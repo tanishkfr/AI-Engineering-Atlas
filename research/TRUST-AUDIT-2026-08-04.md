@@ -34,6 +34,35 @@
 > Progress is real but the shape has changed: the Atlas has moved from *"asserts
 > things it has not verified"* toward *"has verified things, on a sample of one."*
 > That is a better problem and it is not yet a solved one.
+>
+> ---
+>
+> ## THE CURRENT BOTTLENECK — 2026-08-04c
+>
+> ### **Waiting for independent replication.**
+>
+> This replaces every previous bottleneck. Nothing else is the constraint.
+>
+> The replication package is **complete and verified**:
+> [`REPLICATION.md`](../REPLICATION.md) · `--share` payload adversarially
+> verified (78 real transcript strings tested, zero leaked) · classifier tested
+> against falsifying and mixed inputs · thresholds preregistered and
+> non-adjustable.
+>
+> **Current machine state:**
+> ```
+> verdict: AWAITING_REPLICATION
+> usable independent replications: 0 (1 required)
+> cost correction licensed as: operator-scoped only
+> RQ-28: open — unresolved
+> ```
+>
+> **What is explicitly NOT the bottleneck, and must not be worked on instead:**
+> more entities · more analysis of the originating dataset · more architecture ·
+> more documentation. All of those are available, none of them moves credibility,
+> and each is a way of looking busy while the actual constraint goes untouched.
+>
+> **Cost to clear it: one other person, one command, two minutes.**
 
 ---
 
