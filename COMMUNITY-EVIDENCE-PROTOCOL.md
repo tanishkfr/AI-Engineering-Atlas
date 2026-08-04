@@ -195,6 +195,30 @@ if fifty practitioners had been sampled.
 
 They are legitimate for **finding** threads. Then the threads get read.
 
+## 7.5 The relevance gate
+
+*Added 2026-08-04 after Synthesis 001.*
+
+The §2 thresholds measure **independence**. They do not measure **relevance**,
+and a corpus can pass all of them while containing none of the evidence sought.
+
+Synthesis 001 produced a sample of 157 distinct participants across 162 threads
+with a largest-thread share of 0.6% — sixty-six times better than the ceiling —
+and **one** matching behaviour report. The queries were entity-targeted
+(`"claude code"`), so they returned discussion *about* the tool rather than
+friction *with* it.
+
+**Gate: probe hit rate ≥ 5%.** Before synthesis, at least 5% of harvested
+records must match at least one specific behaviour probe. Below that the harvest
+is **off-target** and is re-run with different queries rather than analysed.
+Analysing an off-target corpus produces a null result that looks like an absence
+of evidence and is actually an absence of sampling.
+
+**Query design rule: harvest on symptoms, not subjects.** Query the behaviour
+being investigated, then filter by entity — never the reverse. Product names
+select for announcements and comparisons; symptom language selects for
+experience.
+
 ## 8. Failure conditions
 
 Publish as insufficient — do not extend the sample — when:

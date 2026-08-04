@@ -11,10 +11,17 @@
 
 ## Current Priority
 
-**Score a second dimension.** The engine now runs end-to-end but refuses at
-1/13 coverage. D6 (cost) is computable from Class A pricing; everything else
-needs Class B/C evidence. Synthesizing the ~300KB of primary community records
-in `research/evidence/raw/` is the shortest path to D7 or D4.
+**Two tracks, in parallel. Neither waits for the other.**
+
+| Track A — Reference | Track B — Evidence |
+|---|---|
+| Qwen 3.8, Kimi K3, DeepSeek, Cursor, OpenCode, Hermes | 1. Measure one real usage profile |
+| Canonical pages, 17-section standard | 2. Score D7 from harvested community records |
+| Ships value before the engine matures | 3. Score a third evidence-backed dimension |
+|  | 4. Resolve RQ-17 |
+
+**Decision pages are gated on ≥3 genuinely scored dimensions.** No public launch
+date. Optimize for the first release being something an expert respects.
 
 ## Current Blocker
 
