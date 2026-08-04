@@ -9,6 +9,7 @@ than an aspiration.
 """
 from __future__ import annotations
 
+import collections
 from pathlib import Path
 
 import yaml
@@ -153,6 +154,90 @@ def elicitable(g: dict) -> list[dict]:
             out.append({"id": c["id"], "scope": c["scope"], "predicate": c.get("predicate"),
                         "value": c.get("value"), "elicit": c["elicit"]})
     return out
+
+
+def provenance(g: dict, claim_ids: set[str]) -> dict:
+    """Claims and their sources, verbatim, for the ids asked for.
+
+    The interface lets a reader open any number and read the actual sentence on
+    the actual page it came from. That is only possible if the excerpt travels
+    with the figure, so it does.
+    """
+    claims, srcs = {}, {}
+    for cid in claim_ids:
+        c = g["claims"].get(cid)
+        if not c:
+            continue
+        ev = []
+        for e in c.get("evidence") or []:
+            sid = e.get("source")
+            s = g["sources"].get(sid)
+            if not s:
+                continue
+            ref = e.get("excerpt_ref")
+            text = next((x.get("text") for x in (s.get("excerpts") or [])
+                         if x.get("id") == ref), None)
+            loc = next((x.get("locator") for x in (s.get("excerpts") or [])
+                        if x.get("id") == ref), None)
+            ev.append({"source": sid, "excerpt": text, "locator": loc,
+                       "supports": e.get("supports", True)})
+            if sid not in srcs:
+                pub = g["entities"].get(s.get("publisher") or "", {})
+                srcs[sid] = {
+                    "class": s.get("class"),
+                    "title": s.get("title"),
+                    "publisher": pub.get("name") or s.get("publisher"),
+                    "url": s.get("canonical_url") or s.get("url"),
+                    "archive_url": s.get("archive_url"),
+                    "retrieved": s.get("retrieved"),
+                    "hash_status": s.get("hash_status"),
+                    "archive_status": s.get("archive_status"),
+                    "fidelity": s.get("excerpt_fidelity"),
+                    "flags": s.get("flags") or [],
+                }
+        t = c.get("temporal") or {}
+        claims[cid] = {
+            "statement": (c.get("statement") or "").strip(),
+            "predicate": c.get("predicate"),
+            "type": c.get("type"),
+            "scope": c.get("scope"),
+            "kind": c.get("temporal_kind"),
+            "valid_from": t.get("valid_from"),
+            "valid_to": t.get("valid_to"),
+            "observed_at": t.get("observed_at"),
+            "supersedes": c.get("supersedes"),
+            "supersession_kind": c.get("supersession_kind"),
+            "conditions": c.get("conditions") or {},
+            "evidence": ev,
+        }
+    return {"claims": claims, "sources": srcs}
+
+
+def calibration(g: dict) -> dict:
+    """What the corpus knows about its own skew. Reported, not buried."""
+    # Citations, not sources — one heavily-cited page skews a corpus more than
+    # one lightly-cited one. Same metric the standing bias report tracks.
+    pub = collections.Counter()
+    for c in g["claims"].values():
+        for e in c.get("evidence") or []:
+            s = g["sources"].get(e.get("source") or "")
+            if not s:
+                continue
+            name = g["entities"].get(s.get("publisher") or "", {}).get("name") or s.get("publisher")
+            if name:
+                pub[name] += 1
+    published = [c for c in g["claims"].values() if c.get("status") == "published"]
+    unk = [c for c in published if c.get("value") == "unknown"]
+    top, n = pub.most_common(1)[0] if pub else (None, 0)
+    return {
+        "dominant_publisher": top,
+        "dominant_share": round(n / sum(pub.values()), 4) if pub else None,
+        "distinct_publishers": len(pub),
+        "published_claims": len(published),
+        "explicit_unknowns": len(unk),
+        "unknown_ratio": round(len(unk) / len(published), 4) if published else None,
+        "citations": pub.most_common(),
+    }
 
 
 def unknowns(g: dict) -> list[dict]:

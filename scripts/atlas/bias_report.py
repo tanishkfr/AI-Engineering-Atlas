@@ -14,6 +14,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
+import corpus as C  # noqa: E402
+
 # This report draws bar charts. A default Windows console is cp1252 and raised
 # UnicodeEncodeError instead of printing the bias metric.
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -23,22 +26,22 @@ DATA = ROOT / "data"
 
 
 def main() -> int:
-    cites = collections.Counter()
-    entities = collections.Counter()
-    unknowns = 0
-    published = 0
+    # The metric is DEFINED in corpus.calibration and only rendered here.
+    # It used to be re-derived by regex, which made the interface and this
+    # report disagree about the same number. CONSTITUTION §9: one fact, one place.
+    cal = C.calibration(C.load())
+    cites = collections.Counter(dict(cal["citations"]))
+    unknowns = cal["explicit_unknowns"]
+    published = cal["published_claims"]
 
+    entities = collections.Counter()
     for p in DATA.rglob("*.yaml"):
         t = p.read_text(encoding="utf-8")
-        for m in re.finditer(r"source: (src-[a-z0-9]+)", t):
-            cites[m.group(1).split("-", 1)[1]] += 1
         for m in re.finditer(r"made_by: ent-institution-([a-z0-9-]+)", t):
             entities[m.group(1)] += 1
-        unknowns += len(re.findall(r"^\s*value: unknown", t, re.M))
-        published += len(re.findall(r"status: published", t))
 
     total = sum(cites.values()) or 1
-    top = cites.most_common(1)[0] if cites else ("none", 0)
+    top = (cal["dominant_publisher"] or "none", cites[cal["dominant_publisher"]] if cal["dominant_publisher"] else 0)
 
     print("EVIDENCE CONCENTRATION — citations by publisher\n" + "-" * 52)
     for k, v in cites.most_common():

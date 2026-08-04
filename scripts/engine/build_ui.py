@@ -57,7 +57,10 @@ def main() -> int:
             "harness": hw["elicit"] if hw else None,
         },
         "cache_hit": (hw or {}).get("value", {}).get("rate") if hw else None,
+        "cache_claim": (hw or {}).get("id"),
+        "workload_claim": (wl or {}).get("id"),
         "unknowns": C.unknowns(g),
+        "calibration": C.calibration(g),
         "counts": {
             "entities": len(g["entities"]),
             "claims": len(g["claims"]),
@@ -66,6 +69,13 @@ def main() -> int:
             "unknowns": len(C.unknowns(g)),
         },
     }
+
+    # Every figure the interface can display must be able to show the sentence it
+    # came from. Collect the ids first, then fetch their evidence verbatim.
+    cited = {cid for m in payload["models"] for i in m["intervals"] for cid in i["claims"]}
+    cited |= {c for c in (payload["cache_claim"], payload["workload_claim"]) if c}
+    cited |= {u["id"] for u in payload["unknowns"]}
+    payload.update(C.provenance(g, cited))
 
     tpl = TEMPLATE.read_text(encoding="utf-8")
     # The trailing `null` is part of the marker. Replacing the comment alone

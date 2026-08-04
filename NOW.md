@@ -18,10 +18,22 @@ engineering.
 ```
 dimensions scored     1 / 13   (D8, provisional - single-rater)
 decision coverage     8 / 50
-vendor concentration  50.0%    (was ~75%)
+vendor concentration  59.8%    (corrected upward — see below)
 unknown ratio         12.0%    of published claims say "we do not know"
 replications          0 / 1
 ```
+
+### Correction — 2026-08-04: concentration was understated
+
+Published as **50.0%**. The true figure is **59.8%**.
+
+The metric existed in two places: the standing bias report re-derived it by
+regex over the YAML, while the interface computed it from the loaded corpus.
+The regex keyed on the source *id* prefix rather than resolving each source to
+its publisher entity, and undercounted. Both now read one definition —
+`corpus.calibration()` — per CONSTITUTION §9.
+
+The corrected number is worse than the published one. It is the number.
 
 ## What unfreezes this
 
