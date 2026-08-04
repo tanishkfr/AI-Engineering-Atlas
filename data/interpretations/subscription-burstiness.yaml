@@ -1,0 +1,65 @@
+"$schema": ../schema/interpretation.schema.json
+# The first interpretation record in the corpus.
+#
+# Origin: a reader asked a direct question ("$20 budget — will this help me
+# decide?") and the honest answer required an argument the Atlas had no way to
+# store. It was neither a claim (no source) nor an opinion (it has reasoning and
+# a falsification test). The schema gap was real, so the schema changed.
+
+interpretations:
+
+  - id: int-subscription-burstiness
+    schema_version: 1
+    render: interpretation
+    statement: >
+      For bursty interactive coding at a fixed monthly budget, a subscription is
+      likely better value than the same money spent on metered API access —
+      because the binding constraint is peak usage, not mean usage, and a
+      subscription absorbs peaks that a metered budget cannot.
+    strength: plausible
+    status: unfalsified
+    asserted: 2026-08-04
+    author: atlas-editorial
+    review_by: 2026-11-04
+
+    reasoning:
+      - "Interactive coding is bursty. Work arrives in sessions, not at a constant rate: hours of nothing, then an afternoon of sustained agentic runs."
+      - "A metered budget is exhausted by the PEAK, not the mean. A month whose p90 is 2.4x its median (our own assumed distribution) blows a ceiling that the median comfortably fits."
+      - "When a metered budget is exhausted mid-month, the work stops or the budget is exceeded. Both are failures; the second is invisible until the invoice."
+      - "A subscription converts a variable cost into a fixed one. Its failure mode under load is throttling — degraded service — rather than a hard stop or an overrun."
+      - "Degraded service during a peak is strictly better than no service during a peak, for interactive work where the human is present and waiting."
+      - "This argument is STRUCTURAL — it follows from the shape of the demand curve and the shape of the two billing models. It does not depend on any specific price."
+
+    rests_on:
+      - clm-access-anthropic-api-001   # metered spend caps exist and pause usage
+      - clm-sub-allowance-001          # subscriptions meter in sessions/weekly limits
+
+    falsified_by:
+      - "A subscription whose throttling is severe enough that peak-hour work stops entirely — in which case both models fail at the peak and the argument collapses."
+      - "Measurement showing interactive coding usage is NOT bursty — a p90/p50 ratio near 1.0 would remove the premise."
+      - "A metered provider offering a hard spend cap with graceful degradation rather than a stop, which would give metered the same peak behaviour."
+      - "A subscription allowance so low that it is exhausted before the metered equivalent would have been."
+
+    scope:
+      applies_when:
+        - "Interactive, human-in-the-loop coding"
+        - "Fixed monthly budget with no tolerance for overrun"
+        - "Usage is bursty (p90 materially above median)"
+      does_not_apply_when:
+        - "Automated or scheduled workloads — CI, batch, headless runs. These have predictable volume, so the peak-absorption advantage disappears and metered wins on paying only for what runs."
+        - "Usage well below either plan's floor, where both are cheap and the choice is immaterial."
+        - "Requirements that a subscription cannot meet at all — BYOK, model routing, data residency."
+
+    competing:
+      - "int-metered-transparency: metered access is better because per-request cost visibility changes behaviour, and cost discipline is worth more than peak absorption."
+
+    notes: >
+      THIS IS NOT A FINDING. It is an argument. It is recorded because the
+      underlying comparison is NOT PUBLICLY COMPUTABLE (see RQ-08) — no vendor
+      publishes a subscription allowance in any unit that permits a crossover
+      calculation. In the absence of a computable answer, a structural argument
+      with a stated falsification test is the most honest thing the Atlas can
+      offer, provided it is never rendered as a measurement.
+
+      If RQ-08e ever produces an absolute allowance, this interpretation is
+      superseded by arithmetic and should be retired, not defended.

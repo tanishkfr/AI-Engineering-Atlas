@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/interpretation.schema.json",
+  "title": "Interpretation",
+  "description": "A reading of evidence that a reasonable analyst could dispute (CONSTITUTION §3). NOT a claim — it has no source of its own. NOT an opinion — it has explicit reasoning and a stated falsification test. This record type exists because the Atlas kept producing structurally-sound arguments it had nowhere to put, and the alternative was either discarding them or laundering them into findings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "statement", "reasoning", "rests_on", "falsified_by", "status", "asserted"],
+
+  "properties": {
+    "id": { "type": "string", "pattern": "^int-[a-z0-9-]+$" },
+    "schema_version": { "type": "integer", "const": 1 },
+
+    "statement": {
+      "type": "string",
+      "minLength": 20,
+      "description": "The interpretation, stated so it could be wrong. Hedged phrasing that cannot be falsified is not an interpretation, it is a mood."
+    },
+
+    "reasoning": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "string" },
+      "description": "The argument, step by step. Each step must be independently checkable. An interpretation whose reasoning cannot be written out is an opinion and belongs in a different field."
+    },
+
+    "rests_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Claim IDs the reasoning depends on. May be empty ONLY when the argument is purely structural (arithmetic, definitional). Structural arguments must say so in reasoning."
+    },
+
+    "falsified_by": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "MANDATORY. What observation would show this is wrong. An interpretation with no falsification condition cannot be published — that is the line between interpretation and opinion."
+    },
+
+    "status": {
+      "enum": ["unfalsified", "supported", "weakened", "refuted", "untestable"],
+      "description": "'unfalsified' is the honest default and means only that nobody has checked. 'untestable' requires a recorded reason and downgrades the record to opinion."
+    },
+
+    "strength": {
+      "enum": ["structural", "strong", "plausible", "speculative"],
+      "description": "structural = follows from arithmetic or definition; strong = multiple independent lines converge; plausible = one line of reasoning; speculative = a hunch with a shape."
+    },
+
+    "scope": {
+      "type": "object",
+      "description": "Who this applies to. An interpretation that silently generalizes is the failure mode this whole record type exists to prevent.",
+      "properties": {
+        "applies_when": { "type": "array", "items": { "type": "string" } },
+        "does_not_apply_when": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "competing": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Other interpretation IDs that would explain the same evidence differently. Recording the competitor is what stops an interpretation hardening into a belief."
+    },
+
+    "asserted": { "$ref": "defs.schema.json#/$defs/date" },
+    "author": { "type": "string" },
+    "review_by": { "$ref": "defs.schema.json#/$defs/date" },
+
+    "render": {
+      "const": "interpretation",
+      "description": "Locked. The interface MUST render this visually distinct from facts and must never let it enter a recommendation unlabelled (CONSTITUTION §3)."
+    }
+  }
+}

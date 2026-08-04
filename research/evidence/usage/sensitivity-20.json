@@ -1,0 +1,107 @@
+{
+  "study": "cost sensitivity to workload shape",
+  "budget_usd_month": 20.0,
+  "fixed_inputs": {
+    "presented_input_tokens": 25000000.0,
+    "cache_hit_rate": 0.9432
+  },
+  "undeclared_parameter": "input:output ratio \u2014 NOT asked of the reader",
+  "measured_value_scope": "operator-specific (doc-heavy research, n=1)",
+  "rows": [
+    {
+      "model": "claude-sonnet-5 (std)",
+      "cost_by_workload": {
+        "doc_heavy_research": 13.23,
+        "mixed": 15.08,
+        "code_leaning": 18.83,
+        "heavy_codegen": 30.08
+      },
+      "fits_budget": {
+        "doc_heavy_research": true,
+        "mixed": true,
+        "code_leaning": true,
+        "heavy_codegen": false
+      },
+      "crossover_io_ratio": 43.3,
+      "verdict": "CONDITIONAL \u2014 fits only above 43:1 input/output",
+      "sensitive": true
+    },
+    {
+      "model": "claude-sonnet-5 (intro)",
+      "cost_by_workload": {
+        "doc_heavy_research": 8.82,
+        "mixed": 10.06,
+        "code_leaning": 12.56,
+        "heavy_codegen": 20.06
+      },
+      "fits_budget": {
+        "doc_heavy_research": true,
+        "mixed": true,
+        "code_leaning": true,
+        "heavy_codegen": false
+      },
+      "crossover_io_ratio": 20.1,
+      "verdict": "CONDITIONAL \u2014 fits only above 20:1 input/output",
+      "sensitive": true
+    },
+    {
+      "model": "claude-haiku-4-5",
+      "cost_by_workload": {
+        "doc_heavy_research": 4.41,
+        "mixed": 5.03,
+        "code_leaning": 6.28,
+        "heavy_codegen": 10.03
+      },
+      "fits_budget": {
+        "doc_heavy_research": true,
+        "mixed": true,
+        "code_leaning": true,
+        "heavy_codegen": true
+      },
+      "crossover_io_ratio": 7.7,
+      "verdict": "robust \u2014 fits at every workload shape",
+      "sensitive": false
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "cost_by_workload": {
+        "doc_heavy_research": 0.81,
+        "mixed": 0.92,
+        "code_leaning": 1.14,
+        "heavy_codegen": 1.79
+      },
+      "fits_budget": {
+        "doc_heavy_research": true,
+        "mixed": true,
+        "code_leaning": true,
+        "heavy_codegen": true
+      },
+      "crossover_io_ratio": 1.1,
+      "verdict": "robust \u2014 fits at every workload shape",
+      "sensitive": false
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "cost_by_workload": {
+        "doc_heavy_research": 0.3,
+        "mixed": 0.33,
+        "code_leaning": 0.4,
+        "heavy_codegen": 0.61
+      },
+      "fits_budget": {
+        "doc_heavy_research": true,
+        "mixed": true,
+        "code_leaning": true,
+        "heavy_codegen": true
+      },
+      "crossover_io_ratio": null,
+      "verdict": "robust \u2014 fits at every workload shape",
+      "sensitive": false
+    }
+  ],
+  "answer_flips_for": [
+    "claude-sonnet-5 (std)",
+    "claude-sonnet-5 (intro)"
+  ],
+  "engine_requirement": "Where 'sensitive' is true the engine MUST NOT emit a point estimate. It must either elicit the parameter from the reader or report the crossover as the answer."
+}
