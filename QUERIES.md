@@ -9,7 +9,7 @@ works and to find where it doesn't.
 
 It didn't, in five places. Four are in §8. The fifth was Q7, which could not be
 expressed at all and forced the entire decision layer
-([DECISION.md](DECISION.md)).
+([DEPENDENCE.md](DEPENDENCE.md)).
 
 ---
 
@@ -297,7 +297,7 @@ Partial refusal per objective where measurements are missing.
 
 ## Q7 — "How do I spend my next $25 most effectively?"
 
-*Added with the decision layer ([DECISION.md](DECISION.md)). This is the query
+*Added with the decision layer ([DEPENDENCE.md](DEPENDENCE.md)). This is the query
 that separates a research site from a decision tool, and v1.0 of the engine could
 not express it at all.*
 
@@ -492,7 +492,7 @@ wrong answer.
 
 **No query required a redesign of the graph or temporal model.** Four additive
 extensions came out of Q1–Q6; **Q7 forced the decision layer**
-([DECISION.md](DECISION.md)) — v1.0's weighted sum could not express marginal
+— v1.0's weighted sum could not express marginal
 value, opportunity cost, or dominated spending at all.
 
 ### The research agenda this implies

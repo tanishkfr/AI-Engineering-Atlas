@@ -32,7 +32,7 @@ be inexpressible by a weighted sum.
 Finding those gaps against seven questions cost a day. Finding them against five
 hundred facts would have cost a migration.
 
-See [ROADMAP.md](ROADMAP.md) for what comes next,
+See [DEPENDENCE.md](DEPENDENCE.md) for the thesis,
 [QUERIES.md](QUERIES.md) for the proofs, and
 [RESEARCH.md](RESEARCH.md) for the state of the corpus.
 
@@ -115,18 +115,14 @@ and corrections are generated pages, not hidden metadata.
 | [METHODOLOGY.md](METHODOLOGY.md) | How research is gathered, weighted, reviewed, and re-verified |
 | [EVALUATION.md](EVALUATION.md) | The 13-dimension scoring rubric |
 | [TAXONOMY.md](TAXONOMY.md) | How the ecosystem is divided — 9 layers, 2 meta-classes |
+| [DEPENDENCE.md](DEPENDENCE.md) | **The thesis** — what holds a conclusion up, and what happens when you withdraw it |
 | [GRAPH.md](GRAPH.md) | Typed relationship ontology — domains, ranges, inference rules |
 | [TEMPORAL.md](TEMPORAL.md) | Bitemporal fact model — how the past is kept |
 | [SCHEMA.md](SCHEMA.md) | The knowledge graph data model |
-| [DECISION.md](DECISION.md) | The decision science: uncertainty, dominance, regret, opportunity cost, option value, VOI |
-| [RECOMMENDATION.md](RECOMMENDATION.md) | The solver: query → constraints → cost → decision layer → explained answer |
 | [QUERIES.md](QUERIES.md) | Seven queries traced end to end — the model's acceptance tests |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System layers: data → research → recommendation → interface → pipeline |
 | [INFORMATION-ARCHITECTURE.md](INFORMATION-ARCHITECTURE.md) | Site structure and evidence rendering |
-| [PERSONAS.md](PERSONAS.md) | Decision contexts that change recommendations |
 | [RESEARCH.md](RESEARCH.md) | Live inventory, gaps, and open questions |
-| [ROADMAP.md](ROADMAP.md) | Gated milestones |
-| [TASKS.md](TASKS.md) | Current backlog |
 | [CLAUDE.md](CLAUDE.md) | How agents work in this repository |
 
 ```

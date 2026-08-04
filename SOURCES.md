@@ -272,6 +272,51 @@ Two consequences worth stating plainly:
 
 ---
 
+## 3.5 The corroboration model — what a second source can and cannot buy
+
+The authority matrix says which class may *support* a claim type. It does not
+say whether a second source adds **independent** support. Those are different
+questions, and conflating them is how a corpus manufactures false confidence.
+
+| Type | Authority model | A second source buys |
+|---|---|---|
+| **S** Specification | **Constitutive** — the vendor does not report the price, it *constitutes* it | Transcription assurance only. Catches stale captures and typos. **Never independent corroboration.** |
+| **M** Measurement | **Observational** — an external fact exists to observe | Genuine corroboration, by replication |
+| **X** Experience | Observational, convergent | Corroboration across independent practitioners |
+| **T** Trend | Observational, convergent | Corroboration on convergence |
+| **C** Comparative | **Interpretive** — synthesised, never observed | Nothing. Attributed, not corroborated |
+| **F** Forecast | Interpretive | Never published as fact |
+
+Three situations look identical in a source list and are not:
+
+- **Corroboration** — independent causal access to the fact. Real.
+- **Duplication** — two sources, one publisher. A pricing page and an overview
+  agreeing is one source with two URLs.
+- **Derivation** — two publishers, one upstream of the other. A reseller quoting
+  a vendor. More dangerous than duplication, because the names differ.
+
+**Rule.** Support counts only where a source has a causal path to the fact that
+does not pass through another counted source.
+
+**Consequence for reading this corpus.** A type-S claim with one source is
+*sole authority* — correct, not fragile. A type-M claim with one source is
+*under-corroborated* — genuinely fragile. Marking both "1 source" tells you
+nothing. See [DEPENDENCE.md](DEPENDENCE.md).
+
+### `construct_stable` — the axis corroboration cannot reach
+
+A stable, replicable measurement of the wrong thing replicates perfectly.
+
+Two instances already in this corpus: TTFT measured as request-to-first-token
+includes the entire reasoning phase for a reasoning model; SWE-bench Verified
+filters instances for solvability, so the score is partly selected by the thing
+it measures.
+
+Where `construct_stable: false`, replication is not the remedy and a replication
+count is misleading. The honest state is **replication will not fix this**.
+
+---
+
 ## 4. Independence and bias flags
 
 Orthogonal to class. Every source record carries these:

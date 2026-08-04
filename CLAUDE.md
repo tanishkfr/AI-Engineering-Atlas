@@ -114,26 +114,29 @@ the next agent repeating the work.
 
 ---
 
-## 3.5 The north star: coverage, not output
+## 3.5 The north star: load-bearing support, not coverage
 
-**Every milestone opens with coverage against the frozen 50-question benchmark
-([`research/COVERAGE-BENCHMARK.md`](research/COVERAGE-BENCHMARK.md)), never with
-an entity count:**
+The 50-question coverage benchmark was deleted on the subtraction branch. It
+measured breadth, and breadth was never the constraint — it sat at 8/50 for
+months while the real problem was that **every load-bearing claim in the corpus
+had exactly one publisher.**
+
+**Every change opens with the support state of the claims conclusions rest on:**
 
 ```
-Coverage
-7 / 50
-  ↓
-Goal
-12 / 50
+load-bearing claims        12
+independently corroborated  0
+single point of failure     clm-usage-cache-hit-001  (kills every figure)
 ```
 
-Entity counts are a footnote. "Added 12 entities" is not progress; "moved three
-questions from unanswerable to answerable" is.
+"Added 12 entities" is not progress. "Moved one load-bearing measurement from
+unreplicated to corroborated" is — and per [DEPENDENCE.md](DEPENDENCE.md) §5,
+**corroborate in proportion to load.** A claim nothing depends on does not need
+a second source; it needs deleting.
 
-**The 50 questions are frozen.** They are never removed or reworded because they
-turned out to be hard. A question that scores zero for a year stays on the list
-scoring zero.
+Note which claims can never be corroborated: type **S** is constitutive, so a
+second source buys transcription assurance and nothing more
+([SOURCES.md](SOURCES.md) §3.5). Do not chase it.
 
 ### Two tracks, and neither subordinates the other
 
@@ -216,14 +219,12 @@ annoyed if it is wrong.
 | [SCHEMA.md](SCHEMA.md) | Before writing to `/data` |
 | [TEMPORAL.md](TEMPORAL.md) | Before writing any fact that can change |
 | [GRAPH.md](GRAPH.md) | Before creating any relationship |
-| [DECISION.md](DECISION.md) | Before touching scoring, uncertainty, or ranking |
-| [RECOMMENDATION.md](RECOMMENDATION.md) | Before touching the engine |
+| [DEPENDENCE.md](DEPENDENCE.md) | Before touching support, corroboration, or withdrawal |
 | [QUERIES.md](QUERIES.md) | Before changing the schema — the queries are the acceptance tests |
 | [INFORMATION-ARCHITECTURE.md](INFORMATION-ARCHITECTURE.md) | Before writing a page |
-| [PERSONAS.md](PERSONAS.md) | Before writing a recommendation |
 | [RESEARCH.md](RESEARCH.md) | To find what is missing |
 | [research/questions/](research/questions/README.md) | Before proposing new research — the program is ranked, and adding to it requires an ERI estimate |
-| [TASKS.md](TASKS.md) | To find what to do |
+| [NOW.md](NOW.md) | To find what to do |
 
 **When a finding generates an original question,** write it up as an RQ file
 against the eight-section template rather than leaving it in a findings document.

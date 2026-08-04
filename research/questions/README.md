@@ -28,7 +28,7 @@ its readers. A research atlas that only aggregates is a bibliography.
 
 Questions are ranked by **ERI**, not by novelty, difficulty, or how interesting
 they are to work on. ERI operationalizes the value-of-information concept in
-[DECISION.md](../../DECISION.md) §8.
+[DEPENDENCE.md](../../DEPENDENCE.md) §5.
 
 ```
 ERI = breadth × flip_probability × magnitude

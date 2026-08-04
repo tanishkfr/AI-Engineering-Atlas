@@ -202,28 +202,6 @@ edge is an unscoped opinion, which CONSTITUTION §6 forbids.
 
 ---
 
-## 5. Reconciliation with the requested vocabulary
-
-Where the brief's predicates landed, and why anything was renamed or split.
-
-| Requested | Result | Note |
-|---|---|---|
-| `works_with` | ✅ adopted verbatim | Made three-valued; evidence of actual co-use required |
-| `replaces` | ✅ adopted | Replaces v1.0's `succeeded_by`, which was the inverse direction and read backwards |
-| `depends_on` | ✅ adopted | Replaces v1.0's `requires`; `optional_with` retained for soft coupling |
-| `provides` | ✅ adopted, **promoted** | Range is a new `capability` entity class rather than free text. This is what makes the schema survive new categories (§3) |
-| `competes_with` | ✅ adopted, **narrowed** | Institution→institution only. Product-level rivalry is `alternative_to` — products compete for a slot, companies compete for a market, and conflating them made both unqueryable |
-| `hosted_by` | ✅ adopted | Split from `available_through` (§4.2) |
-| `available_through` | ✅ adopted | |
-| `benchmarked_by` | ⚠ **split into three** | `measured_on` (which benchmark), `measured_by` (who ran it), `published_in` (who reported it). One predicate could not distinguish a vendor's self-reported number from an independent run — the exact confusion the M1 scan documented |
-| `reviewed_by` | ⚠ **renamed** `evaluated_by` | "Review" is ambiguous in this domain: it means both third-party evaluation and automated code review, and L8 contains a whole category of code review agents. Renamed to keep the two apart |
-
-Dropped from v1.0: `succeeded_by` (→ `replaces`), `requires` (→ `depends_on`),
-`provides_capability` (→ `provides`), `scored_on` (→ `measured_on`).
-Migration is mechanical; no data exists yet to migrate.
-
----
-
 ## 6. Derived edges
 
 Materialized by the build with `derived: true` and a named rule. Inference is
@@ -288,29 +266,6 @@ Acceptance criteria for the graph layer.
 computable here and answers a question — *what breaks if this company is
 acquired or shuts down* — that nothing in this ecosystem currently answers, and
 that feeds EVALUATION.md D12 with something better than a judgment call.
-
----
-
-## 9. Extensibility
-
-The test the brief set: absorb new models, harnesses, providers, and workflows
-without redesign.
-
-| New thing appears | What changes |
-|---|---|
-| New model version | One entity + `version_of` + endpoints. Zero schema change. |
-| New provider | One entity + `hosts` / `offers` edges. Zero schema change. |
-| New harness | One entity + `works_with` edges + `provides` capabilities. Zero schema change. |
-| New capability nobody had | One `capability` entity. Constraints referencing it work immediately across every existing entity. Zero engine change. |
-| **New category that did not exist** | New `role` value + a facet schema, via TAXONOMY amendment. Existing predicates apply unchanged because domains are role-scoped, not type-scoped. The engine needs no change because it operates on layers, slots, capabilities, and dimensions — never on named entity types. |
-| New pricing shape | New predicate with a `temporal_kind`; cost model gains a term. |
-| New evaluation method | New benchmark entity + `measured_on` edges. |
-
-The load-bearing claim: **the recommendation engine contains no reference to any
-specific entity, vendor, or product.** It operates on slots, capabilities,
-constraints, dimensions, and costs. That is what makes the assertion above
-credible rather than aspirational, and RECOMMENDATION.md §10 states it as an
-enforced invariant.
 
 ---
 

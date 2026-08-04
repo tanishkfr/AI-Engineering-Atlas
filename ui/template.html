@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aletheia — an instrument for deciding with incomplete evidence</title>
+<title>Aletheia — what would have to disappear before this conclusion should</title>
 
 <style>
 /* ══ ALETHEIA ══════════════════════════════════════════════════════════════
@@ -92,10 +92,15 @@ main{flex:1 0 auto}
 .voice{font-family:var(--voice);font-size:16.5px;line-height:1.58;max-width:50ch}
 .voice em{font-style:normal;color:var(--sig);transition:color .3s}
 #face.refusing .voice em{color:var(--cold)}
+/* two questions, two rows: sensitivity (what if the world differed) and
+   dependence (what if we stopped being entitled to this). A grid so they can
+   never run together into one line. */
 .threshold{margin-top:20px;padding-top:15px;border-top:1px solid var(--rule);
-  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px 16px;
+  align-items:baseline;
   font-family:var(--mono);font-size:11.5px;color:var(--dim);line-height:1.5}
-.threshold .k{letter-spacing:.2em;font-size:9.5px;color:var(--faint);flex:0 0 auto}
+.threshold .k{letter-spacing:.2em;font-size:9.5px;color:var(--faint);
+  white-space:nowrap;padding-top:1px}
 .threshold b{color:var(--sig);font-weight:400}
 #face.refusing .threshold b{color:var(--cold)}
 
@@ -287,13 +292,15 @@ body.boot footer{animation:warm .5s var(--ease) .36s both}
     <div class="threshold" id="thresh"></div>
 
     <div id="about" hidden>
-      <p><b>Aletheia is an instrument, not an article.</b> It holds a small body of
-      evidence about AI coding tools — every figure traceable to the page it came
-      from — and computes what fits a budget. Turn a control; the answer moves.</p>
-      <p>It is deliberately incomplete. It has scored <b>one of thirteen</b> quality
-      dimensions, so it will not tell you which tool is better. Where it has no
-      measurement it <b>refuses to compute</b> rather than substituting a plausible
-      number. The refusals are the part worth reading.</p>
+      <p><b>Aletheia shows what a conclusion rests on.</b> Every figure here is
+      computed from individual claims, each traceable to the page it came from.
+      The question it exists to answer is <b>not</b> "which tool is best" — it is
+      <em>what evidence could disappear before this conclusion should?</em></p>
+      <p>AI coding economics is the first corpus, not the point. It is small on
+      purpose: five priced models, twelve load-bearing claims, and <b>zero of them
+      independently corroborated</b>. Where there is no measurement, it <b>refuses
+      to compute</b> rather than substituting a plausible number. The refusals are
+      the part worth reading.</p>
     </div>
 
     <div id="stage">
@@ -504,6 +511,43 @@ function roll(node,to,fmt){
 }
 const usd=v=>"$"+v.toFixed(2);
 
+/* ── SUPPORT ──────────────────────────────────────────────────────────────
+   Counting sources is not counting strength. Two pages from one publisher is
+   duplication; a reseller quoting a vendor is derivation. Neither is
+   corroboration. And type S is CONSTITUTIVE — the vendor does not report a
+   price, it constitutes one — so a second source there could only verify the
+   transcription. Sole authority is not the same as fragile.
+   See SOURCES.md §3.5 and DEPENDENCE.md. */
+const CONSTITUTIVE=new Set(["S"]);
+
+function support(m){
+  const ids=[...m.claims];
+  const pubs=new Set(); let constitutive=0, observational=0;
+  ids.forEach(id=>{
+    const c=CORPUS.claims[id]; if(!c)return;
+    (CONSTITUTIVE.has(c.type)?()=>constitutive++:()=>observational++)();
+    (c.evidence||[]).forEach(e=>{
+      const s=CORPUS.sources[e.source]; if(s&&s.publisher)pubs.add(s.publisher);
+    });
+  });
+  return{claims:ids,publishers:[...pubs],constitutive,observational,
+         /* independent support requires a causal path not through another counted
+            source. For constitutive claims no such path can exist, so: zero. */
+         corroborated:0};
+}
+
+function supportProse(sup){
+  const who=sup.publishers.join(" and ")||"one publisher";
+  return "Every claim under this price is "+who+"'s — and a price is <em>constitutive</em>, "+
+    "not observed. The vendor does not report it, the vendor sets it, so a second source "+
+    "could only confirm we transcribed it correctly. That is sole authority, and it is "+
+    "correct. What is genuinely uncorroborated sits underneath: the cache measurement, "+
+    "taken <em>once, on one machine</em>.";
+}
+
+/* the claim shared by every priced figure — the actual single point of failure */
+const SHARED={id:CORPUS.cache_claim,load:MODELS.length};
+
 /* the io ratio at which the recommendation stops holding */
 function breakpoint(p,budget,hit){
   const d=budget*1e6-PRES*(1-hit)*p[0]-PRES*hit*p[1];
@@ -599,20 +643,25 @@ function render(){
       $("#gate").classList.add("flash");
     }
     lastRec=rec.m.name;
-    $("#verdict").textContent="HIGHEST THAT FITS";
+    const sup=support(rec.m);
+    $("#verdict").textContent="RESTS ON "+sup.claims.length+" CLAIMS · "+
+      sup.publishers.length+" PUBLISHER"+(sup.publishers.length===1?"":"S")+
+      " · "+sup.corroborated+" CORROBORATED";
     $("#subject").textContent=rec.m.name;
     roll($("#amount"),rec.lo,usd);
     $("#against").textContent="of "+usd(S.budget)+" · "+usd(S.budget-rec.lo)+" spare · "+
       fitting.length+" of "+rows.length+" fit";
-    $("#voice").innerHTML="The priciest thing that still fits. That is a fact about your "+
-      "budget, <em>not a ranking of quality</em> — we have scored one of thirteen quality "+
-      "dimensions, so nobody here knows which of these writes better code, including us.";
-    $("#thresh").innerHTML = bp<=IO_MIN
+    $("#voice").innerHTML=supportProse(sup);
+    /* sensitivity AND dependence are different questions and both get a line */
+    $("#thresh").innerHTML = ( bp<=IO_MIN
       ? '<span class="k">HOLDS</span><span>at every workload shape we can ask about</span>'
       : bp===Infinity
       ? '<span class="k">THRESHOLD</span><span>no workload shape makes this fit</span>'
       : '<span class="k">BREAKS AT</span><span><b>'+Math.round(bp)+' : 1</b> — drag below '+
-        'that and writing outweighs reading, and this leaves your budget</span>';
+        'that and writing outweighs reading, and this leaves your budget</span>' )
+      + '<span class="k">ENDS IF WITHDRAWN</span><span><b>'+SHARED.id+'</b> — the one '+
+        'measurement under every figure here. Withdraw it and '+SHARED.load+
+        ' of these conclusions stop being computable, this one included.</span>';
     $("#bandtitle").textContent="WHAT FITS";
     $("#legend").innerHTML="● NOW &nbsp; ○ WHERE THE MEASUREMENT SITS";
   }

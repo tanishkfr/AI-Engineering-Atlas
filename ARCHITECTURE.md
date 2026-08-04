@@ -83,9 +83,8 @@ a knowledge base and its own weaknesses:
 ## Layer 3 — Recommendation engine
 
 A **constraint solver**, not a ranker. Turns `(question, persona, date)` into an
-explained, traceable answer — or an informative refusal. Full spec in
-[RECOMMENDATION.md](RECOMMENDATION.md); the decision science in
-[DECISION.md](DECISION.md).
+explained, traceable answer — or an informative refusal. What a conclusion
+owes its reader is specified in [DEPENDENCE.md](DEPENDENCE.md) §7.
 
 ```
 persona ──> HARD CONSTRAINTS ──> eliminate candidates
@@ -213,15 +212,11 @@ AI-Engineering-Atlas/
   GRAPH.md                 relationship ontology
   TEMPORAL.md              bitemporal fact model
   SCHEMA.md                data model
-  DECISION.md              decision science
-  RECOMMENDATION.md        the solver
+  DEPENDENCE.md            the thesis: support, load, withdrawal
   QUERIES.md               query proofs / acceptance tests
   ARCHITECTURE.md          this file
   INFORMATION-ARCHITECTURE.md   site structure
-  PERSONAS.md              decision contexts
   RESEARCH.md              inventory, gaps, open questions
-  ROADMAP.md               milestones
-  TASKS.md                 backlog
   CLAUDE.md                how agents work in this repo
   STUDIO.md                visual system — deferred to Milestone 4
 

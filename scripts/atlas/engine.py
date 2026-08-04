@@ -1,6 +1,6 @@
 """Atlas recommendation engine — minimal executable slice.
 
-Implements the RECOMMENDATION.md pipeline narrowly but genuinely:
+Implements the constraint pipeline narrowly but genuinely:
   graph_at(date) -> candidates -> constraints -> cost -> compute D6 ->
   confidence -> band -> explanation | refusal
 
