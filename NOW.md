@@ -75,4 +75,6 @@ while the actual constraint goes untouched.
    expected value — it biases nothing mechanically, but it biases whether they
    bother to report an odd result.
 2. **Reddit OAuth** — still deferred, still the largest Class C population gap.
-3. **Remote push** — repo is versioned locally and tagged. Not pushed anywhere.
+3. **Published** — https://github.com/tanishkfr/AI-Engineering-Atlas (public,
+   `v0.1-research-preview` tagged). The contributing door is open; the
+   replication ask is now something a stranger can act on.
