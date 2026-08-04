@@ -1,5 +1,5 @@
-﻿"$schema": ../schema/claim.schema.json
-# The two measured inputs that drive every cost figure â€” now carrying SCOPE.
+"$schema": ../schema/claim.schema.json
+# The two measured inputs that drive every cost figure — now carrying SCOPE.
 #
 # Both were previously stored inside usage profiles, where they read as
 # properties of the Atlas rather than facts about a particular person. That
@@ -66,7 +66,7 @@ claims:
 
     scope: workload
     elicit:
-      question: "Roughly, do you read more than you write â€” or the reverse?"
+      question: "Roughly, do you read more than you write — or the reverse?"
       default: null
       options:
         - {label: "Mostly reading and reasoning over existing code",
@@ -75,7 +75,7 @@ claims:
            value: 100, note: "Sonnet 5 still fits $20."}
         - {label: "Mostly generating new code",
            value: 50, note: "Sonnet 5 at the edge of $20."}
-        - {label: "Heavy generation â€” new files, scaffolding, UI",
+        - {label: "Heavy generation — new files, scaffolding, UI",
            value: 20, note: "Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}
 
     conditions:
@@ -98,13 +98,13 @@ claims:
       - positions:
           - statement: "197.7:1 measured on document-heavy research work"
             sources: [src-anthropic-pricing-2026-08-03]
-          - statement: "A code-generation workload plausibly sits near 20:1 â€” an order of magnitude apart"
+          - statement: "A code-generation workload plausibly sits near 20:1 — an order of magnitude apart"
             sources: [src-anthropic-pricing-2026-08-03]
         likely_cause: sample_bias
         note: >
           Not a conflict between sources. A conflict between the measured
           population and the reader. The Atlas cannot know which applies without
           asking, which is what the elicit block is for. Crossover for Sonnet 5
-          at a $20 budget is 43:1 â€” inside the disputed range.
+          at a $20 budget is 43:1 — inside the disputed range.
     cadence_days: 90
     status: published

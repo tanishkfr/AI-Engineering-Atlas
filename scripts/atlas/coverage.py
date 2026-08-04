@@ -12,6 +12,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "engine"))
+
+# A default Windows console is cp1252, and this report prints a warning glyph.
+# Without this the north-star metric raises UnicodeEncodeError instead of printing.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 import corpus as C  # noqa: E402
 
 DIMS = {

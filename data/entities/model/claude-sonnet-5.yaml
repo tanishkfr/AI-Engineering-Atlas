@@ -1,5 +1,5 @@
-﻿"$schema": ../../schema/entity.schema.json
-# GOLD-STANDARD EXEMPLAR â€” canonical example for all future entity contributions.
+"$schema": ../../schema/entity.schema.json
+# GOLD-STANDARD EXEMPLAR — canonical example for all future entity contributions.
 # Chosen as the exemplar because it carries a dated price expiry, which exercises
 # the temporal model more thoroughly than any other entity available today.
 
@@ -40,7 +40,7 @@ decision_questions:
 
 claims:
 
-  # â”€â”€â”€ PRICING (step facts â€” the introductory rate has a KNOWN expiry) â”€â”€â”€
+  # ─── PRICING (step facts — the introductory rate has a KNOWN expiry) ───
   - id: clm-claude-sonnet-5-001
     schema_version: 2
     type: S
@@ -158,7 +158,7 @@ claims:
     cadence_days: 14
     status: published
 
-  # â”€â”€â”€ SPECIFICATION (step facts) â”€â”€â”€
+  # ─── SPECIFICATION (step facts) ───
   - id: clm-claude-sonnet-5-010
     schema_version: 2
     type: S
@@ -254,7 +254,7 @@ claims:
     predicate: cost.tool_use_system_prompt_tokens
     statement: >
       Tool use adds 354 system-prompt tokens with tool_choice auto or none, and
-      474 tokens with any or tool â€” a per-request overhead paid on every call.
+      474 tokens with any or tool — a per-request overhead paid on every call.
     value: {auto_none: 354, any_tool: 474}
     temporal:
       valid_from: unknown
@@ -268,7 +268,7 @@ claims:
     cadence_days: 90
     status: published
 
-  # â”€â”€â”€ INDEPENDENT MEASUREMENT (Class B) â”€â”€â”€
+  # ─── INDEPENDENT MEASUREMENT (Class B) ───
   - id: clm-claude-sonnet-5-020
     schema_version: 2
     type: M
@@ -277,7 +277,7 @@ claims:
     predicate: performance.output_tokens_per_second
     statement: >
       Output throughput measured at 80.9 tokens per second on the first-party
-      API â€” above the measured median of 74.0 for comparable models in the same
+      API — above the measured median of 74.0 for comparable models in the same
       price tier.
     value: {tokens_per_second: 80.9, tier_median: 74.0}
     conditions:
@@ -308,7 +308,7 @@ claims:
     predicate: performance.time_to_first_token
     statement: >
       Time-to-first-token is NOT established. The one available measurement
-      reports 200.59s against a tier median of 2.82s â€” a 71x outlier that would
+      reports 200.59s against a tier median of 2.82s — a 71x outlier that would
       make interactive use impossible if taken at face value.
     value: unknown
     conditions:
@@ -342,7 +342,7 @@ claims:
 
           The metric measures something real and does not measure what its name
           implies. TTFT is therefore NOT COMPARABLE between reasoning and
-          non-reasoning models under this definition â€” a construct-validity
+          non-reasoning models under this definition — a construct-validity
           problem in the metric, of the same kind already recorded against
           repository-patching benchmarks.
 
@@ -350,7 +350,7 @@ claims:
     cadence_days: 60
     status: published
 
-  # â”€â”€â”€ KNOWN UNKNOWNS (publishable) â”€â”€â”€
+  # ─── KNOWN UNKNOWNS (publishable) ───
   - id: clm-claude-sonnet-5-090
     schema_version: 2
     type: M
@@ -393,10 +393,10 @@ claims:
     cadence_days: 30
     status: published
 
-# â”€â”€ FIRST SCORED DIMENSION IN THE CORPUS â”€â”€
+# ── FIRST SCORED DIMENSION IN THE CORPUS ──
 # Every dimension sat at not_scored from M1 to M6 because no admissible evidence
 # existed. D8 now has a Class B source graded B-full at methodology depth, which
-# is exactly the threshold EVIDENCE.md Â§4 sets. Nothing was relaxed to get here.
+# is exactly the threshold EVIDENCE.md §4 sets. Nothing was relaxed to get here.
 scores:
   - id: scr-claude-sonnet-5-d8
     schema_version: 1
@@ -417,11 +417,11 @@ scores:
 
 claims_scores_note: >
   Score is 3 rather than 4 despite being above median, because D8 is defined as
-  "latency and throughput as FELT, not as benchmarked" (EVALUATION Â§2). Throughput
+  "latency and throughput as FELT, not as benchmarked" (EVALUATION §2). Throughput
   is established; the latency half is not. Scoring 4 on one measured axis would
   claim the dimension is better evidenced than it is.
 
-  second_pass is null: no independent re-score has been performed. EVALUATION Â§6
+  second_pass is null: no independent re-score has been performed. EVALUATION §6
   requires one, so this score is single-rater and must be read that way.
 
 relationships:
@@ -464,7 +464,7 @@ review:
 open_questions:
   - "RG-001: Does Sonnet 5 use the newer (~+30% token) tokenizer? Changes effective cost by more than the introductory discount."
   - "No independent (Class B) measurement captured for any capability."
-  - "No community (Class C) evidence captured â€” failure modes and sustained-use reports entirely absent."
+  - "No community (Class C) evidence captured — failure modes and sustained-use reports entirely absent."
   - "Subscription-plan availability and included allowances not yet researched."
   - "Rate limits by tier not yet captured."
 

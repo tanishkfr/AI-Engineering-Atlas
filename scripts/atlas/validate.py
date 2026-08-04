@@ -1,4 +1,4 @@
-﻿"""Atlas validator â€” turns SCHEMA.md Â§11 from prose into an executable gate.
+"""Atlas validator — turns SCHEMA.md §11 from prose into an executable gate.
 
 Exits non-zero on any error. This is the "the build fails" that the documents
 have been asserting in the present tense since M2.
@@ -156,7 +156,7 @@ def validate(corpus: Path) -> Report:
             except Exception as e:  # noqa: BLE001
                 rep.warn("SCHEMA", f"{where}#{rid}", f"validator error: {type(e).__name__}: {e}")
 
-    # ---- pass 2: cross-record rules (SCHEMA Â§11) ----
+    # ---- pass 2: cross-record rules (SCHEMA §11) ----
     for where, claim in all_claims:
         cid = claim.get("id", "<no id>")
         loc = f"{where}#{cid}"
@@ -178,7 +178,7 @@ def validate(corpus: Path) -> Report:
             if src and src not in source_ids:
                 rep.error("EVID-2", loc, f"evidence cites unknown source {src}")
 
-        # R-EVID-3: no Class-E-only published claims (SOURCES Â§1)
+        # R-EVID-3: no Class-E-only published claims (SOURCES §1)
         if status == "published" and evidence:
             classes = {source_class.get(e.get("source"), "?") for e in evidence}
             if classes and classes <= {"E"}:
@@ -219,7 +219,7 @@ def validate(corpus: Path) -> Report:
             else:
                 if el.get("default") is not None:
                     rep.error("SCOPE-2", loc,
-                              "elicit.default must be null â€” a default silently reintroduces "
+                              "elicit.default must be null — a default silently reintroduces "
                               "the unasked assumption this field exists to prevent")
                 if len(el.get("options") or []) < 2:
                     rep.error("SCOPE-3", loc, "elicit requires at least two options")
@@ -257,7 +257,7 @@ def validate(corpus: Path) -> Report:
     for (subj, pred), ids in open_assertions.items():
         if len(ids) > 1:
             rep.error("TEMP-3", f"{subj}::{pred}",
-                      f"{len(ids)} simultaneously-open assertions ({', '.join(ids)}) â€” "
+                      f"{len(ids)} simultaneously-open assertions ({', '.join(ids)}) — "
                       "'what is true now' is ambiguous; supersede or close one")
 
     # TEMP-4: a fact cannot be valid before its subject existed.
@@ -269,7 +269,7 @@ def validate(corpus: Path) -> Report:
             rep.warn("TEMP-4", f"{where}#{claim.get('id')}",
                      f"valid_from {vf} precedes subject first_seen {fs}")
 
-    # ---- pass 2.8: source integrity (SOURCES Â§9) ----
+    # ---- pass 2.8: source integrity (SOURCES §9) ----
     for path, doc in docs:
         where = rel(path)
         for s in doc.get("sources") or []:
@@ -331,7 +331,7 @@ def validate(corpus: Path) -> Report:
         for n in list(adj):
             walk(n, [])
 
-    # ---- pass 5: engine purity (RECOMMENDATION Â§16.1) ----
+    # ---- pass 5: engine purity (RECOMMENDATION §16.1) ----
     # The extensibility guarantee is grep-checkable: the engine must contain no
     # entity, vendor, or product name. If it does, "absorbs new categories
     # without redesign" is an aspiration rather than a property.

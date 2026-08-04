@@ -1,4 +1,4 @@
-﻿"$schema": ../../schema/entity.schema.json
+"$schema": ../../schema/entity.schema.json
 # Anthropic model entities other than Sonnet 5 (which has its own file as the
 # gold-standard exemplar). All claims from the same two verbatim Class A sources
 # captured 2026-08-03. Specification-only: no scores, no comparative claims.
@@ -139,7 +139,7 @@ entities:
     review: {cadence_days: 30, last_reviewed: 2026-08-03, next_due: 2026-09-02}
     open_questions:
       - "No Class B or C evidence. No scores."
-      - "Effective cost vs Opus 5 depends on whether Opus 5 shares the newer tokenizer â€” unresolved."
+      - "Effective cost vs Opus 5 depends on whether Opus 5 shares the newer tokenizer — unresolved."
     revisions:
       - {date: 2026-08-03, change: "Created from verbatim Class A capture.", by: milestone-3}
 
@@ -191,7 +191,7 @@ entities:
         predicate: pricing.fast_mode_per_mtok
         statement: >
           Fast mode (research preview) is priced at $10/MTok input and $50/MTok
-          output â€” 2x standard â€” and applies across the full context window.
+          output — 2x standard — and applies across the full context window.
           Available on the first-party Claude API only; not available with the
           Batch API.
         value: {input: 10.00, output: 50.00, currency: USD, unit: per_mtok}
@@ -207,7 +207,7 @@ entities:
         subject: ent-model-claude-opus-5
         predicate: training.reliable_knowledge_cutoff
         statement: >
-          Reliable knowledge cutoff and training data cutoff of May 2026 â€” the
+          Reliable knowledge cutoff and training data cutoff of May 2026 — the
           most recent of any model documented on the page.
         value: {reliable: "2026-05", training: "2026-05"}
         temporal: {valid_from: unknown, valid_to: null, valid_precision: month, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
@@ -222,7 +222,7 @@ entities:
         subject: ent-model-claude-opus-5
         predicate: cost.tool_use_system_prompt_tokens
         statement: >
-          Tool use adds 286 system-prompt tokens (auto/none) or 406 (any/tool) â€”
+          Tool use adds 286 system-prompt tokens (auto/none) or 406 (any/tool) —
           markedly lower than Opus 4.7's 675/804, a per-request cost reduction
           invisible in headline pricing.
         value: {auto_none: 286, any_tool: 406}
@@ -263,7 +263,7 @@ entities:
         evidence: [clm-claude-opus-5-001]
     review: {cadence_days: 30, last_reviewed: 2026-08-03, next_due: 2026-09-02}
     open_questions:
-      - "Tokenizer generation not stated for Opus 5 â€” same unresolved ambiguity as RG-001."
+      - "Tokenizer generation not stated for Opus 5 — same unresolved ambiguity as RG-001."
       - "Fast mode's latency benefit is undocumented in quantitative terms; the price is known, the benefit is not."
     revisions:
       - {date: 2026-08-03, change: "Created from verbatim Class A capture.", by: milestone-3}
@@ -289,7 +289,7 @@ entities:
     first_seen: 2026-08-03
     canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
     summary: >
-      Fastest Claude model at $1/$5 per MTok, with a 200k context window â€” the
+      Fastest Claude model at $1/$5 per MTok, with a 200k context window — the
       only current Claude model not offering 1M context.
     decision_questions:
       - q: Where is Haiku 4.5 good enough to route work to, and where is it not?
@@ -315,7 +315,7 @@ entities:
         subject: ent-model-claude-haiku-4-5
         predicate: context.window_tokens
         statement: >
-          Context window of 200k tokens and max output of 64k â€” the only current
+          Context window of 200k tokens and max output of 64k — the only current
           Claude model without a 1M window.
         value: {context: 200000, max_output: 64000}
         temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
@@ -331,7 +331,7 @@ entities:
         predicate: capability.thinking_mode
         statement: >
           Supports extended thinking (thinking.type "enabled") but NOT adaptive
-          thinking â€” the inverse of the current larger models.
+          thinking — the inverse of the current larger models.
         value: {adaptive_thinking: false, extended_thinking_enabled: true}
         temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
         evidence:

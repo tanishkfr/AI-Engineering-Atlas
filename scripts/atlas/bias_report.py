@@ -11,7 +11,12 @@ from __future__ import annotations
 
 import collections
 import re
+import sys
 from pathlib import Path
+
+# This report draws bar charts. A default Windows console is cp1252 and raised
+# UnicodeEncodeError instead of printing the bias metric.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"

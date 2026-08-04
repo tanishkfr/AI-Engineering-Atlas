@@ -14,10 +14,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import date
 from pathlib import Path
 
 import corpus as C
+
+# Corpus text contains em dashes; a default Windows console is cp1252 and would
+# print them as '?'. The written file was always correct — only the report lied.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[2]
 TEMPLATE = ROOT / "ui" / "template.html"
@@ -63,7 +68,10 @@ def main() -> int:
     }
 
     tpl = TEMPLATE.read_text(encoding="utf-8")
-    marker = "/*__CORPUS__*/"
+    # The trailing `null` is part of the marker. Replacing the comment alone
+    # emitted `const CORPUS={...}null;` — a SyntaxError that killed the whole
+    # script and left every button in the shipped page inert.
+    marker = "/*__CORPUS__*/null"
     if marker not in tpl:
         print(f"template missing {marker}")
         return 1

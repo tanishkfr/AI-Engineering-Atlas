@@ -1,4 +1,5 @@
-﻿<title>Aletheia â€” what should I actually use?</title>
+<meta charset="utf-8">
+<title>Aletheia — what should I actually use?</title>
 <style>
   :root{
     --bg:#F6F6F4; --card:#FFFFFF; --sunk:#EFEFEC;
@@ -42,7 +43,7 @@
   h1{font-size:31px;line-height:1.25;letter-spacing:-.022em;font-weight:600;margin:0 0 12px;text-wrap:balance}
   .sub{font-size:17px;color:var(--body);margin:0 0 34px;max-width:52ch}
 
-  /* â”€ STEPS â”€ */
+  /* ─ STEPS ─ */
   .step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;
     margin-bottom:14px;transition:opacity .3s,border-color .25s}
   .step.done{opacity:.62;padding:14px 24px}
@@ -67,7 +68,7 @@
   .money{display:flex;gap:8px;flex-wrap:wrap}
   .money .opt{padding:11px 18px;font-family:var(--mono);font-size:15px}
 
-  /* â”€ ANSWER â”€ */
+  /* ─ ANSWER ─ */
   .ans{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
     margin-top:26px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--e),transform .4s var(--e)}
   .ans.in{opacity:1;transform:none}
@@ -96,7 +97,7 @@
   .care p{margin:0;font-size:14px;color:var(--body);line-height:1.55}
   .care p+p{margin-top:8px}
 
-  /* â”€ DISCLOSURE â”€ */
+  /* ─ DISCLOSURE ─ */
   .more{margin-top:16px}
   .discl{border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:10px;overflow:hidden}
   .dh{width:100%;padding:15px 22px;display:flex;align-items:center;gap:12px;transition:background .15s}
@@ -164,7 +165,7 @@
     <div class="stepn">Question 2 of 2</div>
     <h2 class="qh">What kind of work do you do? <span class="chosen" id="c2" hidden></span>
       <button class="edit" id="e2" hidden>change</button></h2>
-    <p class="helper">This matters more than you'd think â€” it changes the cost by up to three times.</p>
+    <p class="helper">This matters more than you'd think — it changes the cost by up to three times.</p>
     <div class="opts" id="o2">
       <button class="opt" data-v="197.7"><span class="ttl">Mostly understanding existing code
         <span class="eg">Debugging, refactoring, reading a large codebase</span></span></button>
@@ -182,16 +183,16 @@
 
 <footer><div class="wrap">
   <span>Aletheia is a research project. Every figure traces to a dated, archived first-party source.</span>
-  <span>Prices verified 4 August 2026. Quality is not yet rated for any tool â€” we say so rather than guess.</span>
+  <span>Prices verified 4 August 2026. Quality is not yet rated for any tool — we say so rather than guess.</span>
 </div></footer>
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const S={budget:null,io:null};
-const PRES=25e6;const HIT=HIT_;
+const PRES=25e6;
+const CORPUS={"generated":"2026-08-04","models":[{"name":"DeepSeek V4 Pro","openness":"open_weight","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":0.435,"cache":0.003625,"out":0.87,"cache_inferred":false,"claims":["clm-model-deepseek-v4-pro-001"]}]},{"name":"Claude Haiku 4.5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":1.0,"cache":0.1,"out":5.0,"cache_inferred":true,"claims":["clm-claude-haiku-4-5-001"]}]},{"name":"Claude Sonnet 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"2026-08-31","in":2.0,"cache":0.2,"out":10.0,"cache_inferred":false,"claims":["clm-claude-sonnet-5-001","clm-claude-sonnet-5-003","clm-claude-sonnet-5-005"]},{"from":"2026-09-01","to":"9999-12-31","in":3.0,"cache":0.3,"out":15.0,"cache_inferred":true,"claims":["clm-claude-sonnet-5-002","clm-claude-sonnet-5-004"]}]},{"name":"Claude Opus 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":5.0,"cache":0.5,"out":25.0,"cache_inferred":true,"claims":["clm-claude-opus-5-001"]}]},{"name":"Claude Fable 5","openness":"closed","tokenizer_verified":true,"intervals":[{"from":"2026-06-09","to":"9999-12-31","in":10.0,"cache":1.0,"out":50.0,"cache_inferred":true,"claims":["clm-claude-fable-5-001","clm-claude-fable-5-002"]}]}],"elicit":{"workload":{"question":"Roughly, do you read more than you write \u2014 or the reverse?","default":null,"options":[{"label":"Mostly reading and reasoning over existing code","value":197.7,"note":"Large context in, small diffs out. What we measured."},{"label":"A mix of reading and generating","value":100,"note":"Sonnet 5 still fits $20."},{"label":"Mostly generating new code","value":50,"note":"Sonnet 5 at the edge of $20."},{"label":"Heavy generation \u2014 new files, scaffolding, UI","value":20,"note":"Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}]},"harness":{"question":"Which coding tool do you actually use day to day?","default":null,"options":[{"label":"The harness this was measured on","value":0.9432,"note":"Applies directly. Still n=1 and unreplicated."},{"label":"A different tool that caches aggressively","value":null,"note":"Unmeasured. The engine refuses rather than substituting a number."},{"label":"A tool with little or no prompt caching","value":0.15,"note":"Illustrative floor, NOT measured. Cost rises roughly fivefold."},{"label":"I don't know","value":null,"note":"Correct answer for most people. The engine reports a range."}]}},"cache_hit":0.9432,"unknowns":[{"id":"clm-benchmark-swe-bench-090","subject":"ent-benchmark-swe-bench","statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.\n"},{"id":"clm-protocol-mcp-090","subject":"ent-protocol-mcp","statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.\n"},{"id":"clm-model-kimi-k3-090","subject":"ent-model-kimi-k3","statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.\n"},{"id":"clm-claude-sonnet-5-021","subject":"ent-model-claude-sonnet-5","statement":"Time-to-first-token is NOT established. The one available measurement reports 200.59s against a tier median of 2.82s \u2014 a 71x outlier that would make interactive use impossible if taken at face value.\n"},{"id":"clm-claude-sonnet-5-090","subject":"ent-model-claude-sonnet-5","statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.\n"},{"id":"clm-model-mistral-large-3-090","subject":"ent-model-mistral-large-3","statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.\n"}],"counts":{"entities":30,"claims":72,"sources":18,"priced":5,"unknowns":6}};
+const HIT=CORPUS.cache_hit??.9432;
 const cost=(i,c,o,io)=>(PRES*(1-HIT)*i+PRES*HIT*c+(PRES/io)*o)/1e6;
-const CORPUS={"generated":"2026-08-04","models":[{"name":"DeepSeek V4 Pro","openness":"open_weight","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":0.435,"cache":0.003625,"out":0.87,"cache_inferred":false,"claims":["clm-model-deepseek-v4-pro-001"]}]},{"name":"Claude Haiku 4.5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":1.0,"cache":0.1,"out":5.0,"cache_inferred":true,"claims":["clm-claude-haiku-4-5-001"]}]},{"name":"Claude Sonnet 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"2026-08-31","in":2.0,"cache":0.2,"out":10.0,"cache_inferred":false,"claims":["clm-claude-sonnet-5-001","clm-claude-sonnet-5-003","clm-claude-sonnet-5-005"]},{"from":"2026-09-01","to":"9999-12-31","in":3.0,"cache":0.3,"out":15.0,"cache_inferred":true,"claims":["clm-claude-sonnet-5-002","clm-claude-sonnet-5-004"]}]},{"name":"Claude Opus 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":5.0,"cache":0.5,"out":25.0,"cache_inferred":true,"claims":["clm-claude-opus-5-001"]}]},{"name":"Claude Fable 5","openness":"closed","tokenizer_verified":true,"intervals":[{"from":"2026-06-09","to":"9999-12-31","in":10.0,"cache":1.0,"out":50.0,"cache_inferred":true,"claims":["clm-claude-fable-5-001","clm-claude-fable-5-002"]}]}],"elicit":{"workload":{"question":"Roughly, do you read more than you write \u00e2\u20ac\u201d or the reverse?","default":null,"options":[{"label":"Mostly reading and reasoning over existing code","value":197.7,"note":"Large context in, small diffs out. What we measured."},{"label":"A mix of reading and generating","value":100,"note":"Sonnet 5 still fits $20."},{"label":"Mostly generating new code","value":50,"note":"Sonnet 5 at the edge of $20."},{"label":"Heavy generation \u00e2\u20ac\u201d new files, scaffolding, UI","value":20,"note":"Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}]},"harness":{"question":"Which coding tool do you actually use day to day?","default":null,"options":[{"label":"The harness this was measured on","value":0.9432,"note":"Applies directly. Still n=1 and unreplicated."},{"label":"A different tool that caches aggressively","value":null,"note":"Unmeasured. The engine refuses rather than substituting a number."},{"label":"A tool with little or no prompt caching","value":0.15,"note":"Illustrative floor, NOT measured. Cost rises roughly fivefold."},{"label":"I don't know","value":null,"note":"Correct answer for most people. The engine reports a range."}]}},"cache_hit":0.9432,"unknowns":[{"id":"clm-benchmark-swe-bench-090","subject":"ent-benchmark-swe-bench","statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.\n"},{"id":"clm-protocol-mcp-090","subject":"ent-protocol-mcp","statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.\n"},{"id":"clm-model-kimi-k3-090","subject":"ent-model-kimi-k3","statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.\n"},{"id":"clm-claude-sonnet-5-021","subject":"ent-model-claude-sonnet-5","statement":"Time-to-first-token is NOT established. The one available measurement reports 200.59s against a tier median of 2.82s \u00e2\u20ac\u201d a 71x outlier that would make interactive use impossible if taken at face value.\n"},{"id":"clm-claude-sonnet-5-090","subject":"ent-model-claude-sonnet-5","statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.\n"},{"id":"clm-model-mistral-large-3-090","subject":"ent-model-mistral-large-3","statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.\n"}],"counts":{"entities":30,"claims":72,"sources":18,"priced":5,"unknowns":6}}null;
-const HIT_=CORPUS.cache_hit??.9432;
 const active=(iv,d)=>iv.find(x=>d>=x.from&&d<=x.to)||iv[0];
 const TODAY=new Date().toISOString().slice(0,10);
 const MODELS=CORPUS.models.map(m=>{const p=active(m.intervals,TODAY);
@@ -204,7 +205,7 @@ const WLBL={197.7:"Mostly understanding code",100:"A bit of both",50:"Mostly wri
 function pick(el,id,val,lblmap,next){
   S[id==="c1"?"budget":"io"]=val;
   $("#o"+id.slice(1)).parentElement.classList.add("done");
-  const c=$("#"+id);c.hidden=false;c.textContent="â€” "+lblmap[val];
+  const c=$("#"+id);c.hidden=false;c.textContent="— "+lblmap[val];
   $("#e"+id.slice(1)).hidden=false;
   if(next){next.classList.remove("locked");next.scrollIntoView({behavior:"smooth",block:"center"})}
   if(S.budget&&S.io)render();
@@ -229,7 +230,7 @@ function render(){
       <p class="rec">${fits.length?"Our recommendation":"Nothing fits this budget"}</p>
       <p class="pick">${fits.length?best.n:rows[0].n}</p>
       <p class="price">about <b>$${best.c.toFixed(2)}</b> a month at your usage${
-        fits.length?` Â· leaves $${(S.budget-best.c).toFixed(2)} spare`:""}</p>
+        fits.length?` · leaves $${(S.budget-best.c).toFixed(2)} spare`:""}</p>
       <p class="why">${fits.length
         ? `It's the most capable option that fits your $${S.budget} budget for the kind of work you described. ${best.note}`
         : `Everything we've priced comes to more than $${S.budget} at this usage. The closest is ${rows[0].n} at $${rows[0].c.toFixed(2)}.`}</p>
@@ -249,7 +250,7 @@ function render(){
       <div>
         <h3>Two things you should know before acting on this</h3>
         <p><strong>We haven't rated quality.</strong> These are costs, not verdicts. Nobody has
-          measured which of these writes better code, including us â€” so this tells you what fits,
+          measured which of these writes better code, including us — so this tells you what fits,
           not what's best.</p>
         <p><strong>The cost figures come from one person's usage.</strong> We measured them properly,
           but only on one setup. Your real bill could differ.</p>
@@ -263,13 +264,13 @@ function render(){
       <span class="t">Why does the kind of work change the price?</span>
       <span class="s">the biggest surprise here</span></summary>
       <div class="dc">
-        <p>Reading code is cheap. Writing it is expensive â€” often <strong>ten to twenty times</strong>
+        <p>Reading code is cheap. Writing it is expensive — often <strong>ten to twenty times</strong>
           more per word, because generating text costs far more than consuming it.</p>
         <p>So someone debugging a big codebase and someone scaffolding a new app can pay wildly
           different amounts for the same tool.</p>
         ${overByWork.length?`<p><strong>For your budget this actually changes the answer.</strong>
           ${overByWork.join(" and ")} fits if you mostly read code, and doesn't if you mostly write it.
-          That's why we asked.</p>`:`<p>At your budget the answer happens to be stable either way â€”
+          That's why we asked.</p>`:`<p>At your budget the answer happens to be stable either way —
           every option that fits keeps fitting whichever kind of work you do.</p>`}
         <table><thead><tr><th>Tool</th><th class="r">If reading</th><th class="r">If writing</th></tr></thead>
           <tbody>${MODELS.map(m=>`<tr><td>${m.n}</td>
@@ -287,7 +288,7 @@ function render(){
           publishes a number that lets you convert between the two.</p>
         <p>So any site telling you confidently that a subscription is better value has quietly made
           up the missing number.</p>
-        <p>Our honest reasoning: <em>if</em> your usage is spiky â€” quiet weeks then intense days â€” a
+        <p>Our honest reasoning: <em>if</em> your usage is spiky — quiet weeks then intense days — a
           subscription probably absorbs the peaks better, because running out mid-task is worse than
           paying a flat fee. That's an argument, not a measurement, and we could be wrong.</p>
       </div></details>
@@ -295,7 +296,7 @@ function render(){
     <details class="discl"><summary class="dh">
       <svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
       <span class="t">Where do these numbers come from?</span>
-      <span class="s">4 sources Â· all archived</span></summary>
+      <span class="s">4 sources · all archived</span></summary>
       <div class="dc">
         <div class="legend">
           <span><i class="dot meas" style="width:9px;height:9px;border-radius:2px;display:inline-block"></i> we measured it</span>
@@ -310,7 +311,7 @@ function render(){
           <div class="m">Measured across 18,604 real exchanges over 56 days. This is what makes the prices lower than a naive calculation suggests.</div></div></div>
         <div class="ev"><span class="dot meas"></span><div class="body">
           <div class="t">How much reading vs writing you do</div>
-          <div class="m">Measured on one person's work â€” which is why we asked you instead of assuming.</div></div></div>
+          <div class="m">Measured on one person's work — which is why we asked you instead of assuming.</div></div></div>
         <div class="ev"><span class="dot unk"></span><div class="body">
           <div class="t">Which tool writes better code</div>
           <div class="m">Not established. The usual benchmarks measure fixing bugs in open-source Python, which tells you very little about most real work.</div></div></div>

@@ -1,8 +1,8 @@
-﻿"""Test suite for the validator.
+"""Test suite for the validator.
 
 A validation rule that has never failed is a rule you cannot trust. Every test
 here builds a corpus that DELIBERATELY violates one rule and asserts the
-validator catches it â€” plus a clean corpus that must pass.
+validator catches it — plus a clean corpus that must pass.
 
 Run: python scripts/atlas/test_validate.py
 """
@@ -43,7 +43,7 @@ def check(name: str, files: dict[str, str], expect_rule: str | None):
             detail = "clean" if ok else f"unexpected: {sorted(codes)}"
         else:
             ok = expect_rule in codes
-            detail = "caught" if ok else f"MISSED â€” got {sorted(codes) or 'nothing'}"
+            detail = "caught" if ok else f"MISSED — got {sorted(codes) or 'nothing'}"
         results.append((ok, name, detail))
         print(f"{PASS if ok else FAIL}  {name:44s} {detail}")
     finally:
@@ -150,7 +150,7 @@ print("\n" + "=" * 74)
 passed = sum(1 for ok, _, _ in results if ok)
 print(f"{passed} / {len(results)} rules verified to fire")
 if passed < len(results):
-    print("\nUNVERIFIED RULES â€” these cannot be trusted:")
+    print("\nUNVERIFIED RULES — these cannot be trusted:")
     for ok, n, d in results:
         if not ok:
             print(f"  {n}: {d}")

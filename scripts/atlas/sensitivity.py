@@ -13,7 +13,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
+
+# Same cp1252 console hazard as bias_report: this prints a '✗' marker.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 OUT = Path(__file__).resolve().parents[2] / "research" / "evidence" / "usage"
 
