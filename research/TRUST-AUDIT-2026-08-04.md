@@ -1,5 +1,21 @@
 # TRUST AUDIT — why an expert would not trust the Atlas today
 
+> **STATUS UPDATE 2026-08-04 (post vertical slice + provenance backfill)**
+>
+> | # | Item | Status |
+> |---|---|---|
+> | 1 | Engine never produced a recommendation | ⚠️ **Partial** — runs end-to-end, emits full explanation, but correctly *refuses* at 1/13 coverage |
+> | 2 | "Build fails" rules are fiction | ✅ **Substantially resolved** — validator runs, exits non-zero, found 6 real errors; ~14 of ~25 rules implemented |
+> | 3 | Every gate self-administered | ❌ **Unchanged** |
+> | 4 | Sources unhashed and unarchived | ✅ **RESOLVED** — 15/15 sources carry a real SHA-256 of the raw body and a Wayback URL; `reverification: hash_triggered` |
+> | 5 | Corpus tiny and vendor-skewed | ❌ **Unchanged** |
+>
+> Two resolved, one partial, two untouched. Detail in
+> `research/VERTICAL-SLICE-REPORT.md`.
+
+---
+
+
 **Date:** 2026-08-04 · **Framing:** if this launched publicly tomorrow, what
 would a hostile, competent reviewer attack first?
 
