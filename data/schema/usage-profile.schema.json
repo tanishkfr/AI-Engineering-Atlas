@@ -15,8 +15,14 @@
     "persona": { "$ref": "defs.schema.json#/$defs/personaId" },
 
     "status": {
-      "enum": ["assumed", "measured"],
-      "description": "'measured' requires derived_from pointing at a Class D experiment."
+      "enum": ["assumed", "measured", "irreducible"],
+      "description": "'measured' requires derived_from pointing at a Class D experiment. 'assumed' requires an rq (validator rule ASSUM-1)."
+    },
+
+    "rq": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^RQ-\\d+$" },
+      "description": "MANDATORY when status is 'assumed' (ASSUMPTIONS.md). Names the research question(s) that would replace this guess with a measurement. An assumption without a path to measurement is a permanent guess wearing a temporary label."
     },
 
     "tokens_in_month": { "type": "number", "minimum": 0 },

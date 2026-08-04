@@ -22,6 +22,7 @@ profiles:
     name: Solo founder, typical month
     persona: per-solo-founder
     status: assumed
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
     tokens_in_month: 25000000        # 25M — midpoint of a 8M–60M assumed range
     tokens_out_month: 2000000        # 2M
     cache_hit_rate: 0.5
@@ -49,6 +50,7 @@ profiles:
     name: Student, hard budget ceiling
     persona: per-student
     status: assumed
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
     tokens_in_month: 4000000
     tokens_out_month: 400000
     cache_hit_rate: 0.35
@@ -73,6 +75,7 @@ profiles:
     name: Design-focused, frontend-heavy
     persona: per-designer-engineer
     status: assumed
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
     tokens_in_month: 10000000
     tokens_out_month: 2500000
     cache_hit_rate: 0.4
@@ -97,6 +100,7 @@ profiles:
     name: Backend engineer, mature codebase
     persona: per-backend-engineer
     status: assumed
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
     tokens_in_month: 40000000
     tokens_out_month: 2000000
     cache_hit_rate: 0.6

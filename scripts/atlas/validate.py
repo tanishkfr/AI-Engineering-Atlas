@@ -198,6 +198,21 @@ def validate(corpus: Path) -> Report:
         if ctype == "F" and status == "published":
             rep.error("CLAIM-1", loc, "forecast (F) claims may not be published")
 
+    # ---- pass 2.5: assumption register (ASSUMPTIONS.md) ----
+    # ASSUM-1: any record carrying status: assumed must name the RQ that would
+    # replace it. An assumption without a path to measurement is a permanent
+    # guess wearing a temporary label.
+    for path, doc in docs:
+        where = str(path.relative_to(ROOT))
+        for key in ("profiles", "entities", "sources"):
+            for rec in doc.get(key) or []:
+                if not isinstance(rec, dict):
+                    continue
+                if rec.get("status") == "assumed" and not rec.get("rq"):
+                    rep.error("ASSUM-1", f"{where}#{rec.get('id')}",
+                              "status: assumed requires an 'rq:' field naming the "
+                              "research question that would replace it")
+
     # ---- pass 3: graph integrity ----
     for where, ent in all_entities:
         eid = ent.get("id")
