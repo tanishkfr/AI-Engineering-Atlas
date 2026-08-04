@@ -1,7 +1,41 @@
 # PREREGISTRATION — RQ-18/19/20/21 usage profile
 
-**Status:** ✅ **READY TO RUN — awaiting deployment approval**
-**Designed:** 2026-08-04 · **Not executed**
+**Status:** 🔒 **FROZEN FOR EXECUTION** · **Amended:** 2026-08-04, before any run
+**Designed:** 2026-08-04
+
+---
+
+## 0. Amendment — execution design (recorded BEFORE running)
+
+| Run | Window | Role |
+|---|---|---|
+| **Primary** | **56 days** (full retrospective history) | **The measurement.** All assumption elimination, all cost recomputation, all deltas derive from this. |
+| Secondary | 7 days | **Freshness comparison only.** Detects whether recent behaviour diverges from the 56-day baseline. Never the primary figure. |
+
+**Why 56 days is primary:** a 7-day window on a single operator is dominated by
+whatever that week happened to contain. The recent weeks are document-heavy Atlas
+work — atypical by construction. The longer window dilutes that and is the more
+defensible basis for a profile.
+
+**Divergence rule, fixed in advance:** if the 7-day cache hit rate or I/O ratio
+differs from the 56-day figure by **more than 25% relative**, that is reported as
+a **finding about workload variability**, not as a reason to prefer either
+window. The 56-day figure remains primary regardless of which looks better.
+
+**Smoke-test values from §6 are excluded from all analysis, comparison, and
+citation.** They informed hypothesis *direction* only, which §4 already discloses.
+
+**Analysis plan, fixed:**
+1. Compute 56-day profile → replaces `use-*` assumed values.
+2. Recompute D6 cost for every scored candidate at captured pricing.
+3. Emit a recommendation delta for every figure that moves materially.
+4. Mark RQ-18/RQ-19 `resolved` only if the data actually supports it; RQ-20
+   proxy-only; RQ-21 remains open.
+5. Report medians and p90. **Never means alone** — the distribution is expected
+   to be right-skewed and a mean would misrepresent a typical session.
+
+---
+
 
 ---
 
