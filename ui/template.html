@@ -4,269 +4,217 @@
 
 <style>
 /* ══ ALETHEIA ══════════════════════════════════════════════════════════════
-   ἀλήθεια — unconcealment. Not truth as correctness; truth as the state of no
-   longer being hidden. This interface's whole job is to un-hide, and the
-   hardest thing to un-hide is its own ignorance.
+   ἀλήθεια — unconcealment.
 
-   So: an instrument, not a document. One readout. Controls under your hand.
-   A lamp that goes OUT when the instrument will not answer, because refusing
-   is a state worth designing, not an error to apologise for.
+   One instrument, one operation: WITHDRAW A SOURCE AND SEE WHAT HOLDS.
+
+   The dependency graph is the hero. The conclusion is the thing being tested,
+   not the thing being sold. Every visual change corresponds to a real change
+   in what the engine can compute — nothing here degrades for effect.
+
+   MOTION RULE (DEPENDENCE §6): positions transition, existence does not.
+   A price moving along the scale is a continuous quantity and animates.
+   A model ceasing to be computable is a discrete fact and happens at once.
    ═════════════════════════════════════════════════════════════════════════ */
 
 :root{
-  --face:#0C0D0E; --panel:#121314;
-  --rule:#212325; --rule2:#31353A;
+  --face:#0C0D0E; --rule:#212325; --rule2:#31353A;
   --ink:#EAE7E1; --dim:#A0A4A8; --faint:#7C8084;
-  --sig:#E8A33D;            /* the lamp. amber, because instruments are amber */
-  --sig-deep:#8A6526; --sig-wash:#E8A33D0F;
-  --cold:#7F8D96;           /* refusal. not red — refusal is not a failure */
+  --sig:#E8A33D; --sig-deep:#8A6526;
+  --cold:#7F8D96;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,"Cascadia Mono",Menlo,Consolas,monospace;
   --voice:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --ease:cubic-bezier(.22,.86,.28,1);
 }
 :root[data-theme=light]{
-  --face:#F1EFEA; --panel:#FBFAF7;
-  --rule:#DFDBD2; --rule2:#C2BCB0;
+  --face:#F1EFEA; --rule:#DFDBD2; --rule2:#C2BCB0;
   --ink:#16171A; --dim:#4A4E52; --faint:#66696D;
-  --sig:#8A5808; --sig-deep:#C9A669; --sig-wash:#8A58080D; --cold:#4F646F;
+  --sig:#8A5808; --sig-deep:#C9A669; --cold:#4F646F;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{height:100%}
-body{
-  min-height:100%;background:var(--face);color:var(--ink);font-family:var(--sans);
-  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
+body{min-height:100%;background:var(--face);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;text-align:left}
 :focus-visible{outline:1.5px solid var(--sig);outline-offset:3px}
 .n{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 .grow{flex:1}
+.w{width:100%;max-width:1280px;margin:0 auto;padding:0 34px}
 
-/* the whole face loses its colour when the instrument refuses to compute */
 #face{min-height:100vh;display:flex;flex-direction:column;
-  transition:filter .34s var(--ease)}
+  transition:filter .3s var(--ease)}
 #face.refusing{filter:saturate(.05)}
 
-.w{width:100%;max-width:1240px;margin:0 auto;padding:0 34px}
-
-/* ── HEADER RAIL ──────────────────────────────────────────────────────── */
+/* ── HEADER ───────────────────────────────────────────────────────────── */
 header{border-bottom:1px solid var(--rule);flex:0 0 auto}
 header .w{display:flex;align-items:center;gap:18px;height:54px}
 .mark{display:flex;align-items:baseline;gap:11px;user-select:none;min-width:0}
 .mark b{font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.34em}
 .mark i{font-style:normal;font-size:11px;color:var(--faint);white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-.lamp{display:flex;align-items:center;gap:8px;font-family:var(--mono);
-  font-size:10px;letter-spacing:.18em;color:var(--dim);white-space:nowrap}
+.lamp{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.18em;color:var(--dim);white-space:nowrap}
 .bulb{width:7px;height:7px;border-radius:50%;background:var(--sig);
-  box-shadow:0 0 10px var(--sig);transition:background .3s,box-shadow .3s}
+  box-shadow:0 0 10px var(--sig)}
 #face.refusing .bulb{background:var(--cold);box-shadow:none}
 .hbtn{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);
-  padding:5px 9px;border:1px solid var(--rule);border-radius:3px;
-  white-space:nowrap;transition:.16s}
+  padding:5px 9px;border:1px solid var(--rule);border-radius:3px;white-space:nowrap;
+  transition:color .16s,border-color .16s}
 .hbtn:hover{color:var(--ink);border-color:var(--rule2)}
+.hbtn[disabled]{opacity:.32;cursor:default}
 
-/* ── THE DECK — answer on the left, hands on the right ───────────────── */
+/* ── DECK ─────────────────────────────────────────────────────────────── */
 main{flex:1 0 auto}
-.deck{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);
-  gap:0 46px;align-items:start}
-.left{padding:34px 0 26px;min-width:0}
-.right{padding:34px 0 26px;border-left:1px solid var(--rule);
-  padding-left:46px;margin-left:-46px;min-width:0}
+.deck{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(330px,1fr);gap:0 44px;
+  align-items:start}
+.left{padding:32px 0 26px;min-width:0}
+.right{padding:32px 0 26px;border-left:1px solid var(--rule);padding-left:44px;
+  margin-left:-44px;min-width:0}
 
 /* ── READOUT ──────────────────────────────────────────────────────────── */
-.verdict{font-family:var(--mono);font-size:10px;letter-spacing:.24em;
-  color:var(--sig);margin-bottom:14px;transition:color .3s}
-#face.refusing .verdict{color:var(--cold)}
-.subject{font-size:clamp(30px,4.2vw,46px);line-height:1.03;letter-spacing:-.03em;
-  font-weight:500;margin-bottom:12px}
-.figure{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin-bottom:18px}
-.amount{font-family:var(--mono);font-size:clamp(20px,2.4vw,26px);letter-spacing:-.02em;
-  color:var(--sig);border-bottom:1px dashed var(--sig-deep);padding-bottom:2px;
-  transition:color .3s,border-color .3s}
-.amount:hover{border-bottom-style:solid}
-#face.refusing .amount{color:var(--cold);border-color:transparent;cursor:default}
+.state{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--sig);
+  margin-bottom:13px}
+#face.refusing .state{color:var(--cold)}
+.subject{font-size:clamp(28px,3.7vw,42px);line-height:1.04;letter-spacing:-.03em;
+  font-weight:500;margin-bottom:11px}
+.figure{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin-bottom:20px}
+.amount{font-family:var(--mono);font-size:clamp(19px,2.2vw,25px);letter-spacing:-.02em;
+  color:var(--sig)}
+#face.refusing .amount{color:var(--cold)}
 .against{font-family:var(--mono);font-size:12px;color:var(--dim)}
-.voice{font-family:var(--voice);font-size:16.5px;line-height:1.58;max-width:50ch}
-.voice em{font-style:normal;color:var(--sig);transition:color .3s}
-#face.refusing .voice em{color:var(--cold)}
-/* two questions, two rows: sensitivity (what if the world differed) and
-   dependence (what if we stopped being entitled to this). A grid so they can
-   never run together into one line. */
-.threshold{margin-top:20px;padding-top:15px;border-top:1px solid var(--rule);
-  display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px 16px;
-  align-items:baseline;
-  font-family:var(--mono);font-size:11.5px;color:var(--dim);line-height:1.5}
-.threshold .k{letter-spacing:.2em;font-size:9.5px;color:var(--faint);
-  white-space:nowrap;padding-top:1px}
-.threshold b{color:var(--sig);font-weight:400}
-#face.refusing .threshold b{color:var(--cold)}
 
-/* ── THE BAND — a strip chart. one gate crosses every channel ────────── */
-#stage{position:relative;margin-top:26px;min-height:252px}
-.front,.back{transition:transform .46s var(--ease),opacity .26s}
-.back{position:absolute;inset:0;transform:rotateX(-92deg);transform-origin:top center;
-  opacity:0;visibility:hidden;background:var(--face);
-  max-height:min(64vh,540px);overflow:auto}
-#stage.flipped .front{transform:rotateX(92deg);transform-origin:top center;
-  opacity:0;visibility:hidden;position:absolute;inset:0}
-#stage.flipped .back{position:relative;transform:none;opacity:1;visibility:visible}
+/* the component that tells the truth about a NON-event */
+.consequence{border-left:2px solid var(--sig-deep);padding:2px 0 2px 16px;
+  font-family:var(--voice);font-size:16px;line-height:1.55;color:var(--ink);
+  max-width:52ch;min-height:74px}
+.consequence.none{border-color:var(--rule2)}
+.consequence.gone{border-color:var(--cold)}
+.consequence b{font-weight:400;color:var(--sig)}
+.consequence.gone b{color:var(--cold)}
+.consequence .q{display:block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;color:var(--faint);margin-bottom:7px}
 
-.bandhead{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;
+/* ── BAND ─────────────────────────────────────────────────────────────── */
+#band{margin-top:26px}
+.bandhead{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;
   font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--faint)}
 .chart{position:relative;padding-top:2px}
-.gatewrap{position:absolute;left:150px;right:88px;top:-14px;bottom:22px;
-  pointer-events:none}
+.gatewrap{position:absolute;left:148px;right:84px;top:-14px;bottom:22px;pointer-events:none}
 .gate{position:absolute;top:0;bottom:0;width:1px;background:var(--sig);left:70%;
   transition:left .34s var(--ease);box-shadow:0 0 10px var(--sig-deep)}
-.gate::after{content:attr(data-l);position:absolute;top:0;left:0;
-  transform:translateX(-50%);font-family:var(--mono);font-size:9.5px;
-  letter-spacing:.1em;color:var(--sig);white-space:nowrap}
-.gate.flash{animation:flash .34s steps(1)}
-@keyframes flash{0%,100%{opacity:1}35%{opacity:.1}70%{opacity:1}}
+.gate::after{content:attr(data-l);position:absolute;top:0;left:0;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--sig);white-space:nowrap}
 #face.refusing .gate{background:var(--cold);box-shadow:none}
 #face.refusing .gate::after{color:var(--cold)}
 
-.chan{display:grid;grid-template-columns:134px 1fr 72px;align-items:center;gap:16px;
-  height:32px;transition:opacity .3s}
+.chan{display:grid;grid-template-columns:132px 1fr 68px;align-items:center;gap:16px;height:32px}
 .chan .nm{font-size:12.5px;color:var(--dim);white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;transition:color .25s}
+  text-overflow:ellipsis}
 .chan.rec .nm{color:var(--ink)}
 .chan.over{opacity:.44}
+/* EXISTENCE IS DISCRETE — no transition on this state, by design */
+.chan.gone{opacity:.3}
+.chan.gone .nm{text-decoration:line-through;text-decoration-thickness:1px;color:var(--cold)}
 .track{position:relative;height:100%}
-.track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;
-  background:var(--rule)}
-.chan.rec .track::before{background:var(--rule2)}
-.ghost{position:absolute;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;
-  border-radius:50%;box-shadow:inset 0 0 0 1px var(--rule2);transition:opacity .3s}
-.dot{position:absolute;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;
-  border-radius:50%;background:var(--sig);
-  transition:left .34s var(--ease),background .3s,opacity .25s,transform .2s}
-.chan.rec .dot{transform:scale(1.28)}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule)}
+.dot{position:absolute;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  background:var(--sig);transition:left .34s var(--ease)}
+.chan.rec .dot{transform:scale(1.3)}
 .chan.over .dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--dim)}
+.chan.gone .dot{display:none}
 .bar{position:absolute;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;
-  background:var(--cold);opacity:0;
-  transition:left .34s var(--ease),width .34s var(--ease),opacity .25s}
-.val{font-family:var(--mono);font-size:12px;text-align:right;color:var(--dim);
-  transition:color .25s;cursor:pointer;border-bottom:1px dashed transparent}
-.val:hover{border-bottom-color:var(--rule2)}
+  background:var(--cold);display:none;transition:left .34s var(--ease),width .34s var(--ease)}
+.chan.ranged .bar{display:block}
+.chan.ranged .dot{display:none}
+.val{font-family:var(--mono);font-size:12px;text-align:right;color:var(--dim)}
 .chan.rec .val{color:var(--sig)}
 .chan.over .val{text-decoration:line-through;text-decoration-thickness:1px}
-.peg{position:absolute;right:-3px;top:50%;transform:translateY(-50%);
-  font-family:var(--mono);font-size:10px;color:var(--cold);visibility:hidden}
-.axis{display:flex;justify-content:space-between;margin-top:12px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--faint)}
+.chan.gone .val{color:var(--cold);text-decoration:none}
+.axis{display:flex;justify-content:space-between;margin-top:12px;font-family:var(--mono);
+  font-size:9px;letter-spacing:.1em;color:var(--faint)}
 
-/* ── EVIDENCE — the band turns over and shows its workings ───────────── */
-.evhead{display:flex;align-items:baseline;gap:16px;margin-bottom:16px;
-  position:sticky;top:0;background:var(--face);padding-bottom:8px;z-index:2}
-.evhead .t{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--faint)}
-.claim{padding:15px 0;border-top:1px solid var(--rule)}
-.claim:first-of-type{border-top:none;padding-top:0}
-.cmeta{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-bottom:7px;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--faint)}
-.cls{padding:1px 5px;border:1px solid var(--rule2);border-radius:2px;color:var(--dim)}
-.cls.A{color:var(--sig);border-color:var(--sig-deep)}
-.cstate{font-size:13.5px;color:var(--ink);margin-bottom:8px;max-width:70ch;line-height:1.5}
-.quote{font-family:var(--voice);font-size:14.5px;line-height:1.55;color:var(--dim);
-  border-left:1px solid var(--rule2);padding:2px 0 2px 15px;margin:8px 0;max-width:68ch}
-.qloc{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
-  color:var(--faint);margin-top:6px}
-.srcline{font-family:var(--mono);font-size:10.5px;color:var(--faint);
-  display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.srcline a{color:var(--dim)}
+/* ── CONDITIONS — demoted. They pick the conclusion; they are not the instrument ── */
+#cond{margin-top:28px;padding-top:20px;border-top:1px solid var(--rule);
+  display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cond .lab{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--faint);
+  margin-bottom:6px;display:flex;gap:9px}
+.cond .lab b{color:var(--dim);font-weight:400;letter-spacing:.04em}
+.cond input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:18px;
+  background:transparent;cursor:grab;margin:0;display:block}
+.cond input::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;
+  border-radius:50%;background:var(--dim);border:3px solid var(--face)}
+.cond input::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--dim);
+  border:3px solid var(--face)}
+.railwrap{position:relative;height:18px}
+.rail{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule2)}
 
-/* ── DIALS ────────────────────────────────────────────────────────────── */
-.dial+.dial{margin-top:26px;padding-top:24px;border-top:1px solid var(--rule)}
-.dial .lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;
-  color:var(--faint);margin-bottom:8px}
-.dial .cur{font-size:14px;line-height:1.4;color:var(--ink);margin-bottom:11px;
-  display:flex;gap:9px;align-items:baseline}
-.dial .cur .rd{color:var(--sig);font-family:var(--mono);flex:0 0 auto;transition:color .3s}
-#face.refusing .dial .cur .rd{color:var(--cold)}
-.slot{position:relative;height:26px}
-.slot input[type=range]{position:absolute;inset:0;width:100%;height:100%;margin:0;
-  -webkit-appearance:none;appearance:none;background:transparent;cursor:grab}
-.slot input:active{cursor:grabbing}
-.slot input::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;
-  border-radius:50%;background:var(--sig);border:3px solid var(--face);
-  box-shadow:0 0 0 1px var(--sig-deep)}
-.slot input::-moz-range-thumb{width:15px;height:15px;border-radius:50%;
-  background:var(--sig);border:3px solid var(--face);box-shadow:0 0 0 1px var(--sig-deep)}
-.rail{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule2);
-  pointer-events:none}
-.notch{position:absolute;top:50%;width:1px;height:8px;margin-top:-4px;
-  background:var(--rule2);pointer-events:none}
-.notch.measured{background:var(--sig);height:12px;margin-top:-6px}
-/* the stretch of rail the corpus actually names. Outside it you are extrapolating. */
-.span{position:absolute;top:50%;height:1px;margin-top:-.5px;background:var(--dim);
-  pointer-events:none}
-.span::before,.span::after{content:"";position:absolute;top:-3px;width:1px;height:7px;
-  background:var(--dim)}
-.span::before{left:0}.span::after{right:0}
-.again{font-family:var(--mono);font-size:10px;color:var(--faint);margin:6px 0}
-.note{font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--faint);
-  margin-top:11px;min-height:32px}
-.note.open{color:var(--cold)}
+/* ── SUPPORT PANEL — the graph. The hero. ─────────────────────────────── */
+.sh{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;font-family:var(--mono);
+  font-size:9.5px;letter-spacing:.2em;color:var(--faint)}
+.shsub{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-bottom:18px;
+  line-height:1.5}
+#support{max-height:min(70vh,640px);overflow:auto}
+/* group header — the graph is grouped by WHAT DEPENDS ON IT, so load is structural */
+.gh{display:flex;align-items:baseline;gap:12px;margin:22px 0 2px;padding-bottom:5px;
+  border-bottom:1px solid var(--rule2)}
+.gh:first-child{margin-top:0}
+.gn{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ink)}
+.gl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--faint);
+  margin-left:auto}
+.gh.dead .gn{color:var(--cold);text-decoration:line-through;text-decoration-thickness:1px}
+.gh.dead .gl{color:var(--cold)}
+.cl{border-top:1px solid var(--rule);padding:13px 0}
+.gh+.cl{border-top:none}
+.cl.dead .cid{color:var(--cold);text-decoration:line-through;text-decoration-thickness:1px}
+.clh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:3px}
+.cid{font-family:var(--mono);font-size:10.5px;color:var(--ink)}
+.tag{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--faint);
+  border:1px solid var(--rule2);border-radius:2px;padding:1px 5px}
+.tag.crit{color:var(--sig);border-color:var(--sig-deep)}
+.cst{font-size:12.5px;color:var(--dim);line-height:1.45;margin-bottom:9px;max-width:46ch}
+.margin{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-bottom:8px}
 
-/* the discrete dial reads as a switch, not a sweep */
-.steps{display:flex;flex-direction:column}
-.steps button{display:flex;align-items:center;gap:11px;padding:6px 0;font-size:13px;
-  color:var(--faint);transition:color .16s}
-.steps button:hover{color:var(--dim)}
-.steps button[aria-checked=true]{color:var(--ink)}
-.pip{width:7px;height:7px;flex:0 0 7px;border-radius:50%;
-  box-shadow:inset 0 0 0 1px var(--rule2);transition:.2s}
-.steps button[aria-checked=true] .pip{background:var(--sig);box-shadow:0 0 8px var(--sig-deep)}
-.steps button[data-open=y] .pip{border-radius:0;transform:rotate(45deg)}
-.steps button[data-open=y][aria-checked=true] .pip{background:var(--cold);box-shadow:none}
+.src{display:flex;align-items:center;gap:11px;padding:5px 0}
+.src .pub{font-size:12.5px;color:var(--dim);flex:1;min-width:0;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.src.off .pub{color:var(--cold);text-decoration:line-through;text-decoration-thickness:1px}
+/* a switch, not a checkbox. Instruments have switches. */
+.sw{width:26px;height:14px;flex:0 0 26px;border:1px solid var(--rule2);border-radius:2px;
+  position:relative;transition:border-color .15s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:9px;height:8px;
+  background:var(--sig);transition:transform .13s var(--ease),background .13s}
+.src.off .sw::after{transform:translateX(11px);background:var(--rule2)}
+.src:hover .sw{border-color:var(--dim)}
+.note{font-family:var(--mono);font-size:9.5px;color:var(--faint);line-height:1.5;
+  margin-top:5px;padding-left:37px}
+.note.warn{color:var(--cold)}
 
-/* ── BLIND SPOTS ─────────────────────────────────────────────────────── */
-#blind{margin-top:26px;padding-top:24px;border-top:1px solid var(--rule)}
-.bh{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;color:var(--faint);
-  margin-bottom:12px}
-.cells{display:flex;gap:6px;flex-wrap:wrap}
-.cell{width:25px;height:25px;border:1px solid var(--rule2);border-radius:2px;
-  font-family:var(--mono);font-size:9.5px;color:var(--faint);
-  display:flex;align-items:center;justify-content:center;transition:.18s}
-.cell:hover{border-color:var(--dim);color:var(--dim)}
-.cell[aria-expanded=true]{border-color:var(--cold);color:var(--cold);
-  box-shadow:inset 0 2px 0 var(--cold)}
-.caption{margin-top:13px;font-family:var(--voice);font-size:14.5px;line-height:1.55;
-  color:var(--dim);min-height:66px}
+.scope{margin-top:9px;padding-left:37px}
+.scope select{font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  background:var(--face);border:1px solid var(--rule2);border-radius:2px;padding:3px 5px;
+  max-width:100%}
 
-/* ── ABOUT / FOOTER ──────────────────────────────────────────────────── */
-#about{margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
-  font-family:var(--voice);font-size:15.5px;line-height:1.6;color:var(--dim);max-width:56ch}
-#about p+p{margin-top:11px}
-#about b{color:var(--ink);font-weight:400}
 footer{border-top:1px solid var(--rule);flex:0 0 auto}
-footer .w{padding:16px 34px 26px;display:flex;gap:20px;flex-wrap:wrap;
-  font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--faint)}
+footer .w{padding:15px 34px 24px;display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);
+  font-size:10px;letter-spacing:.06em;color:var(--faint)}
 footer a{color:var(--dim)}
-
-/* ── POWER-ON — instruments boot ─────────────────────────────────────── */
-@keyframes warm{from{opacity:0}to{opacity:1}}
-@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
-body.boot header{animation:warm .45s var(--ease) both}
-body.boot .left{animation:rise .55s var(--ease) .08s both}
-body.boot .right{animation:rise .55s var(--ease) .2s both}
-body.boot footer{animation:warm .5s var(--ease) .36s both}
+#about{margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);
+  font-family:var(--voice);font-size:15.5px;line-height:1.6;color:var(--dim);max-width:54ch}
+#about p+p{margin-top:10px}
+#about b{color:var(--ink);font-weight:400}
 
 @media (max-width:1000px){
   .deck{grid-template-columns:1fr;gap:0}
-  .right{border-left:none;border-top:1px solid var(--rule);
-    padding-left:0;margin-left:0;padding-top:28px}
-  .w{padding:0 22px}
-  /* must match .chan's columns exactly, or the gate stops marking the budget */
-  .gatewrap{left:118px;right:82px}
-  .chan{grid-template-columns:104px 1fr 68px;gap:14px}
+  .right{border-left:none;border-top:1px solid var(--rule);padding-left:0;margin-left:0;
+    padding-top:26px}
+  .w{padding:0 20px}
+  .gatewrap{left:118px;right:80px}
+  .chan{grid-template-columns:104px 1fr 64px;gap:14px}
+  #support{max-height:none}
 }
-@media (prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
 </style>
 
 <div id="face">
@@ -275,6 +223,7 @@ body.boot footer{animation:warm .5s var(--ease) .36s both}
   <div class="mark"><b>ALETHEIA</b><i>ἀλήθεια · unconcealment</i></div>
   <span class="grow"></span>
   <span class="lamp"><span class="bulb"></span><span id="lampt">READING</span></span>
+  <button class="hbtn" id="restore" disabled>RESTORE ALL</button>
   <button class="hbtn" id="whatbtn" aria-expanded="false">WHAT THIS IS</button>
   <button class="hbtn" id="theme" aria-label="Switch light or dark">◐</button>
 </div></header>
@@ -282,82 +231,58 @@ body.boot footer{animation:warm .5s var(--ease) .36s both}
 <main><div class="w"><div class="deck">
 
   <div class="left">
-    <div class="verdict" id="verdict">—</div>
+    <div class="state" id="state">—</div>
     <h1 class="subject" id="subject">—</h1>
     <div class="figure">
-      <button class="amount n" id="amount">—</button>
+      <span class="amount n" id="amount">—</span>
       <span class="against n" id="against"></span>
     </div>
-    <p class="voice" id="voice"></p>
-    <div class="threshold" id="thresh"></div>
 
-    <div id="about" hidden>
-      <p><b>Aletheia shows what a conclusion rests on.</b> Every figure here is
-      computed from individual claims, each traceable to the page it came from.
-      The question it exists to answer is <b>not</b> "which tool is best" — it is
-      <em>what evidence could disappear before this conclusion should?</em></p>
-      <p>AI coding economics is the first corpus, not the point. It is small on
-      purpose: five priced models, twelve load-bearing claims, and <b>zero of them
-      independently corroborated</b>. Where there is no measurement, it <b>refuses
-      to compute</b> rather than substituting a plausible number. The refusals are
-      the part worth reading.</p>
+    <p class="consequence" id="conseq" role="status" aria-live="polite"></p>
+
+    <div id="band">
+      <div class="bandhead"><span id="bandtitle">WHAT CAN STILL BE PRICED</span>
+        <span class="grow"></span><span id="bandnote"></span></div>
+      <div class="chart" id="chart"><div class="gatewrap"><div class="gate" id="gate" data-l=""></div></div></div>
+      <div class="axis"><span id="axlo"></span><span>cost per month · log scale</span><span id="axhi"></span></div>
     </div>
 
-    <div id="stage">
-      <div class="front">
-        <div class="bandhead"><span id="bandtitle">WHAT FITS</span><span class="grow"></span>
-          <span id="legend">● NOW &nbsp; ○ WHERE THE MEASUREMENT SITS</span></div>
-        <div class="chart" id="chart">
-          <div class="gatewrap"><div class="gate" id="gate" data-l=""></div></div>
-        </div>
-        <div class="axis"><span id="axlo"></span><span id="axmid">cost per month · log scale</span><span id="axhi"></span></div>
+    <div id="cond">
+      <div class="cond">
+        <div class="lab">BUDGET<b id="brd">$20</b></div>
+        <div class="railwrap"><div class="rail"></div>
+          <input type="range" id="budget" min="5" max="100" step="1" value="20"
+                 aria-label="Monthly budget in dollars"></div>
       </div>
+      <div class="cond">
+        <div class="lab">READ VS WRITE<b id="wrd">—</b></div>
+        <div class="railwrap"><div class="rail"></div>
+          <input type="range" id="work" min="0" max="1000" step="1" value="1000"
+                 aria-label="Reading versus writing ratio"></div>
+      </div>
+    </div>
 
-      <div class="back" id="back">
-        <div class="evhead"><span class="t" id="evtitle">EVIDENCE</span><span class="grow"></span>
-          <button class="hbtn" id="evclose">CLOSE ▲</button></div>
-        <div id="evbody"></div>
-      </div>
+    <div id="about" hidden>
+      <p><b>Aletheia shows what a conclusion rests on.</b> Every figure here is computed
+      from individual claims, each traceable to the page it came from. Switch a source
+      off and the engine genuinely recomputes without it — nothing here degrades for
+      effect.</p>
+      <p>The question is not which tool is best. It is
+      <em>what evidence could disappear before this conclusion should?</em> AI coding
+      economics is the first corpus, not the point.</p>
     </div>
   </div>
 
   <div class="right">
-    <div class="dial">
-      <div class="lab">BUDGET</div>
-      <div class="cur"><span class="rd n" id="brd">$20</span><span>a month, all in</span></div>
-      <div class="slot"><div class="rail"></div>
-        <input type="range" id="budget" min="5" max="100" step="1" value="20"
-               aria-label="Monthly budget in dollars"></div>
-      <div class="note">Your number. Nothing measured about it.</div>
-    </div>
-
-    <div class="dial">
-      <div class="lab">WORKLOAD — READING VS WRITING</div>
-      <div class="cur"><span class="rd n" id="wrd">—</span><span id="wtxt"></span></div>
-      <div class="slot"><div class="rail"></div><div id="wnotch"></div>
-        <input type="range" id="work" min="0" max="1000" step="1" value="1000"
-               aria-label="Reading versus writing"></div>
-      <div class="note" id="wnote"></div>
-    </div>
-
-    <div class="dial">
-      <div class="lab">TOOL — WHOSE CACHING?</div>
-      <div class="steps" id="hsteps" role="radiogroup" aria-label="Which tool do you use"></div>
-      <div class="note" id="hnote"></div>
-    </div>
-
-    <div id="blind">
-      <div class="bh" id="blindn">NOT KNOWN</div>
-      <div class="cells" id="cells"></div>
-      <p class="caption" id="cap"></p>
-    </div>
+    <div class="sh"><span>SUPPORT</span><span class="grow"></span><span id="supn"></span></div>
+    <p class="shsub" id="shsub"></p>
+    <div id="support"></div>
   </div>
 
 </div></div></main>
 
 <footer><div class="w">
-  <span id="fcounts"></span>
-  <span id="fcal"></span>
+  <span id="fcounts"></span><span id="fcal"></span>
   <span class="grow"></span>
   <a href="https://github.com/tanishkfr/AI-Engineering-Atlas">source &amp; corpus</a>
   <span id="fgen"></span>
@@ -371,131 +296,85 @@ const $=s=>document.querySelector(s);
 const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
 const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-/* ── the cost model ───────────────────────────────────────────────────────
-   25M prompt tokens presented per month. Cached reads bill at the cache rate,
-   the remainder at the input rate, output scaled by the input:output ratio. */
 const PRES=25e6;
 const cost=(p,io,hit)=>(PRES*(1-hit)*p[0]+PRES*hit*p[1]+(PRES/io)*p[2])/1e6;
-
 const TODAY=new Date().toISOString().slice(0,10);
 const MODELS=CORPUS.models.map(m=>{
   const iv=m.intervals.find(x=>TODAY>=x.from&&TODAY<=x.to)||m.intervals[0];
   return{name:m.name,p:[iv.in,iv.cache,iv.out],claims:iv.claims};
 });
-
 const WL=CORPUS.elicit.workload, HW=CORPUS.elicit.harness;
 const WV=WL.options.map(o=>o.value).filter(v=>typeof v==="number").sort((a,b)=>a-b);
-const IO_MIN=WV[0], IO_MAX=WV[WV.length-1];
+const IO_MIN=WV[0], IO_MAX=WV[WV.length-1], IO_LO=IO_MIN/4;
 const MEASURED_HIT=CORPUS.cache_hit;
-/* The only other rate the corpus offers. It declares this one an illustrative
-   floor, NOT a measurement — so it is used only as a range bound, always said aloud. */
 const FLOOR_HIT=HW.options.map(o=>o.value).filter(v=>typeof v==="number")
   .reduce((a,b)=>Math.min(a,b),MEASURED_HIT);
+const CACHE=CORPUS.cache_claim, WORK=CORPUS.workload_claim;
 
-const S={budget:20,io:IO_MAX,hw:0};
+/* ── THE GRAPH ────────────────────────────────────────────────────────────
+   withdrawn is a set of SOURCE ids. Everything else is derived from it.
+   No visual state exists that is not computed from this set. */
+const S={budget:20, io:IO_MAX, hw:0, withdrawn:new Set()};
 
-/* fixed domain. Instruments peg their needle; they do not silently rescale. */
+const srcOf=cid=>{const c=CORPUS.claims[cid];
+  return c?[...new Set((c.evidence||[]).map(e=>e.source).filter(s=>CORPUS.sources[s]))]:[]};
+const live=cid=>srcOf(cid).filter(s=>!S.withdrawn.has(s));
+const held=cid=>live(cid).length>0;
+const pubsOf=cid=>[...new Set(srcOf(cid).map(s=>CORPUS.sources[s].publisher))];
+const pubName=s=>(CORPUS.sources[s]||{}).publisher||s;
+const title=s=>(CORPUS.sources[s]||{}).title||s;
+
+/* a model can be priced only if every claim of its active interval still holds */
+const priceable=m=>m.claims.every(held);
+/* the cache measurement gates every figure: no rate, no arithmetic */
+const hitNow=()=>{const o=HW.options[S.hw];
+  return (o.value===null||!held(CACHE))?null:o.value};
+
+function snapshot(){
+  const hit=hitNow(), refusing=hit===null;
+  /* rows carry their own channel elements — the snapshot IS what render draws */
+  const rows=chans.map(ch=>{
+    const ok=priceable(ch.m);
+    const lo=ok?cost(ch.m.p,S.io,refusing?MEASURED_HIT:hit):null;
+    const hi=ok&&refusing?cost(ch.m.p,S.io,FLOOR_HIT):lo;
+    return Object.assign({},ch,{ok,lo,hi,fits:ok&&hi<=S.budget});
+  }).sort((a,b)=>(a.lo??Infinity)-(b.lo??Infinity));
+  const fitting=rows.filter(r=>r.fits);
+  return{hit,refusing,rows,fitting,
+         rec:refusing?null:(fitting[fitting.length-1]||null),
+         priced:rows.filter(r=>r.ok).length};
+}
+
+/* ── BAND ─────────────────────────────────────────────────────────────── */
 const D_LO=0.30,D_HI=120;
 const x=c=>Math.min(Math.max((Math.log(Math.max(c,D_LO))-Math.log(D_LO))/
   (Math.log(D_HI)-Math.log(D_LO)),0),1)*100;
-
-/* ── build the strip chart once; afterwards only positions move ───────── */
 const chart=$("#chart");
 const chans=MODELS.map(m=>{
-  const row=el("div","chan");
-  row.append(el("div","nm",m.name));
-  const tr=el("div","track");
-  const ghost=el("div","ghost"),bar=el("div","bar"),dot=el("div","dot"),peg=el("div","peg","▸");
-  /* where the evidence actually sits — never moves, so drift is visible */
-  ghost.style.left=x(cost(m.p,IO_MAX,MEASURED_HIT))+"%";
-  ghost.title="cost at the measured workload and the measured cache rate";
-  tr.append(ghost,bar,dot,peg);
-  const val=el("button","val n");
-  val.onclick=()=>showEvidence([...m.claims,CORPUS.cache_claim,CORPUS.workload_claim]
-    .filter(Boolean),"EVIDENCE BEHIND "+m.name.toUpperCase());
-  row.append(tr,val);
-  chart.append(row);
-  return{m,row,dot,bar,val,peg};
+  const row=el("div","chan"); row.append(el("div","nm",m.name));
+  const tr=el("div","track"), bar=el("div","bar"), dot=el("div","dot");
+  tr.append(bar,dot);
+  const val=el("div","val n"); row.append(tr,val); chart.append(row);
+  return{m,row,dot,bar,val};
 });
-$("#axlo").textContent="$"+D_LO.toFixed(2);
-$("#axhi").textContent="$"+D_HI+"+";
+$("#axlo").textContent="$"+D_LO.toFixed(2); $("#axhi").textContent="$"+D_HI+"+";
 
-/* ── workload: continuous, with magnetic notches at the measured shapes ───
-   The rail runs PAST the shapes the corpus names. That is deliberate: at most
-   budgets the recommendation only breaks below the corpus's lowest sampled
-   shape, and an instrument that cannot be pushed to its breaking point hides
-   the most useful thing it knows. The evidenced span is drawn on the rail, so
-   leaving it is visible under your thumb. */
+/* ── conditions ───────────────────────────────────────────────────────── */
 const work=$("#work");
-const IO_LO=IO_MIN/4, IO_HI=IO_MAX;
-const posToIo=p=>IO_LO*Math.pow(IO_HI/IO_LO,p/1000);
-const ioToPos=io=>1000*Math.log(io/IO_LO)/Math.log(IO_HI/IO_LO);
-const span=el("div","span");
-span.style.left=ioToPos(IO_MIN)/10+"%";
-span.style.width=(ioToPos(IO_MAX)-ioToPos(IO_MIN))/10+"%";
-span.title="the range of workload shapes the corpus actually names";
-$("#wnotch").append(span);
-WL.options.forEach(o=>{
-  if(typeof o.value!=="number")return;
-  const n=el("div","notch"+(o.value===IO_MAX?" measured":""));
-  n.style.left=ioToPos(o.value)/10+"%";
-  n.title=o.value===IO_MAX?"the shape we actually measured":o.label;
-  $("#wnotch").append(n);
-});
+const posToIo=p=>IO_LO*Math.pow(IO_MAX/IO_LO,p/1000);
+const ioToPos=io=>1000*Math.log(io/IO_LO)/Math.log(IO_MAX/IO_LO);
 $("#budget").addEventListener("input",e=>{S.budget=+e.target.value;render()});
 work.addEventListener("input",e=>{
   let io=posToIo(+e.target.value);
-  for(const v of WV) if(Math.abs(Math.log(io/v))<0.03) io=v;   /* magnetism */
+  for(const v of WV) if(Math.abs(Math.log(io/v))<0.03) io=v;
   S.io=io;render();
 });
 
-/* ── tool: discrete, and two of its positions open the circuit ────────── */
-HW.options.forEach((o,i)=>{
-  const b=el("button");
-  b.setAttribute("role","radio");
-  b.setAttribute("aria-checked",String(i===0));
-  b.tabIndex=i===0?0:-1;
-  if(o.value===null)b.dataset.open="y";
-  b.append(el("span","pip"),el("span",null,o.label));
-  b.onclick=()=>{S.hw=i;render()};
-  b.onkeydown=e=>{
-    const d=e.key==="ArrowDown"||e.key==="ArrowRight"?1:
-            e.key==="ArrowUp"||e.key==="ArrowLeft"?-1:0;
-    if(!d)return;
-    e.preventDefault();
-    S.hw=(S.hw+d+HW.options.length)%HW.options.length;
-    render();$("#hsteps").children[S.hw].focus();
-  };
-  $("#hsteps").append(b);
-});
-
-/* ── blind spots — the instrument draws its own field of view ─────────── */
-CORPUS.unknowns.forEach((u,i)=>{
-  const c=el("button","cell",String(i+1).padStart(2,"0"));
-  c.setAttribute("aria-expanded","false");
-  c.onclick=()=>{
-    const was=c.getAttribute("aria-expanded")==="true";
-    document.querySelectorAll(".cell").forEach(z=>z.setAttribute("aria-expanded","false"));
-    c.setAttribute("aria-expanded",String(!was));
-    $("#cap").textContent=was?DEFAULT_CAP:u.statement.replace(/\s+/g," ").trim();
-  };
-  $("#cells").append(c);
-});
-const DEFAULT_CAP=CORPUS.unknowns.length+" holes in the instrument's field of view. "+
-  "Every one is a claim we published saying, in full, that we do not know. Open one.";
-$("#blindn").textContent="NOT KNOWN — "+CORPUS.unknowns.length;
-$("#cap").textContent=DEFAULT_CAP;
-
-/* ── number rolling ───────────────────────────────────────────────────── */
-/* Numbers roll, but the ROLL IS NEVER LOAD-BEARING. requestAnimationFrame does
-   not fire on a hidden tab, which once left a stale figure sitting on screen —
-   for this product, a wrong number displayed confidently is the only truly
-   unacceptable bug. So: skip the animation when frames are not being painted,
-   and guarantee the terminal value on a timer regardless of what rAF does. */
-const rolls=new WeakMap(), timers=new WeakMap(), DUR=190;
+/* ── number rolling. Never load-bearing: rAF does not fire on a hidden tab,
+      and a stale figure displayed confidently is the one unacceptable bug. ── */
+const rolls=new WeakMap(),timers=new WeakMap(),DUR=190;
 function roll(node,to,fmt){
-  const from=rolls.get(node)??to;
-  rolls.set(node,to);
+  const from=rolls.get(node)??to; rolls.set(node,to);
   clearTimeout(timers.get(node));
   if(RM||document.visibilityState!=="visible"||Math.abs(to-from)<0.005){
     node.textContent=fmt(to);return;
@@ -503,7 +382,7 @@ function roll(node,to,fmt){
   const t0=performance.now();
   timers.set(node,setTimeout(()=>{node.textContent=fmt(to)},DUR+40));
   (function step(t){
-    if(rolls.get(node)!==to)return;              /* superseded by a newer target */
+    if(rolls.get(node)!==to)return;
     const k=Math.min((t-t0)/DUR,1);
     node.textContent=fmt(from+(to-from)*(1-Math.pow(1-k,3)));
     if(k<1)requestAnimationFrame(step);
@@ -511,229 +390,213 @@ function roll(node,to,fmt){
 }
 const usd=v=>"$"+v.toFixed(2);
 
-/* ── SUPPORT ──────────────────────────────────────────────────────────────
-   Counting sources is not counting strength. Two pages from one publisher is
-   duplication; a reseller quoting a vendor is derivation. Neither is
-   corroboration. And type S is CONSTITUTIVE — the vendor does not report a
-   price, it constitutes one — so a second source there could only verify the
-   transcription. Sole authority is not the same as fragile.
-   See SOURCES.md §3.5 and DEPENDENCE.md. */
-const CONSTITUTIVE=new Set(["S"]);
+/* ── THE CONSEQUENCE — the component that tells the truth about a non-event ──
+   Generated by diffing the graph before and after. Never authored per case. */
+function consequence(before,after,sid,off){
+  const c=$("#conseq"); c.className="consequence";
+  if(!off){
+    c.classList.add("none");
+    c.innerHTML='<span class="q">RESTORED</span>'+title(sid)+" is back in the graph.";
+    return;
+  }
+  const killed=CLAIMS.filter(cid=>srcOf(cid).includes(sid)&&!held(cid));
+  /* 3 — the conclusion is withdrawn */
+  if(after.refusing&&!before.refusing){
+    c.classList.add("gone");
+    c.innerHTML='<span class="q">WITHDRAWN</span>That page was the only thing carrying '+
+      '<b>'+CACHE+'</b> — the one measurement under every figure here. Without a cache '+
+      'rate there is no arithmetic to do, so nothing on this page can be computed. '+
+      'It is not a worse answer. It is <b>no answer</b>.';
+    return;
+  }
+  /* 2 — the conclusion weakens: options leave the comparison */
+  const lost=before.rows.filter(r=>r.ok).map(r=>r.m.name)
+    .filter(n=>!after.rows.find(r=>r.m.name===n&&r.ok));
+  if(lost.length){
+    c.classList.add("gone");
+    const moved=(before.rec&&after.rec&&before.rec.m.name!==after.rec.m.name);
+    c.innerHTML='<span class="q">WEAKENED</span><b>'+lost.join(" and ")+'</b> can no longer '+
+      'be priced — '+(killed.length?'nothing is left supporting '+killed[0]:'its price lost its last source')+'. '+
+      (moved?'The conclusion moved to <b>'+after.rec.m.name+'</b>. ':'')+
+      after.priced+' of '+MODELS.length+' options remain.';
+    return;
+  }
+  /* 1 — no change. The most important case, and the one nobody explains. */
+  const stillOn=killed.length?[]:CLAIMS.filter(cid=>srcOf(cid).includes(sid));
+  const survivor=stillOn.length?stillOn[0]:null;
+  const rest=survivor?live(survivor):[];
+  const pubs=[...new Set(rest.map(pubName))];
+  const same=pubs.length===1&&pubs[0]===pubName(sid);
+  c.classList.add("none");
+  c.innerHTML='<span class="q">NO CHANGE</span>Nothing moved. '+
+    (survivor
+      ? '<b>'+survivor+'</b> is still carried by '+rest.length+' other source'+
+        (rest.length===1?'':'s')+'. '+
+        (same
+          ? 'But every one of them is '+pubs[0]+'’s — so this was never two sources. '+
+            'It was <b>one publisher, filed twice</b>. Duplication is not corroboration.'
+          : 'And they are '+pubs.join(" and ")+'’s — genuinely independent.')
+      : 'Nothing computed here depended on it.');
+}
 
-function support(m){
-  const ids=[...m.claims];
-  const pubs=new Set(); let constitutive=0, observational=0;
-  ids.forEach(id=>{
-    const c=CORPUS.claims[id]; if(!c)return;
-    (CONSTITUTIVE.has(c.type)?()=>constitutive++:()=>observational++)();
-    (c.evidence||[]).forEach(e=>{
-      const s=CORPUS.sources[e.source]; if(s&&s.publisher)pubs.add(s.publisher);
+/* ── SUPPORT PANEL ────────────────────────────────────────────────────── */
+let CLAIMS=[];
+/* what the CONCLUSION rests on — drives the readout */
+function claimsFor(snap){
+  const base=snap.rec?snap.rec.m.claims:(snap.rows.find(r=>r.ok)||{m:{claims:[]}}).m.claims;
+  return [...new Set([...base,CACHE,WORK])].filter(c=>CORPUS.claims[c]);
+}
+/* the WHOLE graph, grouped by what depends on it. Shared claims first, because
+   load is the thing worth seeing and they carry all of it. Showing only the
+   winner's branch made one of the three outcomes unreachable: every claim under
+   it routes through the same page, so nothing could leave without refusing. */
+function groups(){
+  const g=[{label:"UNDER EVERY FIGURE",claims:[CACHE,WORK].filter(c=>CORPUS.claims[c])}];
+  MODELS.forEach(m=>g.push({label:m.name.toUpperCase(),model:m,
+    claims:m.claims.filter(c=>CORPUS.claims[c])}));
+  return g;
+}
+
+function claimBlock(cid,load){
+    const c=CORPUS.claims[cid], srcs=srcOf(cid), alive=live(cid);
+    const blk=el("div","cl"+(alive.length?"":" dead"));
+    const h=el("div","clh");
+    h.append(el("span","cid",cid));
+    h.append(el("span","tag",(c.type==="S"?"S · CONSTITUTIVE":c.type==="M"?"M · OBSERVATIONAL":c.type)));
+    if(cid===CACHE)h.append(el("span","tag crit","LOAD "+load));
+    blk.append(h);
+    blk.append(el("div","cst",(c.statement||"").replace(/\s+/g," ").trim()));
+    blk.append(el("div","margin",alive.length
+      ? "holds through "+(alive.length-1)+" more withdrawal"+(alive.length===2?"":"s")
+      : "no support remains"));
+
+    srcs.forEach(sid=>{
+      const off=S.withdrawn.has(sid);
+      const r=el("button","src"+(off?" off":""));
+      r.setAttribute("aria-pressed",String(!off));
+      r.append(el("span","pub",pubName(sid)+" — "+title(sid)));
+      r.append(el("span","sw"));
+      r.onclick=()=>toggle(sid);
+      blk.append(r);
     });
+
+    /* type S can never be independently corroborated — say so, don't imply fragility */
+    if(c.type==="S"&&srcs.length>1&&pubsOf(cid).length===1)
+      blk.append(el("div","note",srcs.length+" sources, 1 publisher — duplication, not corroboration"));
+    if(c.type==="S"&&srcs.length===1)
+      blk.append(el("div","note","sole authority — a second source could only verify transcription"));
+    if(c.type==="M")
+      blk.append(el("div","note warn","1 observation, unreplicated — the only claim here that could be corroborated and is not"));
+
+    /* the scope control lives ON the claim it qualifies, not in a separate rack */
+    if(cid===CACHE){
+      const w=el("div","scope"), sel=el("select");
+      sel.setAttribute("aria-label",HW.question);
+      HW.options.forEach((o,i)=>{const op=el("option",null,o.label);op.value=i;sel.append(op)});
+      sel.value=String(S.hw);
+      sel.onchange=e=>{S.hw=+e.target.value;const b=snapshot();render();
+        const a=snapshot();
+        const c2=$("#conseq");c2.className="consequence "+(a.refusing?"gone":"none");
+        c2.innerHTML='<span class="q">'+(a.refusing?"OUT OF SCOPE":"IN SCOPE")+'</span>'+
+          HW.options[S.hw].note;
+      };
+      w.append(sel); blk.append(w);
+    }
+    return blk;
+}
+
+function drawSupport(snap){
+  const gs=groups();
+  CLAIMS=[...new Set(gs.flatMap(g=>g.claims))];
+  const box=$("#support"); box.textContent="";
+  const priced=MODELS.filter(priceable).length;
+  gs.forEach(g=>{
+    if(!g.claims.length)return;
+    const dead=g.model&&!priceable(g.model);
+    const hd=el("div","gh"+(dead?" dead":""));
+    hd.append(el("span","gn",g.label));
+    hd.append(el("span","gl",g.model
+      ? (dead?"unpriceable":(snap.rec&&snap.rec.m.name===g.model.name?"the conclusion":"load 1"))
+      : "load "+priced));
+    box.append(hd);
+    g.claims.forEach(cid=>box.append(claimBlock(cid,g.model?1:priced)));
   });
-  return{claims:ids,publishers:[...pubs],constitutive,observational,
-         /* independent support requires a causal path not through another counted
-            source. For constitutive claims no such path can exist, so: zero. */
-         corroborated:0};
+  const pubs=[...new Set(CLAIMS.flatMap(pubsOf))];
+  $("#supn").textContent=CLAIMS.length+" CLAIMS · "+pubs.length+" PUBLISHER"+
+    (pubs.length===1?"":"S");
+  $("#shsub").textContent=snap.refusing
+    ? "Switch a source back on to restore the graph."
+    : "Switch any source off. The engine recomputes without it.";
 }
 
-function supportProse(sup){
-  const who=sup.publishers.join(" and ")||"one publisher";
-  return "Every claim under this price is "+who+"'s — and a price is <em>constitutive</em>, "+
-    "not observed. The vendor does not report it, the vendor sets it, so a second source "+
-    "could only confirm we transcribed it correctly. That is sole authority, and it is "+
-    "correct. What is genuinely uncorroborated sits underneath: the cache measurement, "+
-    "taken <em>once, on one machine</em>.";
+function toggle(sid){
+  const before=snapshot();
+  S.withdrawn.has(sid)?S.withdrawn.delete(sid):S.withdrawn.add(sid);
+  const off=S.withdrawn.has(sid);
+  render();
+  consequence(before,snapshot(),sid,off);
+  $("#restore").disabled=S.withdrawn.size===0;
 }
+$("#restore").onclick=()=>{
+  S.withdrawn.clear();render();
+  const c=$("#conseq");c.className="consequence none";
+  c.innerHTML='<span class="q">RESTORED</span>Every source is back in the graph.';
+  $("#restore").disabled=true;
+};
 
-/* the claim shared by every priced figure — the actual single point of failure */
-const SHARED={id:CORPUS.cache_claim,load:MODELS.length};
-
-/* the io ratio at which the recommendation stops holding */
-function breakpoint(p,budget,hit){
-  const d=budget*1e6-PRES*(1-hit)*p[0]-PRES*hit*p[1];
-  return d<=0?Infinity:(PRES*p[2])/d;
-}
-
-let lastRec=null,lastOrder="";
+/* ── RENDER ───────────────────────────────────────────────────────────── */
 function render(){
-  const hw=HW.options[S.hw],open=hw.value===null,hit=open?null:hw.value;
-  $("#face").classList.toggle("refusing",open);
-  $("#lampt").textContent=open?"REFUSING":"READING";
-
+  const snap=snapshot();
+  $("#face").classList.toggle("refusing",snap.refusing);
+  $("#lampt").textContent=snap.refusing?"REFUSING":"READING";
   roll($("#brd"),S.budget,v=>"$"+Math.round(v));
   $("#wrd").textContent=Math.round(S.io)+":1";
-  const near=WL.options.filter(o=>typeof o.value==="number")
-    .reduce((a,b)=>Math.abs(Math.log(b.value/S.io))<Math.abs(Math.log(a.value/S.io))?b:a);
-  const onNotch=Math.abs(Math.log(near.value/S.io))<0.031;
-  const outside=S.io<IO_MIN;
-  $("#wtxt").textContent=onNotch?near.label.toLowerCase()
-    :outside?"past every shape the corpus names":"between the shapes we asked about";
-  $("#wnote").textContent=onNotch?near.note
-    :outside?"Off the evidence entirely. The arithmetic still works out here; nothing else does."
-    :"Between two named shapes. The cost model is continuous — the evidence is four points.";
-  $("#wnote").classList.toggle("open",outside);
-  work.setAttribute("aria-valuetext",Math.round(S.io)+" to 1 — "+
-    (onNotch?near.label:outside?"past every measured shape":"between measured shapes"));
-  $("#hnote").textContent=hw.note;
-  $("#hnote").classList.toggle("open",open);
-  [...$("#hsteps").children].forEach((b,i)=>{
-    b.setAttribute("aria-checked",String(i===S.hw));b.tabIndex=i===S.hw?0:-1;
-  });
-
-  const rows=chans.map(c=>{
-    const lo=cost(c.m.p,S.io,open?MEASURED_HIT:hit);
-    const hi=open?cost(c.m.p,S.io,FLOOR_HIT):lo;
-    return Object.assign({},c,{lo,hi,fits:hi<=S.budget});
-  }).sort((a,b)=>a.lo-b.lo);
-
-  const order=rows.map(r=>r.m.name).join("|");
-  if(order!==lastOrder){rows.forEach(r=>chart.append(r.row));lastOrder=order}
+  work.setAttribute("aria-valuetext",Math.round(S.io)+" to 1");
 
   $("#gate").style.left=x(S.budget)+"%";
   $("#gate").dataset.l=usd(S.budget);
+  snap.rows.forEach(r=>chart.append(r.row));
 
-  const fitting=rows.filter(r=>r.fits);
-  const rec=fitting[fitting.length-1]||null;
-
-  rows.forEach(r=>{
-    r.row.classList.toggle("over",!r.fits);
-    r.row.classList.toggle("rec",!!rec&&r.m.name===rec.m.name&&!open);
+  snap.rows.forEach(r=>{
+    r.row.classList.toggle("gone",!r.ok);
+    r.row.classList.toggle("ranged",r.ok&&snap.refusing);
+    r.row.classList.toggle("over",r.ok&&!snap.refusing&&!r.fits);
+    r.row.classList.toggle("rec",!!snap.rec&&r.m.name===snap.rec.m.name);
+    if(!r.ok){r.val.textContent="unpriceable";return}
     r.dot.style.left=x(r.lo)+"%";
-    r.dot.style.opacity=open?0:1;
-    r.bar.style.opacity=open?1:0;
     r.bar.style.left=x(r.lo)+"%";
     r.bar.style.width=Math.max(x(r.hi)-x(r.lo),0)+"%";
-    r.peg.style.visibility=r.hi>D_HI?"visible":"hidden";
-    /* the bar can run off the scale; the NUMBER never rounds off to a symbol */
-    if(open)r.val.textContent=usd(r.lo)+"–"+usd(r.hi);
+    if(snap.refusing)r.val.textContent=usd(r.lo)+"–"+usd(r.hi);
     else roll(r.val,r.lo,usd);
   });
 
-  if(open){
-    $("#verdict").textContent="CANNOT SAY";
+  if(snap.refusing){
+    $("#state").textContent="CANNOT SAY";
     $("#subject").textContent="No number belongs here";
     $("#amount").textContent="—";
     $("#against").textContent="";
-    $("#voice").innerHTML="We measured a cache rate of <em>"+MEASURED_HIT.toFixed(4)+
-      "</em> on one machine, once. For the tool you picked there is no measurement, and "+
-      "putting ours in its place would be inventing a number. So the band shows ranges "+
-      "instead — floored by that single measurement, ceilinged by a rate the corpus itself "+
-      "calls illustrative rather than observed.";
-    $("#thresh").innerHTML='<span class="k">WHAT WOULD FIX THIS</span>'+
-      '<span>one person running the measurement on that tool and sending the numbers back</span>';
     $("#bandtitle").textContent="WHAT MIGHT FIT";
-    $("#legend").textContent="RANGES, NOT POSITIONS";
-    lastRec=null;
-  }else if(!rec){
-    $("#verdict").textContent="NOTHING FITS";
+    $("#bandnote").textContent="RANGES, NOT POSITIONS";
+  }else if(!snap.rec){
+    $("#state").textContent="NOTHING FITS";
     $("#subject").textContent="Not at "+usd(S.budget);
-    $("#amount").textContent=usd(rows[0].lo);
-    $("#against").textContent="cheapest priced — "+rows[0].m.name;
-    $("#voice").innerHTML="Everything the corpus can price costs more than that at this "+
-      "workload shape. A statement about <em>five priced models</em>, not about the market.";
-    $("#thresh").innerHTML='<span class="k">NOTE</span><span>the corpus prices five things. '+
-      'It is not a survey of what exists.</span>';
-    $("#bandtitle").textContent="WHAT FITS";
-    $("#legend").textContent="NONE";
-    lastRec=null;
+    $("#amount").textContent=snap.rows[0]&&snap.rows[0].ok?usd(snap.rows[0].lo):"—";
+    $("#against").textContent=snap.priced+" of "+MODELS.length+" still priceable";
+    $("#bandtitle").textContent="WHAT CAN STILL BE PRICED";
+    $("#bandnote").textContent="NONE FIT";
   }else{
-    const bp=breakpoint(rec.m.p,S.budget,hit);
-    if(lastRec&&lastRec!==rec.m.name&&!RM){
-      $("#gate").classList.remove("flash");void $("#gate").offsetWidth;
-      $("#gate").classList.add("flash");
-    }
-    lastRec=rec.m.name;
-    const sup=support(rec.m);
-    $("#verdict").textContent="RESTS ON "+sup.claims.length+" CLAIMS · "+
-      sup.publishers.length+" PUBLISHER"+(sup.publishers.length===1?"":"S")+
-      " · "+sup.corroborated+" CORROBORATED";
-    $("#subject").textContent=rec.m.name;
-    roll($("#amount"),rec.lo,usd);
-    $("#against").textContent="of "+usd(S.budget)+" · "+usd(S.budget-rec.lo)+" spare · "+
-      fitting.length+" of "+rows.length+" fit";
-    $("#voice").innerHTML=supportProse(sup);
-    /* sensitivity AND dependence are different questions and both get a line */
-    $("#thresh").innerHTML = ( bp<=IO_MIN
-      ? '<span class="k">HOLDS</span><span>at every workload shape we can ask about</span>'
-      : bp===Infinity
-      ? '<span class="k">THRESHOLD</span><span>no workload shape makes this fit</span>'
-      : '<span class="k">BREAKS AT</span><span><b>'+Math.round(bp)+' : 1</b> — drag below '+
-        'that and writing outweighs reading, and this leaves your budget</span>' )
-      + '<span class="k">ENDS IF WITHDRAWN</span><span><b>'+SHARED.id+'</b> — the one '+
-        'measurement under every figure here. Withdraw it and '+SHARED.load+
-        ' of these conclusions stop being computable, this one included.</span>';
-    $("#bandtitle").textContent="WHAT FITS";
-    $("#legend").innerHTML="● NOW &nbsp; ○ WHERE THE MEASUREMENT SITS";
+    const pubs=[...new Set(claimsFor(snap).flatMap(pubsOf))];
+    $("#state").textContent="RESTS ON "+claimsFor(snap).length+" CLAIMS · "+
+      pubs.length+" PUBLISHER"+(pubs.length===1?"":"S")+" · 0 CORROBORATED";
+    $("#subject").textContent=snap.rec.m.name;
+    roll($("#amount"),snap.rec.lo,usd);
+    $("#against").textContent="of "+usd(S.budget)+" · "+snap.fitting.length+" of "+
+      snap.priced+" priced options fit";
+    $("#bandtitle").textContent="WHAT CAN STILL BE PRICED";
+    $("#bandnote").textContent=snap.priced+" OF "+MODELS.length;
   }
+  drawSupport(snap);
 }
-
-/* ── evidence: the band turns over ────────────────────────────────────── */
-const CLS={A:"vendor primary",B:"independent measurement",C:"practitioner",
-           D:"press",E:"unvetted"};
-function showEvidence(ids,title){
-  const b=$("#evbody");b.textContent="";
-  $("#evtitle").textContent=title;
-  /* one excerpt often establishes several claims. Print it once — repeating it
-     five times looks like volume of evidence, which is exactly the impression
-     a corpus this small should not give. */
-  const seen=new Set();
-  ids.forEach(id=>{
-    const c=CORPUS.claims[id];if(!c)return;
-    const box=el("div","claim"),meta=el("div","cmeta");
-    meta.append(el("span",null,id));
-    if(c.valid_to)meta.append(el("span",null,"valid "+(c.valid_from||"?")+" → "+c.valid_to));
-    else if(c.valid_from)meta.append(el("span",null,"valid from "+c.valid_from));
-    if(c.scope)meta.append(el("span",null,"scope: "+c.scope));
-    if(c.supersession_kind)meta.append(el("span",null,c.supersession_kind+" of "+c.supersedes));
-    box.append(meta,el("div","cstate",c.statement));
-    c.evidence.forEach(e=>{
-      const s=CORPUS.sources[e.source];if(!s)return;
-      if(e.excerpt&&!seen.has(e.excerpt)){
-        seen.add(e.excerpt);
-        const q=el("blockquote","quote",e.excerpt);
-        q.append(el("span","qloc",(e.locator||"")+
-          (e.supports?"":" · CITED AS NOT ESTABLISHING THIS")));
-        box.append(q);
-      }else if(e.excerpt){
-        box.append(el("div","again","— same passage, quoted above"));
-      }
-      const line=el("div","srcline"),cl=el("span","cls "+(s.class||""),"CLASS "+s.class);
-      cl.title=CLS[s.class]||"";
-      line.append(cl,el("span",null,s.publisher||""),
-        el("span",null,"retrieved "+(s.retrieved||"?")),
-        el("span",null,s.hash_status==="hashed"?"hashed":"not hashed"));
-      if(s.url){const a=el("a",null,"page");a.href=s.url;a.target="_blank";a.rel="noopener";line.append(a)}
-      if(s.archive_url){const a=el("a",null,"archived");a.href=s.archive_url;a.target="_blank";a.rel="noopener";line.append(a)}
-      if((s.flags||[]).length)line.append(el("span",null,"flagged: "+s.flags.join(", ")));
-      box.append(line);
-    });
-    b.append(box);
-  });
-  $("#stage").classList.add("flipped");
-  /* focus() on an element that is still edge-on mid-flip is silently a no-op,
-     which stranded keyboard users on a panel they had just opened. Wait for the
-     rotation to finish — and keep a timer, because transitionend never arrives
-     on a tab that is not painting frames. */
-  const back=$("#back"),aim=$("#evclose");
-  let moved=false;
-  const focusOnce=()=>{if(moved)return;moved=true;
-    back.removeEventListener("transitionend",focusOnce);aim.focus()};
-  back.addEventListener("transitionend",focusOnce);
-  setTimeout(focusOnce,520);
-}
-$("#evclose").onclick=()=>{$("#stage").classList.remove("flipped");$("#amount").focus()};
-addEventListener("keydown",e=>{
-  if(e.key==="Escape"&&$("#stage").classList.contains("flipped"))$("#evclose").click();
-});
-$("#amount").onclick=()=>{
-  if(HW.options[S.hw].value===null)return;
-  const hit=HW.options[S.hw].value;
-  const f=chans.map(c=>({c,v:cost(c.m.p,S.io,hit)})).filter(r=>r.v<=S.budget)
-    .sort((a,b)=>a.v-b.v).pop();
-  if(!f)return;
-  showEvidence([...f.c.m.claims,CORPUS.cache_claim,CORPUS.workload_claim].filter(Boolean),
-    "EVIDENCE BEHIND "+f.c.m.name.toUpperCase());
-};
 
 /* ── chrome ───────────────────────────────────────────────────────────── */
 if(matchMedia("(prefers-color-scheme:light)").matches)
@@ -746,17 +609,15 @@ $("#whatbtn").onclick=()=>{
   const a=$("#about"),was=!a.hidden;
   a.hidden=was;$("#whatbtn").setAttribute("aria-expanded",String(!was));
 };
-
 const cal=CORPUS.calibration;
-$("#fcounts").textContent=CORPUS.counts.claims+" claims · "+CORPUS.counts.sources+
-  " sources · "+CORPUS.counts.priced+" priced · "+
-  Math.round(cal.unknown_ratio*100)+"% say we do not know";
+$("#fcounts").textContent=CORPUS.counts.claims+" claims · "+CORPUS.counts.sources+" sources";
 $("#fcal").textContent=Math.round(cal.dominant_share*100)+"% of citations are "+
-  cal.dominant_publisher+"'s — read cross-vendor statements with that in mind";
+  cal.dominant_publisher+"'s";
 $("#fgen").textContent="built "+CORPUS.generated;
 
 work.value=ioToPos(IO_MAX);
-document.body.classList.add("boot");
 render();
-addEventListener("load",()=>setTimeout(()=>document.body.classList.remove("boot"),1100));
+$("#conseq").innerHTML='<span class="q">START HERE</span>This price rests on the sources '+
+  'listed to the right. Switch one off and the engine recomputes without it. '+
+  'Most will change nothing — <b>and why they change nothing is the interesting part.</b>';
 </script>
