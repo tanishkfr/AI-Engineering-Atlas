@@ -16,16 +16,16 @@ sources:
     class: A
     url: https://developers.openai.com/api/docs/pricing
     canonical_url: https://developers.openai.com/api/docs/pricing
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260802044220/https://developers.openai.com/api/docs/pricing
+    archive_status: archived
     title: OpenAI API pricing
     publisher: ent-institution-openai
     author: null
     published: null
     retrieved: 2026-08-03
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:261651519ba566432f4a7b49eff586669ae1351ff4deaa2b98250ce10c64890d
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: tool_extracted
     flags: [self_interested]
     excerpts:
@@ -67,16 +67,16 @@ sources:
     class: A
     url: https://ai.google.dev/gemini-api/docs/pricing
     canonical_url: https://ai.google.dev/gemini-api/docs/pricing
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260803093849/https://ai.google.dev/gemini-api/docs/pricing
+    archive_status: archived
     title: Gemini API pricing
     publisher: ent-institution-google
     author: null
     published: null
     retrieved: 2026-08-03
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:fa9e85073e1779558e803c804c9f27d6c75467123041c01f48f33ba4dbdba1dc
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: tool_extracted
     flags: [self_interested]
     excerpts:

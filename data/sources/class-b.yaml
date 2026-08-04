@@ -9,15 +9,15 @@ sources:
     class: B
     url: https://artificialanalysis.ai/methodology/performance-benchmarking
     canonical_url: https://artificialanalysis.ai/methodology/performance-benchmarking
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260708210234/https://artificialanalysis.ai/methodology/performance-benchmarking
+    archive_status: archived
     title: Artificial Analysis — Performance benchmarking methodology
     publisher: ent-institution-artificialanalysis
     published: null
     retrieved: 2026-08-04
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:5996080ff087ab399cce326856d2713bb7ff0a058895d5cf819dfea6118deaae
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: tool_extracted
     flags: []
     excerpts:
@@ -104,15 +104,15 @@ sources:
     class: A
     url: https://platform.kimi.ai/docs/pricing/chat
     canonical_url: https://platform.kimi.ai/docs/pricing/chat
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260801074348/https://platform.kimi.ai/docs/pricing/chat
+    archive_status: archived
     title: Kimi platform — chat model index
     publisher: ent-institution-moonshot
     published: null
     retrieved: 2026-08-04
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:dd787c081d824a81e25af79567c00e1a7527c33d4a5a5b07801eedd85eadbeac
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: tool_extracted
     flags: [self_interested]
     excerpts:

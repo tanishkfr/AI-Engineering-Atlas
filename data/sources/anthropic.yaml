@@ -9,16 +9,16 @@ sources:
     class: A
     url: https://platform.claude.com/docs/en/about-claude/models/overview
     canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
-    archive_url: null
-    archive_status: pending
+    archive_url: https://web.archive.org/web/20260804055329/https://platform.claude.com/docs/en/about-claude/models/overview
+    archive_status: archived
     title: Models overview
     publisher: ent-institution-anthropic
     author: null
     published: null            # page carries no publication date; NOT guessed
     retrieved: 2026-08-03
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:69b3ec5acb7b8f76995bad0a932f308d000335c9a68f7358bc126c7a20d58b06
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: verbatim
     flags: [self_interested]
     excerpts:

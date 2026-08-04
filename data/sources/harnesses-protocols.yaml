@@ -8,15 +8,15 @@ sources:
     class: A
     url: https://code.claude.com/docs/en/overview
     canonical_url: https://code.claude.com/docs/en/overview
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260803085911/https://code.claude.com/docs/en/overview
+    archive_status: archived
     title: Claude Code — Overview
     publisher: ent-institution-anthropic
     published: null
     retrieved: 2026-08-04
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:43644218b1478e6a084d0e17d57d857ba59f5c34931f17b2e64e52e5de5f88c3
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: verbatim
     flags: [self_interested]
     excerpts:
@@ -85,15 +85,15 @@ sources:
     class: A
     url: https://aider.chat/docs/llms.html
     canonical_url: https://aider.chat/docs/llms.html
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260722164035/https://aider.chat/docs/llms.html
+    archive_status: archived
     title: Aider — Connecting to LLMs
     publisher: ent-institution-aider
     published: null
     retrieved: 2026-08-04
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:633cac70a9392f7e7e62e1520194fe235861fa69578e3fc66c2d921d1def55a4
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: tool_extracted
     flags: [self_interested]
     excerpts:
@@ -126,15 +126,15 @@ sources:
     class: A
     url: https://modelcontextprotocol.io/specification/2025-06-18
     canonical_url: https://modelcontextprotocol.io/specification/2025-06-18
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260727063112/https://modelcontextprotocol.io/specification/2025-06-18
+    archive_status: archived
     title: Model Context Protocol — Specification (2025-06-18)
     publisher: ent-institution-mcp-governance
     published: 2025-06-18
     retrieved: 2026-08-04
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:0d6bf53b64b74ed53248a0b17fb52aca9333e5ba317f66787284a9cf24fa819f
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: verbatim
     flags: []
     excerpts:
@@ -190,15 +190,15 @@ sources:
     class: A
     url: https://deepinfra.com/pricing
     canonical_url: https://deepinfra.com/pricing
-    archive_url: null
-    archive_status: pending
+    archive_url: http://web.archive.org/web/20260803161050/https://deepinfra.com/pricing
+    archive_status: archived
     title: DeepInfra — Pricing
     publisher: ent-institution-deepinfra
     published: null
     retrieved: 2026-08-04
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:f76d4f6b735b8f256e8471aa3f089655a5e81ce5edb42bb512c3c8f34a693712
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: tool_extracted
     flags: [self_interested]
     excerpts:
