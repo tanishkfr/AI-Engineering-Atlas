@@ -1,7 +1,7 @@
-"$schema": ../schema/usage-profile.schema.json
-# Usage profiles v1 — ALL ASSUMED, NONE MEASURED.
+﻿"$schema": ../schema/usage-profile.schema.json
+# Usage profiles v1 â€” ALL ASSUMED, NONE MEASURED.
 #
-# QUERIES.md §8.1 established these as the single most fragile input in the
+# QUERIES.md Â§8.1 established these as the single most fragile input in the
 # system: every cost answer inherits their uncertainty, and Q7's sensitivity
 # analysis puts them at the top of the value-of-information ranking.
 #
@@ -13,7 +13,7 @@
 # uncertainty is wide.
 #
 # The correct engine behaviour today is to return UNDER_DETERMINED on budget
-# queries and cite these as the blocking unknown — not to compute a confident
+# queries and cite these as the blocking unknown â€” not to compute a confident
 # monthly cost from them.
 
 profiles:
@@ -22,8 +22,8 @@ profiles:
     name: Solo founder, typical month
     persona: per-solo-founder
     status: assumed
-    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
-    tokens_in_month: 25000000        # 25M — midpoint of a 8M–60M assumed range
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md â€” path to measurement
+    tokens_in_month: 25000000        # 25M â€” midpoint of a 8Mâ€“60M assumed range
     tokens_out_month: 2000000        # 2M
     cache_hit_rate: 0.5
     retry_rate: 0.20
@@ -44,13 +44,13 @@ profiles:
       - "Cache hit rate of 0.5 assumes a harness that caches system prompt and repository context across turns. Harnesses differ enormously here; a harness without caching could double effective cost at identical token volume."
       - "Retry rate of 0.20 assumes one in five units of work is redone. This is a guess. It could plausibly be 0.05 or 0.50, and the range materially changes which stack is cheapest."
       - "Excludes tokenizer differences between vendors. Comparing per-token prices across tokenizers without normalizing is invalid (see met-effective-token-multiplier)."
-      - "p90 multiplier of 2.4 assumes usage is right-skewed — a heavy month costs well over double a typical one, which matters for anyone on a hard budget ceiling."
+      - "p90 multiplier of 2.4 assumes usage is right-skewed â€” a heavy month costs well over double a typical one, which matters for anyone on a hard budget ceiling."
 
   - id: use-student-light
     name: Student, hard budget ceiling
     persona: per-student
     status: assumed
-    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md â€” path to measurement
     tokens_in_month: 4000000
     tokens_out_month: 400000
     cache_hit_rate: 0.35
@@ -75,7 +75,7 @@ profiles:
     name: Design-focused, frontend-heavy
     persona: per-designer-engineer
     status: assumed
-    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md â€” path to measurement
     tokens_in_month: 10000000
     tokens_out_month: 2500000
     cache_hit_rate: 0.4
@@ -100,7 +100,7 @@ profiles:
     name: Backend engineer, mature codebase
     persona: per-backend-engineer
     status: assumed
-    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md — path to measurement
+    rq: [RQ-18, RQ-19, RQ-20, RQ-21]   # ASSUMPTIONS.md â€” path to measurement
     tokens_in_month: 40000000
     tokens_out_month: 2000000
     cache_hit_rate: 0.6
@@ -118,5 +118,5 @@ profiles:
     assumptions:
       - "ASSUMED, NOT MEASURED."
       - "Highest input volume of any profile: large repositories mean large context per task. Input:output ratio assumed ~20:1."
-      - "Cache hit rate assumed highest here (0.6) because repository context is stable across a working session. If a provider lacks caching, this profile is penalized far more than the others — which is precisely the kind of interaction a per-token price comparison cannot show."
+      - "Cache hit rate assumed highest here (0.6) because repository context is stable across a working session. If a provider lacks caching, this profile is penalized far more than the others â€” which is precisely the kind of interaction a per-token price comparison cannot show."
       - "Concurrency of 2 assumes occasional parallel agent use; this affects rate-limit fit, not cost."

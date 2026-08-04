@@ -1,0 +1,39 @@
+{
+  "study": "RQ-18/19/20 usage profile",
+  "method": "retrospective extraction from existing transcripts",
+  "privacy": "metadata only \u2014 no message content, file contents, paths, or branch names",
+  "window_days": 56,
+  "files_scanned": 2132,
+  "sessions": 2123,
+  "projects": 2,
+  "turns": 18604,
+  "tokens": {
+    "uncached_input": 1566443,
+    "cache_write": 254623681,
+    "cache_read": 4252826897,
+    "output": 22808033,
+    "total_presented_to_model": 4509017021
+  },
+  "RQ-19_cache_hit_rate": 0.9432,
+  "RQ-18_io_ratio": 197.69,
+  "RQ-18_per_session": {
+    "median_turns": 2,
+    "median_duration_min": 0.3
+  },
+  "RQ-20_error_records": 11666,
+  "distinct_models": 7,
+  "tool_call_totals": {
+    "mcp__claude-in-chrome__javascript_tool": 134,
+    "Bash": 133,
+    "Edit": 121,
+    "Write": 109,
+    "mcp__claude-in-chrome__computer": 102,
+    "mcp__claude-in-chrome__browser_batch": 80,
+    "PowerShell": 63,
+    "TaskUpdate": 63,
+    "TaskCreate": 38,
+    "mcp__Claude_Browser__javascript_tool": 38,
+    "WebFetch": 29,
+    "WebSearch": 26
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "study": "RQ-18/19 cost delta",
+  "pricing_as_of": "2026-08-04",
+  "assumed_profile": {
+    "label": "assumed",
+    "presented_in": 25000000,
+    "out": 2000000,
+    "hit": 0.5
+  },
+  "measured_profile": {
+    "label": "measured",
+    "presented_in": 25000000,
+    "out": 126460.62016288129,
+    "hit": 0.9432,
+    "io_ratio": 197.69
+  },
+  "rows": [
+    {
+      "model": "claude-sonnet-5 (from 2026-09-01)",
+      "assumed_usd_month": 71.25,
+      "measured_usd_month": 13.23,
+      "delta_usd": -58.02,
+      "delta_pct": -81.4
+    },
+    {
+      "model": "claude-sonnet-5 (introductory, to 2026-08-31)",
+      "assumed_usd_month": 47.5,
+      "measured_usd_month": 8.82,
+      "delta_usd": -38.68,
+      "delta_pct": -81.4
+    },
+    {
+      "model": "claude-opus-5",
+      "assumed_usd_month": 118.75,
+      "measured_usd_month": 22.05,
+      "delta_usd": -96.7,
+      "delta_pct": -81.4
+    },
+    {
+      "model": "claude-fable-5",
+      "assumed_usd_month": 237.5,
+      "measured_usd_month": 44.1,
+      "delta_usd": -193.4,
+      "delta_pct": -81.4
+    },
+    {
+      "model": "claude-haiku-4-5",
+      "assumed_usd_month": 23.75,
+      "measured_usd_month": 4.41,
+      "delta_usd": -19.34,
+      "delta_pct": -81.4
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "assumed_usd_month": 7.22,
+      "measured_usd_month": 0.81,
+      "delta_usd": -6.41,
+      "delta_pct": -88.7
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "assumed_usd_month": 2.35,
+      "measured_usd_month": 0.3,
+      "delta_usd": -2.04,
+      "delta_pct": -87.2
+    }
+  ],
+  "ranking_assumed": [
+    "deepseek-v4-flash",
+    "deepseek-v4-pro",
+    "claude-haiku-4-5",
+    "claude-sonnet-5 (introductory, to 2026-08-31)",
+    "claude-sonnet-5 (from 2026-09-01)",
+    "claude-opus-5",
+    "claude-fable-5"
+  ],
+  "ranking_measured": [
+    "deepseek-v4-flash",
+    "deepseek-v4-pro",
+    "claude-haiku-4-5",
+    "claude-sonnet-5 (introductory, to 2026-08-31)",
+    "claude-sonnet-5 (from 2026-09-01)",
+    "claude-opus-5",
+    "claude-fable-5"
+  ],
+  "ranking_changed": false,
+  "fits_20_usd_assumed": [
+    "deepseek-v4-pro",
+    "deepseek-v4-flash"
+  ],
+  "fits_20_usd_measured": [
+    "claude-sonnet-5 (from 2026-09-01)",
+    "claude-sonnet-5 (introductory, to 2026-08-31)",
+    "claude-haiku-4-5",
+    "deepseek-v4-pro",
+    "deepseek-v4-flash"
+  ],
+  "newly_affordable_at_20": [
+    "claude-haiku-4-5",
+    "claude-sonnet-5 (from 2026-09-01)",
+    "claude-sonnet-5 (introductory, to 2026-08-31)"
+  ],
+  "mean_delta_pct": -83.3
+}
