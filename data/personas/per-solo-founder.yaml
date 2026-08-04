@@ -1,0 +1,75 @@
+"$schema": ../schema/persona.schema.json
+id: per-solo-founder
+schema_version: 1
+name: Solo founder shipping a product
+description: >
+  Building and shipping a product alone. No code reviewer, no team conventions
+  to satisfy, no procurement. Time is the scarcest resource; the binding
+  constraint is that nobody else will catch a mistake before it ships.
+
+context:
+  budget_month_usd:
+    min: 20
+    typical: 150
+    max: 400
+  team_size: 1
+  codebase:
+    age: young
+    size: small
+    languages: [typescript, python, sql]
+  task_mix:
+    feature_work: 0.40
+    frontend: 0.25
+    debugging: 0.15
+    refactoring: 0.10
+    ops: 0.10
+  risk_tolerance: high
+  autonomy_appetite: hands_off
+  compliance: []
+  expertise: working
+
+hard_constraints:
+  - facet: billing_model
+    not: enterprise_only
+    reason: >
+      Sales-gated procurement is not reachable for a single person; annual
+      contracts with seat minimums eliminate on availability, not preference.
+
+weights:
+  D1: 0.85   # output quality
+  D2: 1.00   # autonomy
+  D3: 0.90   # engineering output
+  D4: 0.80   # reliability
+  D5: 0.95   # maintainability of output
+  D6: 0.75   # cost
+  D7: 0.70   # developer experience
+  D8: 0.60   # speed
+  D9: 0.45   # flexibility
+  D10: 0.35  # ecosystem maturity
+  D11: 0.40  # data & licensing posture
+  D12: 0.55  # continuity risk
+  D13: 0.50  # security posture
+
+weights_rationale: >
+  Autonomy is weighted highest because a solo founder's scarcest resource is
+  attention, and every intervention is a context switch with no one to absorb
+  it. Maintainability of output (D5) is weighted almost as high, which is the
+  counterintuitive part and the most defensible: with no reviewer, unmaintainable
+  output is not caught at review, it is discovered months later by the same
+  person who has to fix it. That makes D5 a delayed autonomy cost rather than a
+  quality preference. Cost matters but is not dominant — a tool that saves a day
+  a week justifies a wide price range at this scale. Ecosystem maturity (D10) and
+  flexibility (D9) are weighted low because a solo operator can switch tools
+  cheaply and has no integrations to preserve; continuity risk (D12) is
+  correspondingly moderate rather than high for the same reason.
+
+weights_status: opinion
+weights_author: atlas-editorial
+weights_dated: 2026-08-03
+
+anti_recommendations: []
+
+revisions:
+  - date: 2026-08-03
+    change: Created as the worked example alongside PERSONAS.md v1.0.
+    by: milestone-1

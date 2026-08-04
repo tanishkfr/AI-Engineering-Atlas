@@ -1,0 +1,178 @@
+"$schema": ../../schema/entity.schema.json
+# M1 — EVIDENCE ARTIFACT. Benchmarks are entities so their construct validity
+# travels with every citation (METHODOLOGY §5).
+
+entities:
+
+  - id: ent-benchmark-swe-bench
+    schema_version: 1
+    name: SWE-bench
+    aliases: [SWEBench, SWE bench]
+    slug_frozen_at: 2026-08-04
+    layers: [M1]
+    roles: [benchmark]
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://github.com/SWE-bench/SWE-bench
+    summary: >
+      Benchmark evaluating models on real GitHub issues: given a codebase and an
+      issue, generate a patch that resolves it.
+    decision_questions:
+      - q: What does SWE-bench actually measure?
+        status: answered
+      - q: When should a recommendation ignore SWE-bench rankings?
+        status: answered
+
+    claims:
+      - id: clm-benchmark-swe-bench-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.task_definition
+        statement: >
+          Given a codebase and an issue, a language model is tasked with
+          generating a patch that resolves the described problem. Issues are
+          collected from real GitHub repositories.
+        value: {task: "issue -> patch", source: "github issues"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 180
+        status: draft        # tool_extracted
+
+      - id: clm-benchmark-swe-bench-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.verified_subset
+        statement: >
+          SWE-bench Verified is a subset of 500 problems that real software
+          engineers have confirmed are SOLVABLE.
+        value: {instances: 500, filter: "human-confirmed solvable"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 180
+        status: draft
+
+      # ── CONSTRUCT VALIDITY — the reason this entity exists ──
+      - id: clm-benchmark-swe-bench-003
+        schema_version: 2
+        type: S
+        temporal_kind: static
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.construct_validity
+        statement: >
+          MEASURES: localization within an existing codebase, cross-file
+          reasoning, and patch correctness against a pre-existing test suite, on
+          issues drawn from open-source Python-heavy repositories.
+          DOES NOT MEASURE: interface or visual quality; long-horizon planning;
+          maintainability of the produced code; cost or token efficiency; how
+          many human interventions were required; performance on private,
+          unfamiliar, or non-Python codebases; ambiguous or under-specified
+          issues.
+          COMMON MISUSE: cited as a general measure of "coding ability" or as a
+          basis for choosing a model for frontend work, neither of which it
+          supports.
+        value:
+          measures: [localization, cross_file_reasoning, patch_correctness]
+          does_not_measure: [visual_quality, long_horizon_planning, maintainability,
+                             cost_efficiency, intervention_rate, private_codebases]
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 0, supports: true}
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 180
+        status: draft
+
+      - id: clm-benchmark-swe-bench-004
+        schema_version: 2
+        type: S
+        temporal_kind: static
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.selection_bias
+        statement: >
+          The Verified subset is filtered to problems humans confirmed SOLVABLE.
+          Real issue backlogs contain ambiguous, under-specified, and
+          unresolvable issues. A score on Verified therefore measures performance
+          on a favourably-filtered population and systematically OVERSTATES
+          performance on an unfiltered real backlog. The direction of this bias is
+          known; its magnitude is not.
+        value: {filtered_for_solvability: true, bias_direction: "overstates", magnitude: unknown}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 180
+        status: draft
+
+      - id: clm-benchmark-swe-bench-005
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.contamination_risk
+        statement: >
+          Built from public GitHub issues and their resolving patches, all of
+          which predate model training cutoffs and are freely scrapeable.
+          Contamination risk is HIGH by construction and cannot be excluded for
+          any model whose training data is undisclosed.
+        value: {contamination_risk: high, basis: "public data predating training cutoffs"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 180
+        status: draft
+
+      - id: clm-benchmark-swe-bench-006
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.harness_dependency
+        statement: >
+          Scores depend on the scaffold that drives the model — retrieval,
+          retries, test execution, patch application. Two reports of "SWE-bench
+          Verified" for the same model under different harnesses are NOT
+          comparable. The M1 scan observed six divergent figures in circulation
+          for nominally comparable subjects.
+        value: {harness_dependent: true, cross_report_comparable: false}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 2, supports: true}
+        cadence_days: 180
+        status: draft
+
+      - id: clm-benchmark-swe-bench-090
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-benchmark-swe-bench
+        predicate: benchmark.full_set_size
+        statement: >
+          The total instance count of the full SWE-bench set is NOT established.
+          It is not stated in the repository README we captured. A figure
+          circulated in the M1 landscape scan, but that was Class E and is
+          inadmissible.
+        value: unknown
+        temporal: {valid_from: 2026-08-04, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-swebench-repo-2026-08-04, excerpt_ref: 1, supports: false}
+        cadence_days: 180
+        status: published
+
+    relationships:
+      - predicate: measures
+        object: obj-repository-patching
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-benchmark-swe-bench-003]
+
+    review: {cadence_days: 90, last_reviewed: 2026-08-04, next_due: 2026-11-02}
+    open_questions:
+      - "Saturation state not established — are frontier models near ceiling on Verified?"
+      - "Variant landscape (Lite, Multimodal, Multilingual, Pro) not captured; the homepage was truncated."
+      - "No leaderboard entity created. Per TAXONOMY §3, benchmark and leaderboard are separate entities and results must attach to the latter."
+      - "Magnitude of the solvability-filter bias is unknown and probably unmeasurable without an unfiltered comparison set."

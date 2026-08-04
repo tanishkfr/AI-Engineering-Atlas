@@ -1,0 +1,309 @@
+"$schema": ../../schema/entity.schema.json
+# L3 HARNESS entities — the first in the corpus.
+# Until these existed no stack could compose and the recommendation engine could
+# not run end to end. This is the structural unblock of M5.
+
+entities:
+
+  # ── Claude Code ─────────────────────────────────────────────────────────
+  # A textbook validation of TAXONOMY Finding 1: this entity occupies L3 AND L4
+  # simultaneously across five surfaces. A tree taxonomy would have forced a lie
+  # about it on day one.
+  - id: ent-harness-claude-code
+    schema_version: 1
+    name: Claude Code
+    aliases: [claude-code, claude cli]
+    slug_frozen_at: 2026-08-04
+    layers: [L3, L4]
+    roles: [cli_agent, ide_extension, background_agent, agent_sdk, web_console, messaging_surface]
+    slots: [harness, surface]
+    facets:
+      execution: local_and_hosted
+      model_agnostic: partial          # see clm-004 — only 2 of 5 surfaces
+      headless: true
+      subagents: true
+      hooks: true
+      context_format: "CLAUDE.md"
+    made_by: ent-institution-anthropic
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://code.claude.com/docs/en/overview
+    summary: >
+      Agentic coding tool spanning terminal, IDE, desktop, web, and mobile, with
+      a shared engine and configuration across surfaces.
+    decision_questions:
+      - q: Does the multi-surface design reduce switching cost or increase lock-in?
+        status: open
+      - q: Is partial model-agnosticism enough to avoid vendor lock-in?
+        status: open
+
+    claims:
+      - id: clm-harness-claude-code-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-claude-code
+        predicate: capability.surfaces
+        statement: >
+          Runs on terminal CLI, VS Code and JetBrains IDE extensions, a desktop
+          app, the web, and mobile. Each surface connects to the same underlying
+          engine, so CLAUDE.md files, settings, and MCP servers work across all
+          of them.
+        value: {surfaces: [terminal, vscode, jetbrains, desktop, web, mobile], shared_engine: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 0, supports: true}
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 1, supports: true}
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 8, supports: true}
+        cadence_days: 60
+        status: published
+
+      - id: clm-harness-claude-code-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-claude-code
+        predicate: capability.headless
+        statement: >
+          Supports non-interactive operation via `claude -p`, documented for
+          piping, CI, and chaining with other tools.
+        value: {headless: true, flag: "-p"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 2, supports: true}
+        cadence_days: 90
+        status: published
+
+      - id: clm-harness-claude-code-003
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-claude-code
+        predicate: capability.orchestration
+        statement: >
+          Supports spawning multiple agents working on different parts of a task
+          simultaneously, with a lead agent coordinating and merging results.
+          An Agent SDK exposes the same tools with control over orchestration,
+          tool access, and permissions.
+        value: {subagents: true, agent_sdk: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 5, supports: true}
+        cadence_days: 90
+        status: published
+
+      - id: clm-harness-claude-code-004
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-claude-code
+        predicate: capability.model_agnostic
+        statement: >
+          Third-party model providers are supported on the Terminal CLI and VS
+          Code only. Most surfaces require a Claude subscription or Anthropic
+          Console account. Model-agnosticism is therefore PARTIAL and
+          surface-dependent, not a property of the product as a whole.
+        value: {third_party_surfaces: [terminal, vscode], total_surfaces: 6}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 60
+        status: published
+
+      - id: clm-harness-claude-code-005
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-claude-code
+        predicate: capability.scheduling
+        statement: >
+          Routines run on Anthropic-managed infrastructure and continue when the
+          user's machine is off, and can trigger on API calls or GitHub events.
+          Desktop scheduled tasks run locally.
+        value: {hosted_scheduling: true, local_scheduling: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 6, supports: true}
+        cadence_days: 90
+        status: published
+
+      - id: clm-harness-claude-code-006
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-claude-code
+        predicate: capability.messaging_ingress
+        statement: >
+          Accepts inbound events from Telegram, Discord, iMessage, and arbitrary
+          webhooks via Channels, and from Slack. This places untrusted external
+          input into a session that holds file and command execution capability —
+          a D13 security-posture consideration, not merely a convenience feature.
+        value: {channels: [telegram, discord, imessage, webhooks, slack]}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 7, supports: true}
+        cadence_days: 60
+        status: published
+
+    relationships:
+      - predicate: made_by
+        object: ent-institution-anthropic
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-001]
+      - predicate: implements
+        object: ent-protocol-mcp
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-001]
+      - predicate: provides
+        object: cap-mcp-client
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-001]
+      - predicate: provides
+        object: cap-headless-ci
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-002]
+      - predicate: provides
+        object: cap-subagents
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-003]
+      - predicate: provides
+        object: cap-session-persistence
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-001]
+      - predicate: provides
+        object: cap-requires-cli-fluency
+        temporal_kind: step
+        qualifiers: {surface: terminal}
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-claude-code-001]
+
+    review: {cadence_days: 60, last_reviewed: 2026-08-04, next_due: 2026-10-03}
+    open_questions:
+      - "Permission and approval model NOT captured — cap-approval-gates is NOT asserted. Blocks D13 scoring."
+      - "Sandboxing model NOT captured. Blocks D13 scoring."
+      - "No Class B or C evidence. No dimension scored."
+      - "Cache behaviour unmeasured — the single largest determinant of its real cost (RQ-03)."
+
+  # ── Aider ───────────────────────────────────────────────────────────────
+  - id: ent-harness-aider
+    schema_version: 1
+    name: Aider
+    aliases: [aider-chat]
+    slug_frozen_at: 2026-08-04
+    layers: [L3]
+    roles: [cli_agent]
+    slots: [harness]
+    facets:
+      execution: local
+      model_agnostic: true
+      headless: unknown
+    made_by: ent-institution-aider
+    status: active
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://aider.chat/docs/llms.html
+    summary: >
+      Terminal-based coding agent designed to connect to a wide range of model
+      providers, including local runtimes.
+    decision_questions:
+      - q: Is a fully model-agnostic harness the best defence against vendor lock-in?
+        status: open
+
+    claims:
+      - id: clm-harness-aider-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-aider
+        predicate: capability.provider_support
+        statement: >
+          Documents support for OpenAI, Anthropic, Gemini, GROQ, LM Studio, xAI,
+          Azure, Cohere, DeepSeek, Ollama, OpenAI-compatible APIs, OpenRouter,
+          GitHub Copilot, Vertex AI, and Amazon Bedrock.
+        value:
+          providers: [openai, anthropic, gemini, groq, lm_studio, xai, azure,
+                      cohere, deepseek, ollama, openai_compatible, openrouter,
+                      github_copilot, vertex_ai, bedrock]
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-aider-llms-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 90
+        status: draft        # tool_extracted source
+
+      - id: clm-harness-aider-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-harness-aider
+        predicate: capability.local_inference
+        statement: >
+          Documents support for LM Studio and Ollama, enabling operation against
+          locally-hosted models.
+        value: {local_runtimes: [lm_studio, ollama]}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-aider-llms-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 90
+        status: draft
+
+      - id: clm-harness-aider-003
+        schema_version: 2
+        type: T
+        temporal_kind: measurement
+        subject: ent-harness-aider
+        predicate: documentation.currency
+        statement: >
+          As of 2026-08-04 the documentation's recommended-model list names
+          Gemini 2.5 Pro, DeepSeek R1/V3, Claude 3.7 Sonnet, and OpenAI o3 /
+          o4-mini / GPT-4.1 — model generations several releases behind those
+          documented as current by their own vendors. This is an observation
+          about documentation currency, NOT about tool quality.
+        value: {recommended_models_appear_stale: true}
+        conditions: {harness: null, date: 2026-08-04}
+        qualifiers: {via: null}
+        temporal: {valid_from: 2026-08-04, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-aider-llms-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 90
+        status: draft
+
+    relationships:
+      - predicate: made_by
+        object: ent-institution-aider
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-aider-001]
+      - predicate: provides
+        object: cap-model-agnostic
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-aider-001]
+      - predicate: provides
+        object: cap-byok
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-aider-001]
+      - predicate: provides
+        object: cap-offline-operation
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-aider-002]
+      - predicate: alternative_to
+        object: ent-harness-claude-code
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-harness-aider-001]
+
+    review: {cadence_days: 90, last_reviewed: 2026-08-04, next_due: 2026-11-02}
+    open_questions:
+      - "All claims DRAFT — source was tool_extracted. Re-capture required."
+      - "Headless operation not established."
+      - "MCP support not established from this source."
+      - "cap-offline-operation asserted from documented local-runtime support, NOT demonstrated. The capability's evidence_requirement is 'demonstrated'; this is therefore below bar and must be downgraded or verified."

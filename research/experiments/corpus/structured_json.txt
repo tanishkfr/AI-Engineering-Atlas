@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "entity": {
+    "id": "ent-model-example-tier-two",
+    "name": "Example Model Tier Two",
+    "aliases": ["example-tier-2", "Tier 2"],
+    "layers": ["L1"],
+    "roles": ["model_version"],
+    "facets": {
+      "api_id": "example-tier-2",
+      "openness": "closed",
+      "self_hostable": false,
+      "id_is_pinned_snapshot": true
+    },
+    "review": {
+      "cadence_days": 14,
+      "last_reviewed": "2026-08-03",
+      "next_due": "2026-08-17",
+      "owner": "atlas-editorial"
+    }
+  },
+  "claims": [
+    {
+      "id": "clm-example-tier-two-001",
+      "type": "S",
+      "temporal_kind": "interval",
+      "predicate": "pricing.input_per_mtok",
+      "value": { "amount": 2.0, "currency": "USD", "unit": "per_mtok" },
+      "temporal": {
+        "valid_from": "unknown",
+        "valid_to": "2026-08-31",
+        "valid_precision": "day",
+        "asserted_from": "2026-08-03",
+        "asserted_to": null,
+        "observed_at": "2026-08-03"
+      },
+      "evidence": [
+        { "source": "src-example-pricing-2026-08-03", "excerpt_ref": 0, "supports": true }
+      ],
+      "cadence_days": 14,
+      "status": "published"
+    },
+    {
+      "id": "clm-example-tier-two-002",
+      "type": "S",
+      "temporal_kind": "step",
+      "predicate": "context.window_tokens",
+      "value": { "tokens": 1000000 },
+      "evidence": [
+        { "source": "src-example-overview-2026-08-03", "excerpt_ref": 2, "supports": true }
+      ],
+      "cadence_days": 90,
+      "status": "published"
+    }
+  ],
+  "relationships": [
+    { "predicate": "made_by", "object": "ent-institution-example", "temporal_kind": "static" },
+    { "predicate": "provides", "object": "cap-prompt-caching", "temporal_kind": "step" },
+    { "predicate": "alternative_to", "object": "ent-model-example-tier-one", "temporal_kind": "step" }
+  ]
+}

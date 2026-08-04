@@ -1,0 +1,140 @@
+"$schema": ../../schema/entity.schema.json
+# L5 INTEROP — protocols are entities (TAXONOMY §2 L5). They have versions,
+# governance, adoption curves, and switching costs, so "should I build on this
+# standard?" is a real decision the graph must be able to answer.
+
+entities:
+
+  - id: ent-protocol-mcp
+    schema_version: 1
+    name: Model Context Protocol
+    aliases: [MCP]
+    slug_frozen_at: 2026-08-04
+    layers: [L5]
+    roles: [protocol]
+    slots: [interop]
+    facets:
+      message_format: json-rpc-2.0
+      stateful: true
+      capability_negotiation: true
+      spec_revision_observed: "2025-06-18"
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://modelcontextprotocol.io/specification/2025-06-18
+    summary: >
+      Open protocol connecting LLM applications to external data and tools via
+      JSON-RPC 2.0, with hosts, clients, and servers negotiating capabilities.
+    decision_questions:
+      - q: Is MCP safe to build on, given it cannot enforce its own security principles?
+        status: answered
+      - q: What is the switching cost if a competing standard displaces it?
+        status: open
+
+    claims:
+      - id: clm-protocol-mcp-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-protocol-mcp
+        predicate: architecture.roles
+        statement: >
+          Uses JSON-RPC 2.0 over stateful connections with server and client
+          capability negotiation, between Hosts (LLM applications that initiate
+          connections), Clients (connectors within the host), and Servers
+          (services providing context and capabilities).
+        value: {transport_format: "json-rpc-2.0", roles: [host, client, server], stateful: true}
+        temporal: {valid_from: 2025-06-18, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mcp-spec-2025-06-18-2026-08-04, excerpt_ref: 0, supports: true}
+          - {source: src-mcp-spec-2025-06-18-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 90
+        status: published
+
+      - id: clm-protocol-mcp-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-protocol-mcp
+        predicate: architecture.primitives
+        statement: >
+          Servers offer Resources (context and data), Prompts (templated messages
+          and workflows), and Tools (functions the model executes). Clients may
+          offer Sampling, Roots, and Elicitation to servers.
+        value:
+          server_features: [resources, prompts, tools]
+          client_features: [sampling, roots, elicitation]
+        temporal: {valid_from: 2025-06-18, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mcp-spec-2025-06-18-2026-08-04, excerpt_ref: 2, supports: true}
+        cadence_days: 90
+        status: published
+
+      # ── The decisive security claim ──
+      - id: clm-protocol-mcp-003
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-protocol-mcp
+        predicate: security.enforcement
+        statement: >
+          The specification states that MCP CANNOT ENFORCE its security
+          principles at the protocol level, and that implementors SHOULD build
+          consent and authorization flows themselves. Security is therefore a
+          property of each host implementation, not of the protocol.
+        value: {protocol_level_enforcement: false, guidance_strength: "SHOULD"}
+        temporal: {valid_from: 2025-06-18, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mcp-spec-2025-06-18-2026-08-04, excerpt_ref: 4, supports: true}
+        cadence_days: 90
+        status: published
+
+      - id: clm-protocol-mcp-004
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-protocol-mcp
+        predicate: security.tool_trust_model
+        statement: >
+          The specification states tools represent arbitrary code execution, that
+          descriptions of tool behaviour such as annotations "should be considered
+          untrusted, unless obtained from a trusted server", and that hosts must
+          obtain explicit user consent before invoking any tool.
+        value: {tools_are_arbitrary_execution: true, annotations_untrusted_by_default: true}
+        temporal: {valid_from: 2025-06-18, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mcp-spec-2025-06-18-2026-08-04, excerpt_ref: 3, supports: true}
+        cadence_days: 90
+        status: published
+
+      - id: clm-protocol-mcp-090
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-protocol-mcp
+        predicate: spec.current_revision
+        statement: >
+          The current specification revision as of 2026-08-04 is NOT established.
+          We retrieved the 2025-06-18 revision at a version-pinned URL; whether a
+          later revision exists was not checked, and the M1 scan indicated
+          governance moved to a foundation in December 2025 with a 2026 roadmap.
+        value: unknown
+        temporal: {valid_from: 2026-08-04, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mcp-spec-2025-06-18-2026-08-04, excerpt_ref: 5, supports: false}
+        cadence_days: 30
+        status: published
+
+    relationships:
+      - predicate: implemented_by
+        object: ent-harness-claude-code
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-protocol-mcp-001]
+
+    review: {cadence_days: 30, last_reviewed: 2026-08-04, next_due: 2026-09-03}
+    open_questions:
+      - "RQ-13: is 2025-06-18 the current revision? Cadence set to 30 days because a stale spec citation is a correctness risk."
+      - "Governing body not captured as an entity; M1 scan indicated a foundation transfer that is unverified."
+      - "Transports (stdio, HTTP) not captured from this page."
+      - "No adoption or Class C evidence."

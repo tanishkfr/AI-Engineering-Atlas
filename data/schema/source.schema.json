@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/source.schema.json",
+  "title": "Source",
+  "description": "A captured, citable artifact. Sources are deduplicated and shared across claims (SOURCES.md §7-8).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "class", "url", "title", "retrieved", "excerpts", "excerpt_fidelity"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/sourceId" },
+    "schema_version": { "type": "integer", "const": 1 },
+    "class": { "$ref": "defs.schema.json#/$defs/sourceClass" },
+
+    "url": { "type": "string", "format": "uri" },
+    "canonical_url": { "type": "string", "format": "uri" },
+    "archive_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Required for class A and B. The web rots and vendor pages are edited in place."
+    },
+
+    "title": { "type": "string", "minLength": 1 },
+    "publisher": { "type": ["string", "null"] },
+    "author": { "type": ["string", "null"] },
+
+    "published": {
+      "oneOf": [
+        { "$ref": "defs.schema.json#/$defs/date" },
+        { "type": "null" }
+      ],
+      "description": "null when genuinely unknown. Never guessed."
+    },
+    "retrieved": { "$ref": "defs.schema.json#/$defs/date" },
+
+    "content_hash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Silent edits are detectable on re-verification; a changed hash marks dependent claims needs_review. NULL is permitted only with hash_status: unavailable_pending_tooling — never fabricated (research/capture-limitations-2026-08-03.md)."
+    },
+
+    "hash_status": {
+      "enum": ["hashed", "unavailable_pending_tooling"],
+      "default": "hashed"
+    },
+
+    "archive_status": {
+      "enum": ["archived", "pending", "failed"],
+      "default": "pending"
+    },
+
+    "excerpt_fidelity": {
+      "enum": ["verbatim", "tool_extracted", "tool_summarized"],
+      "description": "How faithfully the excerpt reproduces the source. 'verbatim' admissible for any claim type; 'tool_extracted' for S-type claims only, flagged, and cannot reach status: published; 'tool_summarized' is a pointer only, like Class E. Recording a restructured extraction as verbatim would be exactly the laundering SOURCES.md §1 exists to prevent."
+    },
+
+    "reverification": {
+      "enum": ["hash_triggered", "calendar_only"],
+      "description": "calendar_only means silent vendor edits will NOT be detected automatically."
+    },
+
+    "excerpts": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Passages supporting the claim. A future reviewer must be able to check our reading without refetching.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 0 },
+          "text": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "locator": { "type": "string" }
+        }
+      }
+    },
+
+    "flags": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/sourceFlag" },
+      "uniqueItems": true
+    },
+
+    "methodology": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "published": { "type": "boolean" },
+        "url": { "type": "string", "format": "uri" },
+        "assessed_at_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "ADDED v1.1. The page actually used for the admissibility assessment — the DEEPEST methodology page found, not the capture page. SOURCES §1.5: capture depth is an implementation detail; methodology depth is a research property."
+        },
+        "depth_searched": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Link-hops from the capture page. Stopping rule is depth 3 or first satisfying page."
+        },
+        "searched": { "type": "boolean" },
+        "found": {
+          "type": "boolean",
+          "description": "false with searched:true is a FINDING — the source claims independence without showing its work."
+        },
+        "grade": {
+          "enum": ["B-full", "B-partial", "fails-class-b"],
+          "description": "Per the §1.6 checklist. 'fails-class-b' means the record must be reclassified Class E (pointer only), NOT Class C."
+        },
+        "completeness": {
+          "type": "object",
+          "description": "Which of the seven elements were found, and where. Core elements 1-3 are mandatory for Class B.",
+          "additionalProperties": false,
+          "properties": {
+            "methodology_disclosure": { "type": "boolean" },
+            "measurement_procedure": { "type": "boolean" },
+            "statistical_treatment": { "type": "boolean" },
+            "sampling_strategy": { "type": "boolean" },
+            "update_cadence": { "type": "boolean" },
+            "limitations": { "type": "boolean" },
+            "reproducibility": { "type": "boolean" },
+            "sources_per_element": { "type": "object" }
+          }
+        },
+        "harness": { "type": "string" },
+        "harness_version": { "type": "string" },
+        "run_by": { "type": "string" },
+        "funded_by": { "type": ["string", "null"] },
+        "contamination_risk": { "enum": ["low", "medium", "high", "unknown"] },
+        "sample_size": { "type": "integer" }
+      }
+    },
+
+    "community": {
+      "type": ["object", "null"],
+      "description": "Class C only. Makes the sample reproducible (METHODOLOGY.md §4).",
+      "additionalProperties": false,
+      "properties": {
+        "platform": { "type": "string" },
+        "query": { "type": "string" },
+        "time_window": { "type": "string" },
+        "sample_type": { "enum": ["single-report", "recurring-theme", "consensus"] },
+        "population": { "type": "string" },
+        "usage_duration": {
+          "enum": ["first-impression", "weeks", "months", "sustained", "unknown"],
+          "description": "Sustained-use reports outweigh launch-week reactions."
+        }
+      }
+    },
+
+    "experiment": {
+      "type": ["string", "null"],
+      "pattern": "^exp-[a-z0-9-]+-v\\d+$",
+      "description": "Class D only. Links to the experiment record."
+    },
+
+    "notes": { "type": "string" }
+  },
+
+  "allOf": [
+    {
+      "if": { "properties": { "class": { "enum": ["B", "D"] } }, "required": ["class"] },
+      "then": {
+        "required": ["methodology"],
+        "properties": { "methodology": { "type": "object" } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "class": { "enum": ["A", "B"] },
+          "archive_status": { "const": "archived" }
+        },
+        "required": ["class", "archive_status"]
+      },
+      "then": {
+        "required": ["archive_url"],
+        "properties": { "archive_url": { "type": "string" } }
+      }
+    },
+    {
+      "if": { "properties": { "content_hash": { "type": "null" } }, "required": ["content_hash"] },
+      "then": {
+        "properties": { "hash_status": { "const": "unavailable_pending_tooling" } },
+        "required": ["hash_status"]
+      }
+    },
+    {
+      "if": { "properties": { "class": { "const": "C" } }, "required": ["class"] },
+      "then": { "required": ["community"] }
+    },
+    {
+      "if": { "properties": { "class": { "const": "D" } }, "required": ["class"] },
+      "then": { "required": ["experiment"] }
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+"$schema": ../schema/source.schema.json
+# M5 population sources, captured 2026-08-04.
+
+sources:
+
+  - id: src-claude-code-overview-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://code.claude.com/docs/en/overview
+    canonical_url: https://code.claude.com/docs/en/overview
+    archive_url: null
+    archive_status: pending
+    title: Claude Code — Overview
+    publisher: ent-institution-anthropic
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: verbatim
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Opening definition"
+        text: >-
+          Claude Code is an agentic coding tool that reads your codebase, edits
+          files, runs commands, and integrates with your development tools.
+          Available in your terminal, IDE, desktop app, and browser.
+      - id: 1
+        locator: "Get started — surfaces"
+        text: >-
+          Claude Code runs on several surfaces: the terminal, IDE extensions, a
+          desktop app, and the web. Most surfaces require a Claude subscription
+          or Anthropic Console account. The Terminal CLI and VS Code also support
+          third-party providers.
+      - id: 2
+        locator: "Pipe, script, and automate with the CLI"
+        text: >-
+          Claude Code is composable and follows the Unix philosophy. Pipe logs
+          into it, run it in CI, or chain it with other tools.
+          Example: tail -200 app.log | claude -p "Slack me if you see any anomalies"
+      - id: 3
+        locator: "Connect your tools with MCP"
+        text: >-
+          The Model Context Protocol (MCP) is an open standard for connecting AI
+          tools to external data sources. With MCP, Claude Code can read your
+          design docs in Google Drive, update tickets in Jira, pull data from
+          Slack, or use your own custom tooling.
+      - id: 4
+        locator: "Customize with instructions, skills, and hooks"
+        text: >-
+          CLAUDE.md is a markdown file you add to your project root that Claude
+          Code reads at the start of every session. Claude also builds auto memory
+          as it works, saving learnings like build commands and debugging insights
+          across sessions. Hooks let you run shell commands before or after Claude
+          Code actions.
+      - id: 5
+        locator: "Run agent teams and build custom agents"
+        text: >-
+          Spawn multiple Claude Code agents that work on different parts of a task
+          simultaneously. A lead agent coordinates the work, assigns subtasks, and
+          merges results. For fully custom workflows, the Agent SDK lets you build
+          your own agents powered by Claude Code's tools and capabilities, with
+          full control over orchestration, tool access, and permissions.
+      - id: 6
+        locator: "Schedule recurring tasks"
+        text: >-
+          Routines run on Anthropic-managed infrastructure, so they keep running
+          even when your computer is off. They can also trigger on API calls or
+          GitHub events. Desktop scheduled tasks run on your machine.
+      - id: 7
+        locator: "Use Claude Code everywhere — integration table"
+        text: >-
+          Push events from Telegram, Discord, iMessage, or my own webhooks into a
+          session → Channels. Route bug reports from Slack to pull requests → Slack.
+      - id: 8
+        locator: "Use Claude Code everywhere"
+        text: >-
+          Each surface connects to the same underlying Claude Code engine, so your
+          CLAUDE.md files, settings, and MCP servers work across all of them.
+    methodology: null
+
+  - id: src-aider-llms-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://aider.chat/docs/llms.html
+    canonical_url: https://aider.chat/docs/llms.html
+    archive_url: null
+    archive_status: pending
+    title: Aider — Connecting to LLMs
+    publisher: ent-institution-aider
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Provider navigation list"
+        text: >-
+          OpenAI, Anthropic, Gemini, GROQ, LM Studio, xAI, Azure, Cohere,
+          DeepSeek, Ollama, OpenAI compatible APIs, OpenRouter, GitHub Copilot,
+          Vertex AI, Amazon Bedrock, Other LLMs
+      - id: 1
+        locator: "Best-performing models"
+        text: >-
+          Aider works best with these models, which are skilled at editing code:
+          Gemini 2.5 Pro, DeepSeek R1 and V3, Claude 3.7 Sonnet, OpenAI o3,
+          o4-mini and GPT-4.1
+      - id: 2
+        locator: "General capability statement"
+        text: >-
+          Aider can connect to most LLMs. aider may not work well with less
+          capable models.
+    methodology: null
+    notes: >
+      The "best models" list names model generations that are several releases
+      behind those documented as current by their own vendors in August 2026.
+      Recorded as an observation about documentation currency, not about tool
+      quality — see clm-harness-aider-003.
+
+  - id: src-mcp-spec-2025-06-18-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://modelcontextprotocol.io/specification/2025-06-18
+    canonical_url: https://modelcontextprotocol.io/specification/2025-06-18
+    archive_url: null
+    archive_status: pending
+    title: Model Context Protocol — Specification (2025-06-18)
+    publisher: ent-institution-mcp-governance
+    published: 2025-06-18
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: verbatim
+    flags: []
+    excerpts:
+      - id: 0
+        locator: "Overview"
+        text: >-
+          MCP is an open protocol that enables seamless integration between LLM
+          applications and external data sources and tools. The protocol uses
+          JSON-RPC 2.0 messages to establish communication between Hosts (LLM
+          applications that initiate connections), Clients (connectors within the
+          host application), and Servers (services that provide context and
+          capabilities).
+      - id: 1
+        locator: "Key Details — Base Protocol"
+        text: >-
+          JSON-RPC message format. Stateful connections. Server and client
+          capability negotiation.
+      - id: 2
+        locator: "Features"
+        text: >-
+          Servers offer any of the following features to clients: Resources
+          (context and data), Prompts (templated messages and workflows), Tools
+          (functions for the AI model to execute). Clients may offer the following
+          features to servers: Sampling, Roots, Elicitation.
+      - id: 3
+        locator: "Security and Trust & Safety — Tool Safety"
+        text: >-
+          Tools represent arbitrary code execution and must be treated with
+          appropriate caution. In particular, descriptions of tool behavior such
+          as annotations should be considered untrusted, unless obtained from a
+          trusted server. Hosts must obtain explicit user consent before invoking
+          any tool.
+      - id: 4
+        locator: "Implementation Guidelines"
+        text: >-
+          While MCP itself cannot enforce these security principles at the
+          protocol level, implementors SHOULD build robust consent and
+          authorization flows into their applications.
+      - id: 5
+        locator: "Specification basis"
+        text: >-
+          This specification defines the authoritative protocol requirements,
+          based on the TypeScript schema in schema.ts (2025-06-18).
+    methodology: null
+    notes: >
+      This is the 2025-06-18 revision, retrieved at a version-pinned URL. It is
+      NOT established that this is the current revision as of 2026-08-04 — the
+      M1 scan indicated governance moved to a foundation in Dec 2025 with a 2026
+      roadmap. Version currency is an open question (RQ-13).
+
+  - id: src-deepinfra-pricing-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://deepinfra.com/pricing
+    canonical_url: https://deepinfra.com/pricing
+    archive_url: null
+    archive_status: pending
+    title: DeepInfra — Pricing
+    publisher: ent-institution-deepinfra
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Qwen models"
+        text: >-
+          Qwen3.7-Max with 250k context: $2.50 / $7.50 per 1M tokens.
+          Qwen3-Max with 250k context: $1.20 / $6.00 per 1M tokens.
+          Qwen3-32B with 40k context: $0.08 / $0.28 per 1M tokens.
+      - id: 1
+        locator: "DeepSeek models"
+        text: >-
+          DeepSeek-V4-Pro with 1024k context: $1.30 / $2.60 per 1M tokens.
+          DeepSeek-V4-Flash with 1024k context: $0.09 / $0.18 per 1M tokens.
+          DeepSeek-V3 with 160k context: $0.32 / $0.89 per 1M tokens.
+      - id: 2
+        locator: "Mistral models"
+        text: >-
+          Mistral-Small-3.2-24B-Instruct-2506 with 125k: $0.075 / $0.20 per 1M
+          tokens. Mistral-Nemo-Instruct-2407 with 128k: $0.019 / $0.03 per 1M
+          tokens.
+    methodology: null
+    notes: >
+      First pricing source for models whose exact tokenizers are publicly
+      measurable. Enabled exp-normalized-cost-v1 (RQ-01a) — the first fully
+      normalized cross-vendor cost comparison in the Atlas.

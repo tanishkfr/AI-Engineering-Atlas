@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/objective.schema.json",
+  "title": "Objective",
+  "description": "What a reader is optimizing for, and which measurements are admissible evidence for it. Introduced by QUERIES.md §8.2: without this, the engine would answer a frontend-generation question with a repository-patching benchmark — fluently and wrongly. Construct validity becomes machine-enforced rather than editorially hoped for.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "construct", "metric_set"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/objectiveId" },
+    "schema_version": { "type": "integer", "const": 1 },
+
+    "name": { "type": "string" },
+    "construct": {
+      "type": "string",
+      "minLength": 30,
+      "description": "What this objective actually is. Matched against each benchmark's declared construct; a mismatch makes the metric inadmissible."
+    },
+
+    "metric_set": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The only measurements admissible for ratio and frontier computation on this objective.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["metric", "direction", "floor", "weight"],
+        "properties": {
+          "metric": { "$ref": "defs.schema.json#/$defs/metricId" },
+          "direction": { "$ref": "defs.schema.json#/$defs/metricDirection" },
+          "floor": {
+            "type": "number",
+            "description": "Absolute normalization floor, NOT min-max across candidates. Min-max shifts every score when a weak candidate is added (RECOMMENDATION.md §7)."
+          },
+          "ceiling": { "type": ["number", "null"] },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "source_kinds": {
+            "type": "array",
+            "items": { "$ref": "defs.schema.json#/$defs/sourceClass" },
+            "description": "Admissible source classes for this metric."
+          }
+        }
+      }
+    },
+
+    "coverage_floor": {
+      "type": "number", "minimum": 0, "maximum": 1, "default": 0.6,
+      "description": "Below this share of the metric set, an entity is not_ratio_comparable. Partial measurement is never extrapolated."
+    },
+
+    "implied_guards": {
+      "type": "array",
+      "description": "QUERIES.md §8.4. Single-dimension maximization is almost always an incomplete reading of the question — maximizing autonomy alone selects for an agent that runs for hours producing an unmergeable diff. Guards are disclosed and overridable, never silent.",
+      "items": {
+        "type": "object",
+        "required": ["dimension", "min"],
+        "properties": {
+          "dimension": { "$ref": "defs.schema.json#/$defs/dimension" },
+          "min": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+
+    "guard_disclosure": {
+      "type": "string",
+      "description": "Shown to the reader whenever guards are applied. Required if implied_guards is non-empty."
+    },
+
+    "dimension_affinity": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/dimension" },
+      "description": "Rubric dimensions this objective leans on for ordinal ranking, where no continuous metric exists."
+    },
+
+    "notes": { "type": "string" }
+  },
+
+  "allOf": [
+    {
+      "if": {
+        "properties": { "implied_guards": { "minItems": 1 } },
+        "required": ["implied_guards"]
+      },
+      "then": { "required": ["guard_disclosure"] }
+    }
+  ]
+}

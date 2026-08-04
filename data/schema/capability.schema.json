@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/capability.schema.json",
+  "title": "Capability",
+  "description": "A normalized, entity-independent feature (GRAPH.md §3). This is the extensibility hinge: constraints are expressed against capabilities rather than entity types, so a constraint written today applies correctly to categories that do not exist yet.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "definition"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+    "schema_version": { "type": "integer", "const": 1 },
+
+    "name": { "type": "string" },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+
+    "definition": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Must be written so that two researchers independently decide the same way whether an entity provides it. Vague capabilities produce a graph that filters incorrectly and silently."
+    },
+
+    "applies_to_slots": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/slot" },
+      "description": "Empty means it can apply anywhere. Deliberately permissive — capabilities cross layers."
+    },
+
+    "evidence_requirement": {
+      "enum": ["documented", "demonstrated", "measured"],
+      "description": "documented: vendor states it. demonstrated: observed working. measured: quantified. Sets the bar for a provides edge."
+    },
+
+    "measurement": {
+      "$ref": "defs.schema.json#/$defs/metricId",
+      "description": "Where the capability is a matter of degree rather than presence."
+    },
+
+    "substitutable_by": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+      "description": "Lets the engine say 'lacks X but compensates with Y' rather than eliminating a candidate outright."
+    },
+
+    "negates": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+      "description": "Capabilities that cannot coexist. Used to detect contradictory constraint sets before they silently return zero results."
+    },
+
+    "category": {
+      "enum": ["execution", "cost", "privacy", "integration", "workflow",
+               "safety", "deployment", "observability"]
+    },
+
+    "notes": { "type": "string" }
+  }
+}

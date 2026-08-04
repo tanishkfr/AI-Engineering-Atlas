@@ -1,0 +1,277 @@
+---
+title: "When should I use Claude Sonnet 5?"
+entity: ent-model-claude-sonnet-5
+layer: L1
+status: partial
+last_verified: 2026-08-03
+evidence_confidence: specification-only
+exemplar: true
+---
+
+> **This page is the gold-standard exemplar.** It is the quality reference for
+> every future entity contribution — including the parts that are empty. An
+> entity page is complete when it has *honestly reported* all seventeen
+> sections, not when all seventeen are full.
+>
+> **Coverage state: specification-only.** Every number below traces to
+> first-party documentation captured verbatim on 2026-08-03. No independent
+> evaluation and no community evidence has been captured. **No dimension is
+> scored, and no recommendation is made.** Under SOURCES.md §3, vendor
+> documentation is authoritative for specification and inadmissible for
+> comparative judgment — so this page can tell you exactly what Sonnet 5 *is*,
+> and cannot yet tell you whether to use it.
+
+---
+
+## 1. Executive summary
+
+Claude Sonnet 5 is Anthropic's speed/intelligence balance tier: a 1M-token
+context window and 128k max output at $2/$10 per million input/output tokens —
+**until 2026-08-31**, after which the same model costs $3/$15.
+
+That expiry is the single most decision-relevant fact on this page. It is 28 days
+away as of capture, and it is a **50% increase on both input and output**. Any
+cost comparison, budget plan, or stack recommendation built on the current price
+breaks on 1 September. The Atlas models this as two facts with adjacent validity
+intervals rather than one fact that will silently become wrong
+([TEMPORAL.md](../../../TEMPORAL.md) §2).
+
+The second notable fact is a documentation ambiguity we could not resolve:
+whether Sonnet 5 uses Anthropic's newer tokenizer, which produces **~30% more
+tokens for the same text**. If it does, the effective price increase relative to
+older-tokenizer models is larger than the headline number suggests — a bigger
+effect than the entire introductory discount. See §13.
+
+## 2. Timeline
+
+| Date | Event | Evidence |
+|---|---|---|
+| Jan 2026 | Reliable knowledge cutoff and training data cutoff | `clm-…-012` |
+| *unknown* | Introductory pricing begins — start date not stated in documentation, and **not guessed** | `clm-…-001` |
+| 2026-08-03 | Atlas capture | — |
+| **2026-08-31** | **Introductory pricing ends** | `clm-…-001` |
+| **2026-09-01** | Standard pricing takes effect: $3 / $15 per MTok | `clm-…-002` |
+
+Release date is **not established**. The documentation captured does not state
+one, and inferring it from the version number would be a fabrication.
+
+## 3. Current status
+
+Active and generally available on the Claude API. Model ID `claude-sonnet-5` is
+a **pinned snapshot**, not an evergreen pointer — Anthropic documents that from
+the 4.6 generation onward, dateless IDs are still fixed to a specific release.
+That matters for reproducibility: a measurement taken against `claude-sonnet-5`
+today refers to the same weights as one taken next month, which is *not* safe to
+assume with every vendor.
+
+## 4. Capabilities
+
+| Capability | State | Evidence |
+|---|---|---|
+| Long context (≥500k) | ✅ 1M tokens, standard pricing across the full window | `clm-…-010` |
+| Prompt caching | ✅ 0.1x base input on cache hits | `clm-…-005` |
+| Batch discount | ✅ 50% on input and output | `src-anthropic-pricing` |
+| Extended reasoning | ✅ Adaptive thinking | `clm-…-013` |
+| Extended thinking (`thinking.type: "enabled"`) | ❌ Not supported | `clm-…-013` |
+| Vision input | ✅ Documented for all current Claude models | `src-anthropic-models-overview` |
+| Tool use | ✅ 354 / 474 system-prompt token overhead | `clm-…-014` |
+
+**The 1M context window is priced flat.** A 900k-token request bills at the same
+per-token rate as a 9k-token request — no long-context tier premium. This is a
+genuine structural difference from providers that tier long-context pricing, and
+it changes how you should architect agent context: there is no price cliff to
+design around.
+
+## 5. Limitations
+
+- **Extended thinking via `thinking.type: "enabled"` is not available.** Code
+  written against that parameter for earlier models does not carry over; adaptive
+  thinking is the replacement.
+- **Tool use carries a fixed per-request tax.** 354 tokens with `auto`/`none`,
+  474 with `any`/`tool`, on *every* call. At high request volume with small
+  payloads this is a real fraction of input cost, and it is invisible in a
+  per-million-token price comparison.
+- **Pricing increases 50% on 2026-09-01.** Not a limitation of the model, but the
+  most likely reason a plan built around it fails.
+- **No independent verification of any capability above.** All of §4 is vendor
+  self-description.
+
+## 6. Pricing
+
+**Through 2026-08-31 (introductory):**
+
+| | Input | 5m cache write | 1h cache write | Cache hit | Output |
+|---|---|---|---|---|---|
+| Standard | $2.00 | $2.50 | $4.00 | $0.20 | $10.00 |
+| Batch (−50%) | $1.00 | — | — | — | $5.00 |
+
+**From 2026-09-01 (standard):**
+
+| | Input | 5m cache write | 1h cache write | Cache hit | Output |
+|---|---|---|---|---|---|
+| Standard | $3.00 | $3.75 | $6.00 | $0.30 | $15.00 |
+| Batch (−50%) | $1.50 | — | — | — | $7.50 |
+
+All figures per million tokens, USD, `pricing_as_of: 2026-08-03`.
+
+**Modifiers that stack:** batch −50% · US-only `inference_geo` ×1.1 · regional
+or multi-region cloud endpoints +10%.
+
+**Cache economics.** A cache hit costs 0.1× base input. Anthropic states the
+5-minute cache (1.25× write) pays for itself after **one** read, and the 1-hour
+cache (2× write) after **two**. For agentic work that re-sends a stable system
+prompt and repository context every turn, this is usually the largest single
+cost lever available — larger than choosing a cheaper model.
+
+> ⚠️ **We cannot yet tell you what this costs you per month.** That requires a
+> usage profile, and every profile in `/data/usage/` is `assumed`, not measured
+> ([QUERIES.md](../../../QUERIES.md) §8.1). The engine returns
+> `UNDER_DETERMINED` on budget queries and names this as the blocking unknown.
+
+## 7. Availability
+
+Claude API, Amazon Bedrock, Claude Platform on AWS, Google Cloud, Microsoft
+Foundry. Bedrock offers global and regional endpoints; Google Cloud adds
+multi-region. Regional and multi-region carry a 10% premium.
+
+**Not captured:** rate limits by tier, subscription-plan inclusion, free-tier
+allowance, regional availability detail. These are §14 research gaps, and they
+matter — rate limits often bind before price does.
+
+## 8. Community adoption
+
+**Not researched.** No Class C evidence has been captured for this entity.
+
+This section is deliberately empty rather than filled with impressions. Under
+[METHODOLOGY.md](../../../METHODOLOGY.md) §4, community evidence requires a
+declared population, query, and time window before it can be sampled — and
+sampling has not been done. An adoption claim written from general familiarity
+would be exactly the unsourced assertion CONSTITUTION §2 forbids.
+
+## 9. Official documentation
+
+| Source | Fidelity | Retrieved |
+|---|---|---|
+| [Models overview](https://platform.claude.com/docs/en/about-claude/models/overview) | verbatim | 2026-08-03 |
+| [Pricing](https://platform.claude.com/docs/en/about-claude/pricing) | verbatim | 2026-08-03 |
+
+Both Class A, flagged `self_interested`. Neither is archived and neither is
+content-hashed — see [capture limitations](../../../research/capture-limitations-2026-08-03.md).
+Silent edits to these pages will **not** be detected automatically.
+
+## 10. Independent evidence
+
+**None captured.** No Class B source — no academic evaluation, no third-party
+benchmark run, no independent latency or reliability telemetry.
+
+Consequence, stated plainly: **every capability claim on this page rests on the
+vendor's own description.** That is sufficient for specification facts (price,
+context window, API surface) and insufficient for anything about quality,
+reliability, or comparison.
+
+## 11. Community evidence
+
+**None captured.** No GitHub issues, no practitioner post-mortems, no
+sustained-use reports, no migration accounts.
+
+This is the layer that produces failure modes — the behaviours no vendor
+documents and no benchmark measures. Its absence is the largest single gap on
+this page.
+
+## 12. Atlas assessment
+
+**We decline to assess.**
+
+Not evasion — a rule. [EVALUATION.md](../../../EVALUATION.md) §3 requires D1/D2/D3
+scores to be recorded *via* a named harness, because observed quality is produced
+by a model inside a harness, not by a model. We have no harness-contexted
+evidence. [SOURCES.md](../../../SOURCES.md) §3 makes vendor documentation
+inadmissible for comparative claims. Every input to a score is missing.
+
+Scoring anyway would produce numbers that look like the rest of the Atlas and
+mean something entirely different. `scores: []` is the correct state, and this
+section exists to say so out loud rather than leave a reader wondering why the
+radar chart is empty.
+
+**What we can say, strictly from specification:** if your work is context-heavy
+and cache-friendly, the flat-rate 1M window and 0.1× cache reads are structurally
+favourable, and that conclusion does not depend on any quality judgment.
+
+## 13. Known unknowns
+
+**RG-001 — Does Sonnet 5 use the newer tokenizer?** *(highest-impact unknown)*
+
+Anthropic's pricing page states the ~30%-more-tokens tokenizer applies to
+"Claude 4.7 and later models", and names "Claude Sonnet 4.6 and earlier" as using
+the previous one. The models overview attaches the tokenizer tooltip explicitly
+to Claude Fable 5. Sonnet 5 is not named either way.
+
+Why it matters more than it sounds: if Sonnet 5 inflates tokens ~30%, its
+effective cost is ~30% higher than its posted price implies **when compared
+against older-tokenizer models**. That is a larger effect than the entire
+introductory discount, and it silently corrupts any cross-model per-token price
+comparison. Recorded as a `conflicts` block with `likely_cause: unexplained`
+rather than resolved by inference.
+
+**Also unknown:** introductory-pricing start date · release date · rate limits ·
+real-world reliability · behaviour at the top of the 1M window · whether adaptive
+thinking materially changes output-token consumption (it would change cost, and
+output is the expensive side).
+
+## 14. Research gaps
+
+| ID | Gap | Blocks |
+|---|---|---|
+| RG-001 | Tokenizer identity | All cross-model cost comparison |
+| RG-002 | No Class B evidence | Every score; every comparative claim |
+| RG-003 | No Class C evidence | Failure modes; D4, D7 |
+| RG-004 | Rate limits by tier | Feasibility for concurrent/agentic use |
+| RG-005 | Subscription-plan relationship | The subscription-vs-API crossover |
+| RG-006 | No measured usage profile | Every cost answer for every persona |
+| RG-007 | Source not archived or hashed | Silent-edit detection |
+
+## 15. Future work
+
+Ordered by value of information, not by convenience:
+
+1. Resolve RG-001 — a token-count experiment against a fixed corpus settles it
+   empirically and does not depend on documentation being clarified.
+2. Measure a usage profile (RG-006) — unblocks every cost query in
+   [QUERIES.md](../../../QUERIES.md).
+3. Capture rate limits (RG-004).
+4. Community sampling under METHODOLOGY §4 (RG-003).
+5. Re-capture sources with hashing and archival once T-002 ships (RG-007).
+6. Re-verify pricing **on 2026-09-01** — a scheduled, dated event, not a
+   discretionary review.
+
+## 16. Last verified
+
+**2026-08-03.** Review cadence 14 days; next due **2026-08-17**.
+
+Pricing claims carry a 14-day cadence rather than the 30-day default because a
+known price change lands inside the next two review windows.
+
+## 17. Evidence confidence
+
+| Claim class | Count | Confidence | Basis |
+|---|---|---|---|
+| Specification (S) | 13 published | **high** | Two verbatim Class A sources, mutually corroborating |
+| Measurement (M) | 1 published as `unknown` | **unknown** | Documentation conflict, unresolved |
+| Experience (X) | 0 | — | No Class C captured |
+| Comparative (C) | 0 | — | Structurally inadmissible from Class A alone |
+| Dimension scores | 0 | — | Declined; inputs absent |
+
+**Overall: specification-only.** Trust the numbers. Do not read a recommendation
+into this page, because there isn't one.
+
+## 18. Sources
+
+1. Anthropic — *Models overview*. `src-anthropic-models-overview-2026-08-03`.
+   Class A · verbatim · retrieved 2026-08-03 · flags: `self_interested` ·
+   not archived, not hashed.
+2. Anthropic — *Pricing*. `src-anthropic-pricing-2026-08-03`.
+   Class A · verbatim · retrieved 2026-08-03 · flags: `self_interested` ·
+   not archived, not hashed.
+
+Structured records: [`data/sources/anthropic.yaml`](../../../data/sources/anthropic.yaml).
+Entity record: [`data/entities/model/claude-sonnet-5.yaml`](../../../data/entities/model/claude-sonnet-5.yaml).

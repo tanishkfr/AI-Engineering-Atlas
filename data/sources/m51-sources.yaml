@@ -1,0 +1,133 @@
+"$schema": ../schema/source.schema.json
+
+sources:
+
+  - id: src-agentsmd-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://agents.md/
+    canonical_url: https://agents.md/
+    archive_url: null
+    archive_status: pending
+    title: AGENTS.md
+    publisher: ent-institution-agentic-ai-foundation
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: []
+    excerpts:
+      - id: 0
+        locator: "Definition"
+        text: >-
+          A simple, open format for guiding coding agents. A dedicated,
+          predictable place to provide the context and instructions to help AI
+          coding agents work on your project.
+      - id: 1
+        locator: "Placement and resolution"
+        text: >-
+          At the root of the repository. For monorepos, place another AGENTS.md
+          inside each package. Agents automatically read the nearest file in the
+          directory tree, so the closest one takes precedence and every
+          subproject can ship tailored instructions.
+      - id: 2
+        locator: "Supporting products list"
+        text: >-
+          OpenAI Codex, Google Jules, Factory, Aider, goose, opencode, Zed, Warp,
+          VS Code, Devin (Cognition), UiPath Autopilot & Coded Agents, JetBrains
+          Junie, Amp, Cursor, RooCode, Google Gemini CLI, Kilo Code, Phoenix,
+          Semgrep, GitHub Copilot Coding Agent, Ona, Windsurf (Cognition),
+          Augment Code
+      - id: 3
+        locator: "Standards status"
+        text: >-
+          Now stewarded by the Agentic AI Foundation under the Linux Foundation.
+    methodology: null
+
+  - id: src-swebench-repo-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://github.com/SWE-bench/SWE-bench
+    canonical_url: https://github.com/SWE-bench/SWE-bench
+    archive_url: null
+    archive_status: pending
+    title: SWE-bench repository README
+    publisher: ent-institution-swebench
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: []
+    excerpts:
+      - id: 0
+        locator: "Definition"
+        text: >-
+          SWE-bench is a benchmark for evaluating large language models on real
+          world software issues collected from GitHub. Given a codebase and an
+          issue, a language model is tasked with generating a patch that resolves
+          the described problem.
+      - id: 1
+        locator: "Verified subset"
+        text: >-
+          SWE-bench Verified: A subset of 500 problems that real software
+          engineers have confirmed are solvable.
+      - id: 2
+        locator: "Evaluation resource requirements"
+        text: >-
+          SWE-bench evaluation can be resource intensive. We recommend running on
+          an x86_64 machine with at least 120GB of free storage, 16GB of RAM, and
+          8 CPU cores. Support for arm64 machines is experimental.
+    methodology:
+      published: true
+      url: https://github.com/SWE-bench/SWE-bench
+      contamination_risk: high
+    notes: >
+      Full-set instance count NOT stated in the README and therefore NOT recorded.
+      The M1 scan mentioned a figure; that was Class E and is not admissible.
+
+  - id: src-deepseek-pricing-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://api-docs.deepseek.com/quick_start/pricing
+    canonical_url: https://api-docs.deepseek.com/quick_start/pricing
+    archive_url: null
+    archive_status: pending
+    title: DeepSeek API — Models & Pricing
+    publisher: ent-institution-deepseek
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "deepseek-v4-flash pricing"
+        text: >-
+          deepseek-v4-flash: 1M INPUT TOKENS (CACHE HIT) $0.0028; 1M INPUT TOKENS
+          (CACHE MISS) $0.14; 1M OUTPUT TOKENS $0.28.
+      - id: 1
+        locator: "deepseek-v4-pro pricing"
+        text: >-
+          deepseek-v4-pro: 1M INPUT TOKENS (CACHE HIT) $0.003625; 1M INPUT TOKENS
+          (CACHE MISS) $0.435; 1M OUTPUT TOKENS $0.87.
+      - id: 2
+        locator: "Context and output limits"
+        text: >-
+          Both models support 1M tokens of context with a maximum output of 384K
+          tokens.
+      - id: 3
+        locator: "Peak pricing"
+        text: >-
+          During peak hours, prices will be 2x the regular prices. Peak hours are
+          9:00-12:00 and 14:00-18:00 (Beijing Time, UTC+8) daily. This policy's
+          effective date will be subject to the official announcement.
+    methodology: null
+    notes: >
+      Introduces TIME-OF-DAY price variation, a pricing shape the cost model
+      cannot currently express. See RQ-14 and delta D-006.

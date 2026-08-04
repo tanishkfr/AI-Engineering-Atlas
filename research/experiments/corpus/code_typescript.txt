@@ -1,0 +1,57 @@
+export type TemporalKind = "static" | "point" | "step" | "measurement" | "series" | "interval";
+
+export interface TemporalInterval {
+  validFrom: string | null;
+  validTo: string | null;
+  assertedFrom: string;
+  assertedTo: string | null;
+  observedAt: string;
+}
+
+export interface Claim<TValue = unknown> {
+  readonly id: string;
+  readonly predicate: string;
+  readonly temporalKind: TemporalKind;
+  readonly value: TValue;
+  readonly temporal: TemporalInterval;
+  readonly evidence: ReadonlyArray<string>;
+}
+
+const CARRY_FORWARD: ReadonlySet<TemporalKind> = new Set(["step", "static", "point"]);
+
+export function isCurrentAt<T>(claim: Claim<T>, reference: Date): boolean {
+  const { validFrom, validTo } = claim.temporal;
+  if (!CARRY_FORWARD.has(claim.temporalKind)) {
+    return false;
+  }
+  const from = validFrom ? new Date(validFrom) : null;
+  const to = validTo ? new Date(validTo) : null;
+  if (from && reference < from) return false;
+  if (to && reference > to) return false;
+  return true;
+}
+
+export async function resolveCurrent<T>(
+  claims: ReadonlyArray<Claim<T>>,
+  reference: Date,
+): Promise<Claim<T> | undefined> {
+  const candidates = claims.filter((claim) => isCurrentAt(claim, reference));
+  if (candidates.length === 0) {
+    return undefined;
+  }
+  return candidates.reduce((latest, candidate) =>
+    new Date(candidate.temporal.assertedFrom) > new Date(latest.temporal.assertedFrom)
+      ? candidate
+      : latest,
+  );
+}
+
+export function groupByPredicate<T>(claims: ReadonlyArray<Claim<T>>): Map<string, Claim<T>[]> {
+  const grouped = new Map<string, Claim<T>[]>();
+  for (const claim of claims) {
+    const bucket = grouped.get(claim.predicate) ?? [];
+    bucket.push(claim);
+    grouped.set(claim.predicate, bucket);
+  }
+  return grouped;
+}

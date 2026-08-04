@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/score.schema.json",
+  "title": "Score",
+  "description": "One rubric dimension applied to one entity (EVALUATION.md). Ordinal 1-5. Never aggregated into a stored composite — composites are computed per-persona at query time.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "dimension", "value", "as_of"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/scoreId" },
+    "schema_version": { "type": "integer", "const": 1 },
+    "dimension": { "$ref": "defs.schema.json#/$defs/dimension" },
+
+    "value": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5,
+      "description": "null means not_scored. Never imputed, never defaulted to average."
+    },
+
+    "not_scored_reason": {
+      "type": ["string", "null"],
+      "enum": ["insufficient_evidence", "not_applicable", "pending_experiment", null]
+    },
+
+    "rationale": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 400,
+      "description": "One sentence. Mandatory. This is what makes the score auditable; the number alone is an opinion in a numeric costume."
+    },
+
+    "via": {
+      "type": "object",
+      "description": "Conditions the score depends on. Required for D1/D2/D3/D5 on models, which are always scored through a harness.",
+      "properties": {
+        "model": { "$ref": "defs.schema.json#/$defs/entityId" },
+        "harness": { "$ref": "defs.schema.json#/$defs/entityId" },
+        "config": { "type": "string" }
+      }
+    },
+
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "defs.schema.json#/$defs/claimId" }
+    },
+
+    "confidence": {
+      "$ref": "defs.schema.json#/$defs/confidence",
+      "readOnly": true,
+      "description": "COMPUTED. Floor of input confidences, not the average."
+    },
+
+    "belief": {
+      "type": "object",
+      "readOnly": true,
+      "description": "COMPUTED belief distribution over {1..5} (DECISION.md §1). A score is not 4; it is a distribution whose spread comes from evidence strength and WIDENS with age — we do not become wrong about an old score, we become less sure. The engine sees this, never the point value.",
+      "additionalProperties": false,
+      "required": ["mass"],
+      "properties": {
+        "mass": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": { "type": "number", "minimum": 0, "maximum": 1 },
+          "description": "Probability mass over scores 1..5. Sums to 1."
+        },
+        "derived_from": {
+          "type": "object",
+          "properties": {
+            "independent_sources": { "type": "integer" },
+            "convergence": { "enum": ["none", "partial", "strong"] },
+            "conflict_severity": { "enum": ["none", "minor", "major"] },
+            "flag_load": { "type": "number" },
+            "age_widening_factor": { "type": "number", "minimum": 1 }
+          }
+        },
+        "heuristic_version": {
+          "type": "string",
+          "description": "Belief shapes come from published, versioned heuristics about evidence strength. Reasonable people would construct them differently — versioning is mitigation, not a solution (DECISION.md §12)."
+        }
+      }
+    },
+
+    "as_of": { "$ref": "defs.schema.json#/$defs/date" },
+    "anchor_set_version": {
+      "type": "string",
+      "description": "EVALUATION.md version the anchors came from. Anchors drift as the ceiling rises; longitudinal comparison of raw scores across anchor versions is invalid."
+    },
+    "scored_by": { "type": "string" },
+
+    "second_pass": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["value", "scored_by"],
+      "properties": {
+        "value": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
+        "scored_by": { "type": "string" },
+        "divergence": { "type": "integer", "readOnly": true },
+        "resolution": { "type": "string" }
+      },
+      "description": "Independent re-score from the same evidence. Divergence >= 2 triggers re-examination (EVALUATION.md §6)."
+    },
+
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "value"],
+        "properties": {
+          "date": { "$ref": "defs.schema.json#/$defs/date" },
+          "value": { "type": ["integer", "null"] },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  },
+
+  "allOf": [
+    {
+      "if": {
+        "properties": { "value": { "type": "integer" } },
+        "required": ["value"]
+      },
+      "then": {
+        "required": ["rationale", "evidence"],
+        "description": "A scored dimension must have a rationale and evidence. No exceptions."
+      }
+    },
+    {
+      "if": {
+        "properties": { "value": { "const": null } },
+        "required": ["value"]
+      },
+      "then": {
+        "required": ["not_scored_reason"],
+        "properties": { "not_scored_reason": { "type": "string" } }
+      }
+    }
+  ]
+}

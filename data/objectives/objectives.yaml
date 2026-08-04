@@ -1,0 +1,171 @@
+"$schema": ../schema/objective.schema.json
+# Objective definitions v1.
+# QUERIES.md §8.2 — each objective declares which measurements are ADMISSIBLE
+# evidence for it. A benchmark whose construct does not match is rejected by the
+# engine, which is how the Atlas structurally cannot answer a frontend question
+# with a repository-patching benchmark.
+#
+# NOTE: every metric below is currently UNPOPULATED. These definitions declare
+# what would count as evidence; no measurement has yet been captured. That is why
+# ratio queries presently refuse with NO_MEASUREMENTS — the refusal is correct
+# behaviour, not a bug.
+
+objectives:
+
+  - id: obj-repository-patching
+    name: Repository patching
+    construct: >
+      Resolving a described defect in an existing multi-file codebase such that
+      a pre-existing test suite passes, without human intervention. Measures
+      localization, cross-file reasoning, and patch correctness. It does NOT
+      measure interface quality, long-horizon planning, code maintainability, or
+      cost efficiency, and is routinely misread as a general measure of
+      "coding ability".
+    coverage_floor: 0.6
+    metric_set:
+      - metric: met-resolve-rate
+        direction: higher_better
+        floor: 0.0
+        ceiling: 1.0
+        weight: 1.0
+        source_kinds: [B, D]
+      - metric: met-cost-per-resolved-task
+        direction: lower_better
+        floor: 0.0
+        weight: 0.5
+        source_kinds: [D]
+    dimension_affinity: [D1, D3]
+    notes: >
+      Harness-dependent to a degree that makes cross-report comparison invalid
+      without matched conditions. See the M1 scan finding on divergent published
+      figures for the same nominal benchmark.
+
+  - id: obj-long-horizon-autonomy
+    name: Long-horizon autonomy
+    construct: >
+      Sustaining useful progress on a multi-step task over an extended session
+      without human correction. Measures error recovery, goal retention, and
+      self-monitoring. Distinct from repository patching, which scores only the
+      final state and therefore hides how many interventions would have been
+      needed.
+    coverage_floor: 0.5
+    metric_set:
+      - metric: met-interventions-per-completed-task
+        direction: lower_better
+        floor: 0.0
+        weight: 1.0
+        source_kinds: [D]
+      - metric: met-autonomous-duration-minutes
+        direction: higher_better
+        floor: 0.0
+        weight: 0.6
+        source_kinds: [D]
+      - metric: met-task-completion-rate
+        direction: higher_better
+        floor: 0.0
+        ceiling: 1.0
+        weight: 0.8
+        source_kinds: [D]
+    implied_guards:
+      - dimension: D4
+        min: 3
+        rationale: >
+          Maximizing autonomy alone selects for the agent that runs longest
+          without stopping, which is not the agent that produces the most
+          completed work.
+      - dimension: D5
+        min: 3
+        rationale: >
+          An agent that autonomously produces unmaintainable output has moved
+          the cost rather than removed it.
+    guard_disclosure: >
+      Autonomy is ranked with reliability and maintainability floors applied.
+      Remove them to rank on raw autonomy alone.
+    dimension_affinity: [D2, D4, D5]
+
+  - id: obj-frontend-generation
+    name: Frontend generation
+    construct: >
+      Producing user-interface code that matches a design brief and is fit to
+      ship — visual fidelity, responsive correctness, accessibility baseline,
+      and framework-idiomatic structure. Repository-patching benchmarks measure
+      none of this and are INADMISSIBLE here.
+    coverage_floor: 0.6
+    metric_set:
+      - metric: met-visual-fidelity-to-brief
+        direction: higher_better
+        floor: 0.0
+        ceiling: 1.0
+        weight: 1.0
+        source_kinds: [D]
+      - metric: met-responsive-correctness
+        direction: higher_better
+        floor: 0.0
+        ceiling: 1.0
+        weight: 0.7
+        source_kinds: [D]
+      - metric: met-accessibility-baseline
+        direction: higher_better
+        floor: 0.0
+        ceiling: 1.0
+        weight: 0.6
+        source_kinds: [B, D]
+      - metric: met-iterations-to-acceptable
+        direction: lower_better
+        floor: 0.0
+        weight: 0.8
+        source_kinds: [D]
+    dimension_affinity: [D1, D3, D8]
+    notes: >
+      No admissible measurement exists in public evidence. This objective is the
+      clearest case where the Atlas must generate its own data (exp-frontend-
+      fidelity-v1) or refuse. It currently refuses.
+
+  - id: obj-large-repo-comprehension
+    name: Large-repository comprehension
+    construct: >
+      Answering questions and making changes that require reasoning across many
+      files in a large, unfamiliar codebase. Measures retrieval, navigation, and
+      context management — properties of the model AND its context layer
+      together, never of the model alone.
+    coverage_floor: 0.5
+    metric_set:
+      - metric: met-cross-file-accuracy
+        direction: higher_better
+        floor: 0.0
+        ceiling: 1.0
+        weight: 1.0
+        source_kinds: [B, D]
+      - metric: met-context-tokens-to-answer
+        direction: lower_better
+        floor: 0.0
+        weight: 0.5
+        source_kinds: [D]
+    dimension_affinity: [D1, D9]
+
+  - id: obj-cost-efficiency
+    name: Cost efficiency
+    construct: >
+      Completed work per dollar, including retries, failed runs, and rework.
+      Explicitly NOT price per token — a component needing four attempts is not
+      cheap, and per-token comparison is the standard way cost analysis in this
+      domain misleads.
+    coverage_floor: 0.5
+    metric_set:
+      - metric: met-cost-per-completed-task
+        direction: lower_better
+        floor: 0.0
+        weight: 1.0
+        source_kinds: [D]
+      - metric: met-effective-token-multiplier
+        direction: lower_better
+        floor: 1.0
+        weight: 0.6
+        source_kinds: [A, D]
+    dimension_affinity: [D6]
+    notes: >
+      met-effective-token-multiplier exists because tokenizers differ between
+      model generations and vendors. A published per-token price is not
+      comparable across tokenizers, and at least one vendor documents ~30% token
+      inflation in a newer tokenizer. Normalizing is mandatory before any
+      cross-model price comparison.

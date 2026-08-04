@@ -1,0 +1,243 @@
+"$schema": ../schema/capability.schema.json
+# Capability catalogue v1.
+# GRAPH.md §3 — the extensibility hinge. Constraints are written against these,
+# never against entity types, so a constraint written today applies to categories
+# that do not exist yet.
+#
+# Definitions are deliberately operational: two researchers reading one should
+# classify an entity the same way. Vague capabilities produce a graph that
+# filters incorrectly and silently.
+
+capabilities:
+
+  # ── cost ────────────────────────────────────────────────────────────────
+  - id: cap-prompt-caching
+    name: Prompt caching
+    definition: >
+      Reuse of previously-submitted context across requests at a reduced
+      per-token price, where the reduction is stated in published pricing.
+      Latency-only reuse with no price reduction does NOT qualify.
+    category: cost
+    evidence_requirement: documented
+    measurement: met-cache-read-multiplier
+    substitutable_by: [cap-context-compaction]
+
+  - id: cap-batch-discount
+    name: Batch discount
+    definition: >
+      An asynchronous processing mode billed below the synchronous rate, with
+      the discount stated in published pricing.
+    category: cost
+    evidence_requirement: documented
+
+  - id: cap-cost-predictability
+    name: Cost predictability
+    definition: >
+      Monthly spend is bounded by a plan rather than by usage. A flat fee with
+      an unmetered allowance qualifies; metered billing with a spend cap does
+      not, because the cap degrades service rather than fixing cost.
+    category: cost
+    evidence_requirement: documented
+    negates: [cap-usage-transparency]
+
+  - id: cap-usage-transparency
+    name: Per-request usage transparency
+    definition: >
+      Token counts and cost are reported per request, allowing a user to
+      attribute spend to specific work.
+    category: cost
+    evidence_requirement: demonstrated
+
+  - id: cap-free-tier
+    name: Free tier
+    definition: >
+      Usable capacity at zero cost on an ongoing basis, not a one-time trial
+      credit.
+    category: cost
+    evidence_requirement: documented
+
+  # ── privacy / governance ────────────────────────────────────────────────
+  - id: cap-no-training-on-input
+    name: No training on input
+    definition: >
+      The provider contractually commits not to train models on customer
+      inputs or outputs by default. A commitment available only on request, or
+      only on an enterprise tier, is recorded on that tier's entity, not the
+      base one.
+    category: privacy
+    evidence_requirement: documented
+
+  - id: cap-data-residency-control
+    name: Data residency control
+    definition: >
+      The caller can constrain the geography in which inference occurs, through
+      a documented parameter or endpoint.
+    category: privacy
+    evidence_requirement: documented
+
+  - id: cap-offline-operation
+    name: Offline operation
+    definition: >
+      Functions with no outbound network connection after installation.
+      Local weights with a mandatory license check do not qualify.
+    category: deployment
+    evidence_requirement: demonstrated
+
+  - id: cap-byok
+    name: Bring your own key
+    definition: >
+      Accepts a user-supplied provider API key, so inference is billed to the
+      user's own provider account rather than resold.
+    category: integration
+    evidence_requirement: documented
+
+  - id: cap-self-hostable
+    name: Self-hostable
+    definition: >
+      Can be run entirely on infrastructure the user controls, with a licence
+      permitting it.
+    category: deployment
+    evidence_requirement: documented
+
+  # ── execution / agentic ─────────────────────────────────────────────────
+  - id: cap-tool-use
+    name: Tool use
+    definition: >
+      Accepts caller-defined tool schemas and emits structured invocations
+      against them.
+    category: execution
+    evidence_requirement: documented
+
+  - id: cap-sandboxed-execution
+    name: Sandboxed execution
+    definition: >
+      Executes generated code or shell commands inside an isolation boundary
+      (container, VM, or equivalent) that is on by default, not opt-in.
+    category: safety
+    evidence_requirement: documented
+
+  - id: cap-approval-gates
+    name: Approval gates on irreversible actions
+    definition: >
+      Requires explicit human confirmation before destructive or outbound
+      actions, by default. Configurable-but-off-by-default does not qualify.
+    category: safety
+    evidence_requirement: demonstrated
+
+  - id: cap-subagents
+    name: Subagents
+    definition: >
+      Can spawn child agent contexts with their own instructions and, where
+      supported, their own model selection.
+    category: execution
+    evidence_requirement: documented
+
+  - id: cap-headless-ci
+    name: Headless / CI operation
+    definition: >
+      Runs non-interactively with a documented exit contract, suitable for
+      automation.
+    category: deployment
+    evidence_requirement: documented
+
+  - id: cap-session-persistence
+    name: Session persistence
+    definition: >
+      State survives across process restarts without the user re-supplying
+      context.
+    category: workflow
+    evidence_requirement: demonstrated
+
+  - id: cap-parallel-agents
+    name: Parallel agents
+    definition: >
+      Coordinates two or more concurrent agent loops over one codebase with a
+      documented isolation mechanism.
+    category: execution
+    evidence_requirement: demonstrated
+    substitutable_by: [cap-worktree-isolation]
+
+  - id: cap-worktree-isolation
+    name: Workspace isolation
+    definition: >
+      Gives each concurrent agent its own working copy of the repository.
+    category: execution
+    evidence_requirement: demonstrated
+
+  # ── model properties ────────────────────────────────────────────────────
+  - id: cap-extended-reasoning
+    name: Extended reasoning
+    definition: >
+      Supports allocating additional inference compute to a single response
+      through a documented parameter, with the tradeoff surfaced to the caller.
+    category: execution
+    evidence_requirement: documented
+
+  - id: cap-long-context
+    name: Long context (≥500k tokens)
+    definition: >
+      Accepts at least 500,000 input tokens in a single request at documented
+      pricing. Degraded or extra-cost long-context tiers are recorded with the
+      qualifier, not excluded.
+    category: execution
+    evidence_requirement: documented
+
+  - id: cap-vision-input
+    name: Vision input
+    definition: Accepts image input in the same request as text.
+    category: execution
+    evidence_requirement: documented
+
+  # ── integration ─────────────────────────────────────────────────────────
+  - id: cap-mcp-client
+    name: MCP client
+    definition: Can connect to and invoke tools from Model Context Protocol servers.
+    category: integration
+    evidence_requirement: documented
+
+  - id: cap-mcp-server
+    name: MCP server
+    definition: Exposes its own functionality as an MCP server.
+    category: integration
+    evidence_requirement: documented
+
+  - id: cap-model-agnostic
+    name: Model agnostic
+    definition: >
+      Runs against models from more than one vendor without forking or
+      unsupported modification.
+    category: integration
+    evidence_requirement: demonstrated
+
+  - id: cap-model-routing
+    name: Per-task model routing
+    definition: >
+      Selects among multiple models within a single session or workflow, by
+      configuration or automatically.
+    category: integration
+    evidence_requirement: demonstrated
+
+  # ── prerequisites (used as forbids_capability for low-expertise personas) ─
+  - id: cap-requires-cli-fluency
+    name: Requires CLI fluency
+    definition: >
+      Primary interface is a terminal, and normal operation requires the user
+      to read and act on shell output.
+    category: workflow
+    evidence_requirement: demonstrated
+
+  - id: cap-requires-git-fluency
+    name: Requires git fluency
+    definition: >
+      Normal operation requires the user to resolve merge conflicts, manage
+      branches, or reason about repository state.
+    category: workflow
+    evidence_requirement: demonstrated
+
+  - id: cap-context-compaction
+    name: Context compaction
+    definition: >
+      Automatically summarizes or prunes conversation context to stay within
+      the window, without the user restarting the session.
+    category: workflow
+    evidence_requirement: demonstrated

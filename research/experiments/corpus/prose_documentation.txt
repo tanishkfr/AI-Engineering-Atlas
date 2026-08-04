@@ -1,0 +1,32 @@
+Prompt caching reduces both cost and latency by reusing previously processed
+portions of a request across subsequent calls. Instead of reprocessing the same
+system instructions, tool definitions, or repository context on every turn, the
+provider reads from a cache at a fraction of the standard input price.
+
+There are two common ways to enable caching. Automatic caching adds a single
+control field at the top level of the request, and the system manages cache
+breakpoints as the conversation grows. Explicit breakpoints place the control
+directly on individual content blocks, giving fine-grained control over exactly
+what is stored and for how long.
+
+The economics depend on how many times a cached prefix is read before it expires.
+A cache write typically costs more than a standard input token, while a cache
+read costs substantially less. If the write multiplier is modest and the read
+discount is large, caching pays for itself after very few reads. Longer cache
+lifetimes usually carry a higher write multiplier, so the break-even point moves
+further out, and a session with long gaps between turns may forfeit the write
+cost entirely without ever benefiting from it.
+
+Caching interacts with rate limits in a way that is easy to overlook. On some
+platforms, tokens read from a cache do not count toward the input token
+throughput limit. Where that holds, a high cache hit rate raises effective
+throughput as well as lowering cost, which means two systems paying the same
+nominal per-token price can differ substantially in both what they spend and
+whether they can run the workload at all.
+
+Practitioners should measure their realized hit rate rather than assuming one.
+Hit rates depend on session length, how often cached content is edited, the gap
+between turns, and whether the tooling in use places breakpoints sensibly. A
+system that advertises caching support does not necessarily achieve a high hit
+rate in practice, and the difference between a good and a poor implementation can
+exceed the difference between two model tiers.

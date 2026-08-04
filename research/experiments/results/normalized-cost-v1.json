@@ -1,0 +1,247 @@
+{
+  "experiment": "exp-normalized-cost-v1",
+  "study": "RQ-01a",
+  "note": "New study. Candidate list fixed by which models we have captured pricing for, not chosen after seeing exp-tokenizer-normalization-v1 results. Only exact tokenizer/model matches admitted; RQ-01 H3 showed within-vendor generational drift up to 1.27x, so tokenizers are not substituted across generations.",
+  "run_date": "2026-08-04",
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "tiktoken": "0.12.0",
+    "tokenizers": "0.22.2"
+  },
+  "pricing_source": "src-deepinfra-pricing-2026-08-04 (Class A, tool_extracted); src-openai-pricing-2026-08-03 (Class A, tool_extracted)",
+  "pricing_as_of": "2026-08-04",
+  "corpus": {
+    "code_python": {
+      "bytes": 1920,
+      "sha256": "be98433f30f6bc557d7233cd283e2a94795401cd2aad083bdb9a2f2283cb08f4"
+    },
+    "code_typescript": {
+      "bytes": 1773,
+      "sha256": "9808cf7a4ec90c0c84b10b2bc06352187db12a4e9d8e08d574d433e7a8219aa6"
+    },
+    "prose_documentation": {
+      "bytes": 2043,
+      "sha256": "ce512190f6990e5e6a1828a613ec9fa52b662e163faf2c570eb08feba527da98"
+    },
+    "structured_json": {
+      "bytes": 1849,
+      "sha256": "4df57eb0dc7b6cfa56c9204cc78849529d6e933885ec78337a44ff501e53edda"
+    },
+    "mixed_repo_context": {
+      "bytes": 2302,
+      "sha256": "05275654646d4d64a1be532543a7525253141fc0d5e396bf6a037d907921f31e"
+    }
+  },
+  "models_measured": {
+    "deepseek/DeepSeek-V3": {
+      "tokenizer_repo": "deepseek-ai/DeepSeek-V3",
+      "price_in": 0.32,
+      "price_out": 0.89,
+      "provider": "deepinfra",
+      "match": "exact",
+      "tokenizer_loaded": true
+    },
+    "qwen/Qwen3-32B": {
+      "tokenizer_repo": "Qwen/Qwen3-32B",
+      "price_in": 0.08,
+      "price_out": 0.28,
+      "provider": "deepinfra",
+      "match": "exact",
+      "tokenizer_loaded": true
+    },
+    "mistral/Mistral-Nemo-Instruct-2407": {
+      "tokenizer_repo": "mistralai/Mistral-Nemo-Instruct-2407",
+      "price_in": 0.019,
+      "price_out": 0.03,
+      "provider": "deepinfra",
+      "match": "exact",
+      "tokenizer_loaded": true
+    },
+    "openai/gpt-5.6-terra": {
+      "encoding": "o200k_base",
+      "price_in": 2.0,
+      "price_out": 12.0,
+      "provider": "openai-first-party",
+      "match": "assumed_encoding",
+      "tokenizer_loaded": true
+    },
+    "openai/gpt-5.6-sol": {
+      "encoding": "o200k_base",
+      "price_in": 5.0,
+      "price_out": 30.0,
+      "provider": "openai-first-party",
+      "match": "assumed_encoding",
+      "tokenizer_loaded": true
+    }
+  },
+  "models_failed": {
+    "mistral/Mistral-Small-3.2-24B-Instruct-2506": "RemoteEntryNotFoundError: 404 Client Error. (Request ID: Root=1-6a70f447-4776ee5515b8d2a87b4a6315;5161634b-5506-4dfe-bbb3-4cb9ad852ead)\n\nEntry Not Found for url: https://huggingface.co/mistralai/Mistral-Sma"
+  },
+  "not_normalizable": {
+    "anthropic": "No public offline tokenizer; count_tokens requires an API key.",
+    "google": "No public offline tokenizer; countTokens requires an API key."
+  },
+  "token_counts": {
+    "deepseek/DeepSeek-V3": {
+      "code_python": 541,
+      "code_typescript": 465,
+      "prose_documentation": 410,
+      "structured_json": 606,
+      "mixed_repo_context": 702
+    },
+    "qwen/Qwen3-32B": {
+      "code_python": 523,
+      "code_typescript": 446,
+      "prose_documentation": 409,
+      "structured_json": 611,
+      "mixed_repo_context": 729
+    },
+    "mistral/Mistral-Nemo-Instruct-2407": {
+      "code_python": 553,
+      "code_typescript": 463,
+      "prose_documentation": 417,
+      "structured_json": 633,
+      "mixed_repo_context": 737
+    },
+    "openai/gpt-5.6-terra": {
+      "code_python": 507,
+      "code_typescript": 448,
+      "prose_documentation": 407,
+      "structured_json": 571,
+      "mixed_repo_context": 678
+    },
+    "openai/gpt-5.6-sol": {
+      "code_python": 507,
+      "code_typescript": 448,
+      "prose_documentation": 407,
+      "structured_json": 571,
+      "mixed_repo_context": 678
+    }
+  },
+  "normalized_cost_usd_per_pass": {
+    "deepseek/DeepSeek-V3": {
+      "code_python": 0.00017312,
+      "code_typescript": 0.0001488,
+      "prose_documentation": 0.0001312,
+      "structured_json": 0.00019392,
+      "mixed_repo_context": 0.00022464
+    },
+    "qwen/Qwen3-32B": {
+      "code_python": 4.184e-05,
+      "code_typescript": 3.568e-05,
+      "prose_documentation": 3.272e-05,
+      "structured_json": 4.888e-05,
+      "mixed_repo_context": 5.832e-05
+    },
+    "mistral/Mistral-Nemo-Instruct-2407": {
+      "code_python": 1.051e-05,
+      "code_typescript": 8.8e-06,
+      "prose_documentation": 7.92e-06,
+      "structured_json": 1.203e-05,
+      "mixed_repo_context": 1.4e-05
+    },
+    "openai/gpt-5.6-terra": {
+      "code_python": 0.001014,
+      "code_typescript": 0.000896,
+      "prose_documentation": 0.000814,
+      "structured_json": 0.001142,
+      "mixed_repo_context": 0.001356
+    },
+    "openai/gpt-5.6-sol": {
+      "code_python": 0.002535,
+      "code_typescript": 0.00224,
+      "prose_documentation": 0.002035,
+      "structured_json": 0.002855,
+      "mixed_repo_context": 0.00339
+    }
+  },
+  "effective_token_multiplier": {
+    "code_python": {
+      "deepseek/DeepSeek-V3": 1.0671,
+      "qwen/Qwen3-32B": 1.0316,
+      "mistral/Mistral-Nemo-Instruct-2407": 1.0907,
+      "openai/gpt-5.6-terra": 1.0,
+      "openai/gpt-5.6-sol": 1.0
+    },
+    "code_typescript": {
+      "deepseek/DeepSeek-V3": 1.0426,
+      "qwen/Qwen3-32B": 1.0,
+      "mistral/Mistral-Nemo-Instruct-2407": 1.0381,
+      "openai/gpt-5.6-terra": 1.0045,
+      "openai/gpt-5.6-sol": 1.0045
+    },
+    "prose_documentation": {
+      "deepseek/DeepSeek-V3": 1.0074,
+      "qwen/Qwen3-32B": 1.0049,
+      "mistral/Mistral-Nemo-Instruct-2407": 1.0246,
+      "openai/gpt-5.6-terra": 1.0,
+      "openai/gpt-5.6-sol": 1.0
+    },
+    "structured_json": {
+      "deepseek/DeepSeek-V3": 1.0613,
+      "qwen/Qwen3-32B": 1.0701,
+      "mistral/Mistral-Nemo-Instruct-2407": 1.1086,
+      "openai/gpt-5.6-terra": 1.0,
+      "openai/gpt-5.6-sol": 1.0
+    },
+    "mixed_repo_context": {
+      "deepseek/DeepSeek-V3": 1.0354,
+      "qwen/Qwen3-32B": 1.0752,
+      "mistral/Mistral-Nemo-Instruct-2407": 1.087,
+      "openai/gpt-5.6-terra": 1.0,
+      "openai/gpt-5.6-sol": 1.0
+    }
+  },
+  "naive_price_ranking": [
+    "mistral/Mistral-Nemo-Instruct-2407",
+    "qwen/Qwen3-32B",
+    "deepseek/DeepSeek-V3",
+    "openai/gpt-5.6-terra",
+    "openai/gpt-5.6-sol"
+  ],
+  "normalized_cost_ranking": {
+    "code_python": [
+      "mistral/Mistral-Nemo-Instruct-2407",
+      "qwen/Qwen3-32B",
+      "deepseek/DeepSeek-V3",
+      "openai/gpt-5.6-terra",
+      "openai/gpt-5.6-sol"
+    ],
+    "code_typescript": [
+      "mistral/Mistral-Nemo-Instruct-2407",
+      "qwen/Qwen3-32B",
+      "deepseek/DeepSeek-V3",
+      "openai/gpt-5.6-terra",
+      "openai/gpt-5.6-sol"
+    ],
+    "prose_documentation": [
+      "mistral/Mistral-Nemo-Instruct-2407",
+      "qwen/Qwen3-32B",
+      "deepseek/DeepSeek-V3",
+      "openai/gpt-5.6-terra",
+      "openai/gpt-5.6-sol"
+    ],
+    "structured_json": [
+      "mistral/Mistral-Nemo-Instruct-2407",
+      "qwen/Qwen3-32B",
+      "deepseek/DeepSeek-V3",
+      "openai/gpt-5.6-terra",
+      "openai/gpt-5.6-sol"
+    ],
+    "mixed_repo_context": [
+      "mistral/Mistral-Nemo-Instruct-2407",
+      "qwen/Qwen3-32B",
+      "deepseek/DeepSeek-V3",
+      "openai/gpt-5.6-terra",
+      "openai/gpt-5.6-sol"
+    ]
+  },
+  "ranking_changed_by_normalization": {
+    "code_python": false,
+    "code_typescript": false,
+    "prose_documentation": false,
+    "structured_json": false,
+    "mixed_repo_context": false
+  }
+}

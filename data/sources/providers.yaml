@@ -1,0 +1,138 @@
+"$schema": ../schema/source.schema.json
+
+sources:
+
+  - id: src-anthropic-rate-limits-2026-08-03
+    schema_version: 1
+    class: A
+    url: https://platform.claude.com/docs/en/api/rate-limits
+    canonical_url: https://platform.claude.com/docs/en/api/rate-limits
+    archive_url: null
+    archive_status: pending
+    title: Rate limits
+    publisher: ent-institution-anthropic
+    author: null
+    published: null
+    retrieved: 2026-08-03
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: verbatim
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Spend limits table"
+        text: >-
+          Usage tier / Monthly spend cap: Start $500 USD; Build $1,000 USD;
+          Scale $200,000 USD. Organizations on the Custom tier have no monthly
+          spend cap.
+      - id: 1
+        locator: "Rate limits — Start tier table"
+        text: >-
+          Claude Fable 5: 1,000 RPM, 500,000 ITPM, 100,000 OTPM.
+          Claude Opus 5: 1,000 RPM, 2,000,000 ITPM, 400,000 OTPM.
+          Claude Sonnet 5: 1,000 RPM, 2,000,000 ITPM, 400,000 OTPM.
+          Claude Haiku 4.5: 1,000 RPM, 2,000,000 ITPM, 400,000 OTPM.
+      - id: 2
+        locator: "Rate limits — Build tier table"
+        text: >-
+          Claude Fable 5: 2,000 RPM, 1,500,000 ITPM, 300,000 OTPM.
+          Claude Opus 5: 5,000 RPM, 5,000,000 ITPM, 1,000,000 OTPM.
+          Claude Sonnet 5: 5,000 RPM, 5,000,000 ITPM, 1,000,000 OTPM.
+      - id: 3
+        locator: "Rate limits — Scale tier table"
+        text: >-
+          Claude Fable 5: 4,000 RPM, 4,000,000 ITPM, 800,000 OTPM.
+          Claude Opus 5: 10,000 RPM, 10,000,000 ITPM, 2,000,000 OTPM.
+          Claude Sonnet 5: 10,000 RPM, 10,000,000 ITPM, 2,000,000 OTPM.
+      - id: 4
+        locator: "Cache-aware ITPM section"
+        text: >-
+          For most Claude models, only uncached input tokens count toward your
+          ITPM rate limits. cache_read_input_tokens (tokens read from cache) do
+          NOT count toward ITPM for most models.
+      - id: 5
+        locator: "Cache-aware ITPM example"
+        text: >-
+          With a 2,000,000 ITPM limit and an 80% cache hit rate, you could
+          effectively process 10,000,000 total input tokens per minute (2M
+          uncached + 8M cached), because cached tokens don't count toward your
+          rate limit.
+      - id: 6
+        locator: "Rate limit table footnotes"
+        text: >-
+          Opus rate limit is a total limit that applies to combined traffic
+          across Claude Opus 4.8, Opus 4.7, Opus 4.6, and Opus 4.5. Claude Opus 5
+          has a separate rate limit and is not part of this combined bucket.
+      - id: 7
+        locator: "OTPM section"
+        text: >-
+          OTPM rate limits are evaluated in real time as output tokens are
+          produced, counting only the actual tokens generated. The max_tokens
+          parameter does not factor into OTPM rate limit calculations.
+      - id: 8
+        locator: "About rate limits"
+        text: >-
+          New organizations and organizations with limited usage history may
+          start with limits below the standard limits shown on this page while
+          account history is established.
+      - id: 9
+        locator: "inference_geo note"
+        text: >-
+          Rate limits are currently shared across all inference_geo values.
+    methodology: null
+    notes: >
+      Contains the highest-value non-price fact captured in M3: Claude Fable 5
+      carries materially lower ITPM/OTPM limits than Opus 5 and Sonnet 5 at every
+      tier. See research/findings-2026-08-03.md F2.
+
+  - id: src-openrouter-provider-routing-2026-08-03
+    schema_version: 1
+    class: A
+    url: https://openrouter.ai/docs/features/provider-routing
+    canonical_url: https://openrouter.ai/docs/features/provider-routing
+    archive_url: null
+    archive_status: pending
+    title: Provider routing
+    publisher: ent-institution-openrouter
+    author: null
+    published: null
+    retrieved: 2026-08-03
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Default routing behaviour"
+        text: >-
+          For each model in your request, OpenRouter's default behavior is to
+          load balance requests across providers, prioritizing price.
+      - id: 1
+        locator: "Routing step 1"
+        text: >-
+          Prioritize providers that have not seen significant outages in the last
+          30 seconds.
+      - id: 2
+        locator: "Routing step 2 — inverse square price weighting"
+        text: >-
+          Among stable providers, selection uses inverse-square pricing
+          weighting — a provider costing $1/million tokens is 9x more likely to
+          be selected than one costing $3/million.
+      - id: 3
+        locator: "Provider control parameters table"
+        text: >-
+          order (string[]): prioritized providers in sequence. allow_fallbacks
+          (boolean, default true). require_parameters (boolean, default false).
+          data_collection ("allow"|"deny", default "allow"). zdr (boolean).
+          quantizations (string[]): filters by quantization levels (int4, int8,
+          fp8, etc.). sort: prioritizes by "price", "throughput", or "latency".
+          When sort or order are configured, load balancing is disabled.
+    methodology: null
+    notes: >
+      REDUCED FIDELITY — restructured by the extraction model, though direct
+      quotations are preserved. Claims sourced here remain status: draft pending
+      re-capture (T-090). The quantizations filter and data_collection default
+      are the two most decision-relevant parameters and both need verbatim
+      confirmation.

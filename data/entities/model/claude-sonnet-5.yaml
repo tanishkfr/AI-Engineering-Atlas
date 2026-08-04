@@ -1,0 +1,366 @@
+"$schema": ../../schema/entity.schema.json
+# GOLD-STANDARD EXEMPLAR — canonical example for all future entity contributions.
+# Chosen as the exemplar because it carries a dated price expiry, which exercises
+# the temporal model more thoroughly than any other entity available today.
+
+id: ent-model-claude-sonnet-5
+schema_version: 1
+name: Claude Sonnet 5
+aliases: [claude-sonnet-5, Sonnet 5]
+slug_frozen_at: 2026-08-03
+
+layers: [L1]
+roles: [model_version]
+slots: [model]
+
+facets:
+  api_id: claude-sonnet-5
+  openness: closed
+  self_hostable: false
+  id_is_pinned_snapshot: true
+
+made_by: ent-institution-anthropic
+status: active
+depth_priority: P0
+first_seen: 2026-08-03
+canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
+docs_url: https://platform.claude.com/docs/en/about-claude/pricing
+
+summary: >
+  Anthropic's speed/intelligence balance tier, with a 1M-token context window and
+  introductory pricing that expires 2026-08-31.
+
+decision_questions:
+  - q: Is Sonnet 5 enough, or do I need Opus 5?
+    status: open
+  - q: What happens to my costs when introductory pricing ends on 2026-08-31?
+    status: answered
+  - q: Does the 1M context window change how I should structure agent work?
+    status: open
+
+claims:
+
+  # ─── PRICING (step facts — the introductory rate has a KNOWN expiry) ───
+  - id: clm-claude-sonnet-5-001
+    schema_version: 2
+    type: S
+    temporal_kind: interval
+    subject: ent-model-claude-sonnet-5
+    predicate: pricing.input_per_mtok
+    statement: >
+      Base input priced at $2 per million tokens under introductory pricing, in
+      effect through 2026-08-31.
+    value: {amount: 2.00, currency: USD, unit: per_mtok}
+    temporal:
+      valid_from: unknown          # introductory period start not stated on the page
+      valid_to: 2026-08-31
+      valid_precision: day
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    qualifiers: {tier: introductory, region: global}
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 0, supports: true}
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 1, supports: true}
+      - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 1, supports: true}
+    cadence_days: 14
+    status: published
+
+  - id: clm-claude-sonnet-5-002
+    schema_version: 2
+    type: S
+    temporal_kind: step
+    subject: ent-model-claude-sonnet-5
+    predicate: pricing.input_per_mtok
+    statement: >
+      Base input priced at $3 per million tokens from 2026-09-01, when
+      introductory pricing ends.
+    value: {amount: 3.00, currency: USD, unit: per_mtok}
+    temporal:
+      valid_from: 2026-09-01
+      valid_to: null
+      valid_precision: day
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    qualifiers: {tier: standard, region: global}
+    supersedes: clm-claude-sonnet-5-001
+    supersession_kind: change
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 0, supports: true}
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 1, supports: true}
+    cadence_days: 14
+    status: published
+
+  - id: clm-claude-sonnet-5-003
+    schema_version: 2
+    type: S
+    temporal_kind: interval
+    subject: ent-model-claude-sonnet-5
+    predicate: pricing.output_per_mtok
+    statement: Output priced at $10 per million tokens through 2026-08-31.
+    value: {amount: 10.00, currency: USD, unit: per_mtok}
+    temporal:
+      valid_from: unknown
+      valid_to: 2026-08-31
+      valid_precision: day
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    qualifiers: {tier: introductory}
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 0, supports: true}
+    cadence_days: 14
+    status: published
+
+  - id: clm-claude-sonnet-5-004
+    schema_version: 2
+    type: S
+    temporal_kind: step
+    subject: ent-model-claude-sonnet-5
+    predicate: pricing.output_per_mtok
+    statement: Output priced at $15 per million tokens from 2026-09-01.
+    value: {amount: 15.00, currency: USD, unit: per_mtok}
+    temporal:
+      valid_from: 2026-09-01
+      valid_to: null
+      valid_precision: day
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    supersedes: clm-claude-sonnet-5-003
+    supersession_kind: change
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 0, supports: true}
+    cadence_days: 14
+    status: published
+
+  - id: clm-claude-sonnet-5-005
+    schema_version: 2
+    type: S
+    temporal_kind: interval
+    subject: ent-model-claude-sonnet-5
+    predicate: pricing.cache_read_per_mtok
+    statement: >
+      Cache hits and refreshes priced at $0.20 per million tokens through
+      2026-08-31 ($0.30 from 2026-09-01), i.e. 0.1x base input.
+    value: {amount: 0.20, currency: USD, unit: per_mtok}
+    temporal:
+      valid_from: unknown
+      valid_to: 2026-08-31
+      valid_precision: day
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 0, supports: true}
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 3, supports: true}
+    cadence_days: 14
+    status: published
+
+  # ─── SPECIFICATION (step facts) ───
+  - id: clm-claude-sonnet-5-010
+    schema_version: 2
+    type: S
+    temporal_kind: step
+    subject: ent-model-claude-sonnet-5
+    predicate: context.window_tokens
+    statement: Context window of 1M tokens, billed at standard per-token rates across the full window.
+    value: {tokens: 1000000}
+    temporal:
+      valid_from: unknown
+      valid_to: null
+      valid_precision: unknown
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 2, supports: true}
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 8, supports: true}
+    cadence_days: 90
+    status: published
+
+  - id: clm-claude-sonnet-5-011
+    schema_version: 2
+    type: S
+    temporal_kind: step
+    subject: ent-model-claude-sonnet-5
+    predicate: context.max_output_tokens
+    statement: >
+      Maximum output of 128k tokens on the synchronous Messages API; up to 300k
+      on the Message Batches API via the output-300k-2026-03-24 beta header.
+    value: {sync: 128000, batch_beta: 300000}
+    temporal:
+      valid_from: unknown
+      valid_to: null
+      valid_precision: unknown
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 2, supports: true}
+      - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 8, supports: true}
+    cadence_days: 90
+    status: published
+
+  - id: clm-claude-sonnet-5-012
+    schema_version: 2
+    type: S
+    temporal_kind: static
+    subject: ent-model-claude-sonnet-5
+    predicate: training.reliable_knowledge_cutoff
+    statement: >
+      Reliable knowledge cutoff of Jan 2026; training data cutoff also Jan 2026.
+    value: {reliable: "2026-01", training: "2026-01"}
+    temporal:
+      valid_from: unknown
+      valid_to: null
+      valid_precision: month
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 5, supports: true}
+    cadence_days: 3650
+    status: published
+
+  - id: clm-claude-sonnet-5-013
+    schema_version: 2
+    type: S
+    temporal_kind: step
+    subject: ent-model-claude-sonnet-5
+    predicate: capability.thinking_mode
+    statement: >
+      Supports adaptive thinking; does NOT support the older
+      thinking.type "enabled" extended-thinking parameter.
+    value: {adaptive_thinking: true, extended_thinking_enabled: false}
+    temporal:
+      valid_from: unknown
+      valid_to: null
+      valid_precision: unknown
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 7, supports: true}
+    cadence_days: 90
+    status: published
+
+  - id: clm-claude-sonnet-5-014
+    schema_version: 2
+    type: S
+    temporal_kind: step
+    subject: ent-model-claude-sonnet-5
+    predicate: cost.tool_use_system_prompt_tokens
+    statement: >
+      Tool use adds 354 system-prompt tokens with tool_choice auto or none, and
+      474 tokens with any or tool — a per-request overhead paid on every call.
+    value: {auto_none: 354, any_tool: 474}
+    temporal:
+      valid_from: unknown
+      valid_to: null
+      valid_precision: unknown
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 10, supports: true}
+    cadence_days: 90
+    status: published
+
+  # ─── KNOWN UNKNOWNS (publishable) ───
+  - id: clm-claude-sonnet-5-090
+    schema_version: 2
+    type: M
+    temporal_kind: measurement
+    subject: ent-model-claude-sonnet-5
+    predicate: measurement.tokenizer_inflation_factor
+    statement: >
+      Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same
+      text) is NOT established. Anthropic documents the change as applying to
+      "Claude 4.7 and later models"; Sonnet 5 is later than 4.7 by name, but the
+      documentation names Sonnet 4.6 and earlier as using the previous tokenizer
+      and does not list Sonnet 5 explicitly either way.
+    value: unknown
+    conditions:
+      harness: null
+      date: 2026-08-03
+    qualifiers: {via: null}
+    temporal:
+      valid_from: 2026-08-03
+      valid_to: null
+      valid_precision: day
+      asserted_from: 2026-08-03
+      asserted_to: null
+      observed_at: 2026-08-03
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 5, supports: false}
+    conflicts:
+      - positions:
+          - statement: "Sonnet 5 uses the newer tokenizer (it is later than 4.7)"
+            sources: [src-anthropic-pricing-2026-08-03]
+          - statement: "Documentation attributes the tokenizer note explicitly only to Fable 5 among current models"
+            sources: [src-anthropic-models-overview-2026-08-03]
+        likely_cause: unexplained
+        note: >
+          The models overview attaches the tokenizer tooltip to Claude Fable 5
+          specifically. The pricing page states the change applies to "Claude 4.7
+          and later models". These are not obviously consistent for Sonnet 5.
+          Resolving this changes effective cost by up to ~30%, which is larger
+          than the entire introductory discount. Escalated as RG-001.
+    cadence_days: 30
+    status: published
+
+scores: []      # No dimension scored. See Atlas Assessment in the page.
+
+relationships:
+  - predicate: made_by
+    object: ent-institution-anthropic
+    temporal_kind: static
+    temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+    evidence: [clm-claude-sonnet-5-010]
+
+  - predicate: provides
+    object: cap-prompt-caching
+    temporal_kind: step
+    temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+    evidence: [clm-claude-sonnet-5-005]
+
+  - predicate: provides
+    object: cap-long-context
+    temporal_kind: step
+    temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+    evidence: [clm-claude-sonnet-5-010]
+
+  - predicate: provides
+    object: cap-batch-discount
+    temporal_kind: step
+    temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+    evidence: [clm-claude-sonnet-5-010]
+
+  - predicate: provides
+    object: cap-extended-reasoning
+    temporal_kind: step
+    temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+    evidence: [clm-claude-sonnet-5-013]
+
+review:
+  cadence_days: 14
+  last_reviewed: 2026-08-03
+  next_due: 2026-08-17
+  owner: atlas-editorial
+
+open_questions:
+  - "RG-001: Does Sonnet 5 use the newer (~+30% token) tokenizer? Changes effective cost by more than the introductory discount."
+  - "No independent (Class B) measurement captured for any capability."
+  - "No community (Class C) evidence captured — failure modes and sustained-use reports entirely absent."
+  - "Subscription-plan availability and included allowances not yet researched."
+  - "Rate limits by tier not yet captured."
+
+revisions:
+  - date: 2026-08-03
+    change: >
+      Created as the M3 gold-standard exemplar. 14 published S-type claims from
+      two verbatim Class A sources; zero dimensions scored, because scoring
+      requires evidence classes not yet captured.
+    by: milestone-3

@@ -1,0 +1,293 @@
+"$schema": ../schema/entity.schema.json
+# M5.1 population — AGENTS.md (L6/L5), DeepSeek V4 family (L1), and the
+# institutions they require.
+
+entities:
+
+  # ── AGENTS.md — context format AND cross-vendor standard ────────────────
+  - id: ent-format-agents-md
+    schema_version: 1
+    name: AGENTS.md
+    aliases: [agents.md]
+    slug_frozen_at: 2026-08-04
+    layers: [L6, L5]
+    roles: [context_format, protocol]
+    slots: [context, interop]
+    facets:
+      placement: repository_root
+      nested_resolution: nearest_wins
+      governance: foundation
+    made_by: ent-institution-agentic-ai-foundation
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://agents.md/
+    summary: >
+      Open format for repo-level coding-agent instructions, placed at repository
+      root with nearest-file-wins resolution, supported across 20+ products.
+    decision_questions:
+      - q: Is there a cross-vendor standard for agent instructions?
+        status: answered
+      - q: Should I write AGENTS.md, CLAUDE.md, or both?
+        status: open
+
+    claims:
+      - id: clm-format-agents-md-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-format-agents-md
+        predicate: format.placement_and_resolution
+        statement: >
+          Placed at the root of the repository; for monorepos an additional
+          AGENTS.md goes inside each package. Agents read the nearest file in the
+          directory tree, so the closest one takes precedence.
+        value: {root: true, nested: true, resolution: "nearest wins"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-agentsmd-2026-08-04, excerpt_ref: 0, supports: true}
+          - {source: src-agentsmd-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 90
+        status: draft
+
+      - id: clm-format-agents-md-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-format-agents-md
+        predicate: format.cross_vendor_adoption
+        statement: >
+          Documented as supported by 23 named products spanning competing
+          vendors, including OpenAI Codex, Google Jules and Gemini CLI, Cursor,
+          VS Code, GitHub Copilot Coding Agent, Zed, Windsurf, Devin, JetBrains
+          Junie, Aider, goose, opencode, RooCode, Amp, and Augment Code.
+        value: {supporting_products: 23, spans_competing_vendors: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-agentsmd-2026-08-04, excerpt_ref: 2, supports: true}
+        cadence_days: 60
+        status: draft
+        conflicts:
+          - positions:
+              - statement: "Vendor-published support list — a self-interested count of adopters"
+                sources: [src-agentsmd-2026-08-04]
+              - statement: "Whether each named product's support is complete, partial, or nominal is unverified"
+                sources: [src-agentsmd-2026-08-04]
+            likely_cause: incentive
+            note: >
+              A standard's own site listing adopters is the weakest possible
+              evidence of real interoperability. The list establishes that these
+              products CLAIM support, not that a file written for one works
+              unmodified in another. That is RQ-15.
+
+      - id: clm-format-agents-md-003
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-format-agents-md
+        predicate: governance.steward
+        statement: >
+          Stewarded by the Agentic AI Foundation under the Linux Foundation —
+          i.e. vendor-neutral governance rather than single-vendor control.
+        value: {steward: "Agentic AI Foundation", umbrella: "Linux Foundation"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-agentsmd-2026-08-04, excerpt_ref: 3, supports: true}
+        cadence_days: 180
+        status: draft
+
+    relationships:
+      - predicate: made_by
+        object: ent-institution-agentic-ai-foundation
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-format-agents-md-003]
+      - predicate: alternative_to
+        object: ent-format-claude-md
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-format-agents-md-002]
+
+    review: {cadence_days: 60, last_reviewed: 2026-08-04, next_due: 2026-10-03}
+    open_questions:
+      - "RQ-15: does a file written for one supporting product work unmodified in another? Claimed support is not verified interoperability."
+      - "No specification of the file's CONTENT structure captured — only placement and resolution."
+      - "All claims DRAFT (tool_extracted source)."
+
+  # ── CLAUDE.md — the competing convention ────────────────────────────────
+  - id: ent-format-claude-md
+    schema_version: 1
+    name: CLAUDE.md
+    aliases: []
+    slug_frozen_at: 2026-08-04
+    layers: [L6]
+    roles: [context_format]
+    slots: [context]
+    facets:
+      placement: project_root
+      governance: single_vendor
+    made_by: ent-institution-anthropic
+    status: active
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://code.claude.com/docs/en/overview
+    summary: >
+      Single-vendor repo instruction file read at session start, paired with an
+      automatic memory mechanism that accumulates learnings across sessions.
+    claims:
+      - id: clm-format-claude-md-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-format-claude-md
+        predicate: format.behaviour
+        statement: >
+          A markdown file at the project root, read at the start of every
+          session. Paired with "auto memory", which saves learnings such as build
+          commands and debugging insights across sessions without the user
+          writing anything.
+        value: {read_at_session_start: true, auto_memory: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-claude-code-overview-2026-08-04, excerpt_ref: 4, supports: true}
+        cadence_days: 90
+        status: published
+    relationships:
+      - predicate: made_by
+        object: ent-institution-anthropic
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-format-claude-md-001]
+      - predicate: provides
+        object: cap-session-persistence
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-format-claude-md-001]
+    review: {cadence_days: 90, last_reviewed: 2026-08-04, next_due: 2026-11-02}
+    open_questions:
+      - "Auto memory is a memory layer bundled into a harness. Whether it is comparable to a standalone memory layer is unresearched (Q40)."
+
+  # ── DeepSeek V4 family ──────────────────────────────────────────────────
+  - id: ent-model-deepseek-v4-pro
+    schema_version: 1
+    name: DeepSeek V4 Pro
+    aliases: [deepseek-v4-pro, DeepSeek-V4-Pro]
+    slug_frozen_at: 2026-08-04
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      api_id: deepseek-v4-pro
+      openness: open_weight
+      self_hostable: unknown
+      tokenizer_generation: null
+      tokenizer_verified: false
+      tokenizer_repo: null
+    made_by: ent-institution-deepseek
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://api-docs.deepseek.com/quick_start/pricing
+    summary: >
+      DeepSeek's higher-capability V4 tier with a 1M context window, 384K max
+      output, and an unusually aggressive cache discount.
+    decision_questions:
+      - q: When is an open-weight model good enough?
+        status: open
+      - q: Does time-of-day pricing change which model is cheapest?
+        status: open
+
+    claims:
+      - id: clm-model-deepseek-v4-pro-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-deepseek-v4-pro
+        predicate: pricing.per_mtok
+        statement: >
+          $0.435 per 1M input tokens on cache miss, $0.003625 on cache hit, and
+          $0.87 per 1M output tokens.
+        value: {input_miss: 0.435, input_hit: 0.003625, output: 0.87, currency: USD}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-deepseek-pricing-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 30
+        status: draft
+
+      - id: clm-model-deepseek-v4-pro-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-deepseek-v4-pro
+        predicate: pricing.cache_discount_ratio
+        statement: >
+          Cache hits are priced at roughly 1/120th of cache misses
+          ($0.003625 vs $0.435) — an order of magnitude more aggressive than the
+          0.1x multiplier documented by at least one other major vendor. Cache
+          strategy is therefore far more decision-relevant here than elsewhere.
+        value: {hit_to_miss_ratio: 0.00833, comparison: "~12x more aggressive than a 0.1x multiplier"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-deepseek-pricing-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 30
+        status: draft
+
+      # ── New pricing SHAPE ──
+      - id: clm-model-deepseek-v4-pro-003
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-deepseek-v4-pro
+        predicate: pricing.time_of_day_variation
+        statement: >
+          Documented that during peak hours prices are 2x regular prices, with
+          peak defined as 09:00-12:00 and 14:00-18:00 Beijing Time (UTC+8) daily.
+          The effective date is stated as subject to official announcement, so
+          whether this is currently in force is NOT established.
+        value:
+          peak_multiplier: 2.0
+          peak_windows: ["09:00-12:00 UTC+8", "14:00-18:00 UTC+8"]
+          in_force: unknown
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-deepseek-pricing-2026-08-04, excerpt_ref: 3, supports: true}
+        cadence_days: 30
+        status: draft
+
+      - id: clm-model-deepseek-v4-pro-004
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-deepseek-v4-pro
+        predicate: context.window_tokens
+        statement: 1M token context window with a maximum output of 384K tokens.
+        value: {context: 1000000, max_output: 384000}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-deepseek-pricing-2026-08-04, excerpt_ref: 2, supports: true}
+        cadence_days: 90
+        status: draft
+
+    relationships:
+      - predicate: made_by
+        object: ent-institution-deepseek
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-deepseek-v4-pro-001]
+      - predicate: provides
+        object: cap-long-context
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-deepseek-v4-pro-004]
+      - predicate: provides
+        object: cap-prompt-caching
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-deepseek-v4-pro-002]
+
+    review: {cadence_days: 30, last_reviewed: 2026-08-04, next_due: 2026-09-03}
+    open_questions:
+      - "Tokenizer for V4 NOT verified. The V3 tokenizer is measurable but RQ-01 H3 forbids assuming it carries to V4."
+      - "Licence and self-hostability not captured despite 'open weight' positioning — asserted from category, not evidence. Needs verification."
+      - "Whether peak pricing is currently in force is unknown."
+      - "Max output of 384K is the largest captured in the corpus; no independent verification."

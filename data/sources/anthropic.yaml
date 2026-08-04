@@ -1,0 +1,202 @@
+"$schema": ../schema/source.schema.json
+# Class A sources captured 2026-08-03.
+# hash_status and archive_status per research/capture-limitations-2026-08-03.md.
+
+sources:
+
+  - id: src-anthropic-models-overview-2026-08-03
+    schema_version: 1
+    class: A
+    url: https://platform.claude.com/docs/en/about-claude/models/overview
+    canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
+    archive_url: null
+    archive_status: pending
+    title: Models overview
+    publisher: ent-institution-anthropic
+    author: null
+    published: null            # page carries no publication date; NOT guessed
+    retrieved: 2026-08-03
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: verbatim
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Latest models comparison — Pricing row"
+        text: >-
+          Claude Fable 5: $10 / input MTok $50 / output MTok | Claude Opus 5:
+          $5 / input MTok $25 / output MTok | Claude Sonnet 5: $3 / input MTok
+          $15 / output MTok | Claude Haiku 4.5: $1 / input MTok $5 / output MTok
+      - id: 1
+        locator: "Latest models comparison — footnote 4"
+        text: >-
+          Introductory pricing of $2 / $10 per MTok applies to Claude Sonnet 5
+          through August 31, 2026.
+      - id: 2
+        locator: "Latest models comparison — Context window / Max output rows"
+        text: >-
+          Context window: 1M tokens (Fable 5, Opus 5, Sonnet 5), 200k tokens
+          (Haiku 4.5). Max output: 128k tokens (Fable 5, Opus 5, Sonnet 5),
+          64k tokens (Haiku 4.5).
+      - id: 3
+        locator: "Claude Fable 5 context window tooltip"
+        text: >-
+          Claude Fable 5 uses the tokenizer introduced with Claude Opus 4.7;
+          compared to models before Claude Opus 4.7, the same text produces
+          roughly 30% more tokens. The exact increase depends on the content.
+      - id: 4
+        locator: "Claude Fable 5 and Claude Mythos 5 section"
+        text: >-
+          Claude Fable 5 is generally available on the Claude API, Amazon
+          Bedrock, Claude Platform on AWS, Google Cloud, and Microsoft Foundry
+          beginning June 9, 2026. Claude Mythos 5 is not generally available: it
+          is offered in limited availability to approved customers in Project
+          Glasswing, beginning the same day.
+      - id: 5
+        locator: "Latest models comparison — knowledge cutoff rows"
+        text: >-
+          Reliable knowledge cutoff: Jan 2026 (Fable 5), May 2026 (Opus 5),
+          Jan 2026 (Sonnet 5), Feb 2025 (Haiku 4.5). Training data cutoff:
+          Jan 2026, May 2026, Jan 2026, Jul 2025 respectively.
+      - id: 6
+        locator: "Model ID versioning note"
+        text: >-
+          Every Claude model ID is a pinned snapshot. Starting with the Claude
+          4.6 generation, model IDs use a dateless format that is also a pinned
+          snapshot, not an evergreen pointer.
+      - id: 7
+        locator: "Adaptive thinking / Extended thinking rows"
+        text: >-
+          Extended thinking (thinking.type: "enabled"): No (Fable 5, Opus 5,
+          Sonnet 5), Yes (Haiku 4.5). Adaptive thinking: Yes (always on) for
+          Fable 5; Yes for Opus 5 and Sonnet 5; No for Haiku 4.5.
+      - id: 8
+        locator: "Batch API extended output note"
+        text: >-
+          On the Message Batches API, Claude Opus 5, Opus 4.8, Opus 4.7,
+          Opus 4.6, Sonnet 5, and Sonnet 4.6 support up to 300k output tokens by
+          using the output-300k-2026-03-24 beta header.
+    methodology: null
+    notes: >
+      Vendor documentation. Authoritative for specification (S-type) claims
+      about Anthropic's own products; INADMISSIBLE for comparative judgment
+      (SOURCES.md §3).
+
+  - id: src-anthropic-pricing-2026-08-03
+    schema_version: 1
+    class: A
+    url: https://platform.claude.com/docs/en/about-claude/pricing
+    canonical_url: https://platform.claude.com/docs/en/about-claude/pricing
+    archive_url: null
+    archive_status: pending
+    title: Pricing
+    publisher: ent-institution-anthropic
+    author: null
+    published: null
+    retrieved: 2026-08-03
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: verbatim
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Model pricing table — Claude Sonnet 5 rows"
+        text: >-
+          Claude Sonnet 5 through August 31, 2026: $2 / MTok base input,
+          $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes,
+          $0.20 / MTok cache hits & refreshes, $10 / MTok output.
+          Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok,
+          $6 / MTok, $0.30 / MTok, $15 / MTok.
+      - id: 1
+        locator: "Introductory pricing note"
+        text: >-
+          Introductory pricing of $2/$10 per million input/output tokens is in
+          effect through August 31, 2026, after which the standard pricing of
+          $3/$15 per million input/output tokens will take effect.
+      - id: 2
+        locator: "Model pricing table — Opus 5 and Fable 5 rows"
+        text: >-
+          Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok,
+          $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok,
+          $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok,
+          $2 / MTok, $0.10 / MTok, $5 / MTok.
+      - id: 3
+        locator: "Prompt caching multipliers table"
+        text: >-
+          5-minute cache write: 1.25x base input price, cache valid for 5
+          minutes. 1-hour cache write: 2x base input price, cache valid for 1
+          hour. Cache read (hit): 0.1x base input price, same duration as the
+          preceding write.
+      - id: 4
+        locator: "Prompt caching section"
+        text: >-
+          A cache hit costs 10% of the standard input price, which means caching
+          pays off after just one cache read for the 5-minute duration (1.25x
+          write), or after two cache reads for the 1-hour duration (2x write).
+      - id: 5
+        locator: "Tokenizer note under model pricing table"
+        text: >-
+          Claude 4.7 and later models and Claude Mythos Preview use a newer
+          tokenizer that contributes to their improved performance on a wide
+          range of tasks. This tokenizer produces approximately 30% more tokens
+          for the same text. The exact increase depends on the content and
+          workload shape. Claude Sonnet 4.6 and earlier models use the previous
+          tokenizer.
+      - id: 6
+        locator: "Batch processing section"
+        text: >-
+          The Batch API allows asynchronous processing of large volumes of
+          requests with a 50% discount on both input and output tokens.
+      - id: 7
+        locator: "Data residency pricing section"
+        text: >-
+          For Claude 4.6 and later models, specifying US-only inference through
+          the inference_geo parameter incurs a 1.1x multiplier on all token
+          pricing categories, including input tokens, output tokens, cache
+          writes, and cache reads.
+      - id: 8
+        locator: "Long context pricing section"
+        text: >-
+          Claude 4.6 and later models and Claude Mythos Preview include the full
+          1M token context window at standard pricing. (A 900k-token request is
+          billed at the same per-token rate as a 9k-token request.)
+      - id: 9
+        locator: "Fast mode pricing table"
+        text: >-
+          Fast mode, in research preview, provides significantly faster output
+          for Claude Opus 5 and Claude Opus 4.8 at premium pricing.
+          Claude Opus 5 / Claude Opus 4.8: $10 / MTok input, $50 / MTok output.
+      - id: 10
+        locator: "Tool use pricing table"
+        text: >-
+          Tool use system prompt token count — Claude Opus 5: 286 tokens
+          (auto/none), 406 tokens (any/tool). Claude Opus 4.7: 675 tokens,
+          804 tokens. Claude Sonnet 5: 354 tokens, 474 tokens.
+      - id: 11
+        locator: "Web search tool pricing"
+        text: >-
+          Web search is available on the Claude API for $10 per 1,000 searches,
+          plus standard token costs for search-generated content.
+      - id: 12
+        locator: "Code execution tool pricing"
+        text: >-
+          Each organization receives 1,550 free hours of usage per month.
+          Additional usage beyond 1,550 hours is billed at $0.05 USD per hour,
+          per container.
+      - id: 13
+        locator: "Claude Managed Agents — session runtime table"
+        text: >-
+          Session runtime: $0.08 per session-hour, metered on running status
+          duration.
+      - id: 14
+        locator: "Cloud platform pricing note"
+        text: >-
+          Regional and multi-region endpoints include a 10% premium over global
+          endpoints.
+    methodology: null
+    notes: >
+      The single richest pricing source captured. Contains the Sonnet 5
+      introductory-pricing expiry, the tokenizer inflation note, and the cache
+      multiplier table — three facts that together determine most cost answers.

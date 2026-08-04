@@ -1,0 +1,130 @@
+"$schema": ../schema/source.schema.json
+# FIRST CLASS B SOURCES IN THE CORPUS.
+# Until 2026-08-04 the Atlas held zero independent evidence of any kind.
+
+sources:
+
+  - id: src-artificialanalysis-methodology-2026-08-04
+    schema_version: 1
+    class: B
+    url: https://artificialanalysis.ai/methodology/performance-benchmarking
+    canonical_url: https://artificialanalysis.ai/methodology/performance-benchmarking
+    archive_url: null
+    archive_status: pending
+    title: Artificial Analysis — Performance benchmarking methodology
+    publisher: ent-institution-artificialanalysis
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: []
+    excerpts:
+      - id: 0
+        locator: "Testing frequency"
+        text: >-
+          Our 1k, 10k input token and vision workloads are tested 8 times per
+          day, approximately every 3 hours.
+      - id: 1
+        locator: "Workload sizes"
+        text: >-
+          Approximately 1,000 input tokens (1k); approximately 10,000 input
+          tokens (10k); approximately 100,000 input tokens (100k).
+      - id: 2
+        locator: "Statistical treatment"
+        text: >-
+          Performance measurements are represented as the median (P50)
+          measurement over the past 72 hours, with an exception for 100k
+          workloads using 14-day medians.
+      - id: 3
+        locator: "Test server location"
+        text: >-
+          Our primary testing server is a virtual machine hosted in Google
+          Cloud's us-central1-a zone.
+      - id: 4
+        locator: "Stated limitation"
+        text: >-
+          Time-to-first-token (TTFT) is sensitive to server location as it
+          includes network latency.
+      - id: 5
+        locator: "Metric definitions (top-level methodology page)"
+        text: >-
+          Time to First Token: The time in seconds between sending a request to
+          the service or system and receiving the first token of the response.
+          Output Speed (output tokens per second): The average number of tokens
+          received per second, after the first token is received.
+    methodology:
+      published: true
+      url: https://artificialanalysis.ai/methodology/performance-benchmarking
+      assessed_at_url: https://artificialanalysis.ai/methodology/performance-benchmarking
+      depth_searched: 1
+      searched: true
+      found: true
+      grade: B-full
+      completeness:
+        methodology_disclosure: true      # core
+        measurement_procedure: true       # core — TTFT and output-speed definitions
+        statistical_treatment: true       # core — median P50 over 72h; 14d for 100k
+        sampling_strategy: true           # 8x/day; 1k/10k/100k workloads
+        update_cadence: true              # ~every 3 hours
+        limitations: true                 # TTFT location sensitivity acknowledged
+        reproducibility: false            # no code, data, or harness released
+        sources_per_element:
+          all_except_reproducibility: https://artificialanalysis.ai/methodology/performance-benchmarking
+      run_by: "Artificial Analysis"
+      funded_by: null
+      contamination_risk: low
+      sample_size: null
+    notes: >
+      ADMISSIBILITY FINDING. The top-level /methodology page defines the metrics
+      but does NOT disclose sampling frequency, prompt sizes, statistical
+      measure, or test-client geography. At that depth this source would have
+      FAILED the Class B bar (SOURCES §1 requires published methodology).
+      The deeper /methodology/performance-benchmarking page does disclose all
+      four, and the source qualifies.
+
+      Lesson recorded: Class B admissibility must be assessed at the depth where
+      methodology actually lives, not at whichever page is linked first. Judging
+      from the front page would have wrongly excluded a usable independent
+      source — and, in the mirror case, would let a source with a methodology
+      *page* but no methodology *content* pass.
+
+      Contamination risk assessed low: this measures serving performance, not
+      model capability, so training-data leakage is not a mechanism.
+
+      SCOPE LIMIT: measurements are taken from a single GCP zone
+      (us-central1-a). The publisher acknowledges TTFT is location-sensitive.
+      Any D8 claim sourced here is therefore a claim about latency AS OBSERVED
+      FROM us-central1-a, and must carry that qualifier. It is NOT a general
+      statement of provider speed for a user elsewhere.
+
+  - id: src-kimi-models-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://platform.kimi.ai/docs/pricing/chat
+    canonical_url: https://platform.kimi.ai/docs/pricing/chat
+    archive_url: null
+    archive_status: pending
+    title: Kimi platform — chat model index
+    publisher: ent-institution-moonshot
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Model index cards"
+        text: >-
+          Kimi K3 with a 1M-token context window. Kimi K2.7 Code, a dedicated
+          Coding model, multi-modal model. Kimi K2.6, supports visual and text
+          input. Moonshot V1, classic generation model series.
+    methodology: null
+    notes: >
+      Index page only. Per-model pricing lives on deeper pages (e.g.
+      /docs/pricing/chat-k3) that were not captured. Recorded to support the
+      context-window claim and to make the pricing gap explicit rather than
+      leaving Kimi absent from the corpus.

@@ -1,0 +1,72 @@
+Repository: atlas-engine
+Branch: main
+Working directory: /workspace/atlas-engine
+
+File tree:
+  src/
+    cost/
+      model.py
+      profiles.py
+    graph/
+      claims.py
+      temporal.py
+    engine/
+      solver.py
+      explain.py
+  tests/
+    test_cost_model.py
+    test_temporal.py
+  pyproject.toml
+  README.md
+
+--- src/cost/model.py ---
+def component_cost(tokens_in, tokens_out, cache_read, prices, retry_rate=0.0):
+    """Cost for one component at one pricing snapshot."""
+    uncached = max(tokens_in - cache_read, 0)
+    base = (
+        uncached * prices["input"]
+        + cache_read * prices["cache_read"]
+        + tokens_out * prices["output"]
+    ) / 1_000_000
+    return base * (1.0 + retry_rate)
+
+
+def crossover(subscription_usd, prices, ratio_out_to_in, cache_hit_rate):
+    """Input tokens/month at which metered cost equals the subscription."""
+    effective_in = (1 - cache_hit_rate) * prices["input"] + cache_hit_rate * prices["cache_read"]
+    per_token = (effective_in + ratio_out_to_in * prices["output"]) / 1_000_000
+    if per_token <= 0:
+        return None
+    return subscription_usd / per_token
+
+--- tests/test_cost_model.py ---
+def test_cache_reduces_cost():
+    prices = {"input": 3.0, "cache_read": 0.3, "output": 15.0}
+    without = component_cost(1_000_000, 50_000, 0, prices)
+    with_cache = component_cost(1_000_000, 50_000, 800_000, prices)
+    assert with_cache < without
+
+
+def test_retry_rate_scales_linearly():
+    prices = {"input": 3.0, "cache_read": 0.3, "output": 15.0}
+    base = component_cost(100_000, 10_000, 0, prices)
+    doubled = component_cost(100_000, 10_000, 0, prices, retry_rate=1.0)
+    assert abs(doubled - 2 * base) < 1e-9
+
+--- diff ---
+diff --git a/src/cost/model.py b/src/cost/model.py
+index 4a1c2e9..8b3f7d1 100644
+--- a/src/cost/model.py
++++ b/src/cost/model.py
+@@ -1,9 +1,14 @@
+-def component_cost(tokens_in, tokens_out, cache_read, prices):
++def component_cost(tokens_in, tokens_out, cache_read, prices, retry_rate=0.0):
+     """Cost for one component at one pricing snapshot."""
+     uncached = max(tokens_in - cache_read, 0)
+-    return (
++    base = (
+         uncached * prices["input"]
+         + cache_read * prices["cache_read"]
+         + tokens_out * prices["output"]
+     ) / 1_000_000
++    return base * (1.0 + retry_rate)

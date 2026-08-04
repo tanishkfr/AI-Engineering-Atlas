@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/defs.schema.json",
+  "title": "Shared definitions and controlled vocabularies",
+  "description": "v2. Closed vocabularies for the Atlas knowledge graph. Adding a value requires a TAXONOMY.md or GRAPH.md amendment.",
+
+  "$defs": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+
+    "dateOrUnknown": {
+      "oneOf": [
+        { "$ref": "#/$defs/date" },
+        { "const": "unknown" },
+        { "type": "null" }
+      ],
+      "description": "'unknown' is legal and preferred over a guessed date (CLAUDE.md §1.4). null means an open interval."
+    },
+
+    "entityId":      { "type": "string", "pattern": "^ent-[a-z0-9-]+$" },
+    "claimId":       { "type": "string", "pattern": "^clm-[a-z0-9-]+-\\d{3}$" },
+    "sourceId":      { "type": "string", "pattern": "^src-[a-z0-9-]+-\\d{4}-\\d{2}-\\d{2}$" },
+    "scoreId":       { "type": "string", "pattern": "^scr-[a-z0-9-]+-d\\d{1,2}$" },
+    "relationshipId":{ "type": "string", "pattern": "^rel-[a-z0-9-]+$" },
+    "personaId":     { "type": "string", "pattern": "^per-[a-z0-9-]+$" },
+    "capabilityId":  { "type": "string", "pattern": "^cap-[a-z0-9-]+$" },
+    "objectiveId":   { "type": "string", "pattern": "^obj-[a-z0-9-]+$" },
+    "usageProfileId":{ "type": "string", "pattern": "^use-[a-z0-9-]+$" },
+    "experimentId":  { "type": "string", "pattern": "^exp-[a-z0-9-]+-v\\d+$" },
+    "benchmarkId":   { "type": "string", "pattern": "^bmk-[a-z0-9-]+$" },
+    "metricId":      { "type": "string", "pattern": "^met-[a-z0-9-]+$" },
+
+    "layer": {
+      "description": "TAXONOMY.md §2.",
+      "enum": ["L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "M1", "M2", "MX"]
+    },
+
+    "slot": {
+      "description": "RECOMMENDATION.md §2. Stack assembly positions.",
+      "enum": ["model", "access", "harness", "surface", "interop", "context",
+               "orchestration", "assurance", "practice"]
+    },
+
+    "role": {
+      "description": "TAXONOMY.md §2-3 plus the capability class introduced in GRAPH.md §3.",
+      "enum": [
+        "model_family", "model_version", "model_endpoint",
+        "first_party_api", "aggregator", "inference_provider", "gpu_platform",
+        "local_runtime", "subscription_plan", "free_tier",
+        "cli_agent", "ide_agent", "background_agent", "app_builder",
+        "agent_sdk", "chat_assistant",
+        "ai_editor", "ide_extension", "terminal", "web_console",
+        "code_host_integration", "messaging_surface", "mobile",
+        "protocol", "server", "skill", "plugin", "hook", "registry",
+        "tool_definition",
+        "code_intelligence", "retrieval_system", "memory_layer",
+        "context_format", "compaction_strategy",
+        "agent_framework", "parallel_runner", "workspace_isolation",
+        "scheduler", "fleet_manager", "handoff_protocol",
+        "code_review_agent", "test_generation", "static_analysis",
+        "security_scanner", "eval_platform", "observability", "ci_gate",
+        "workflow", "methodology", "prompting_technique",
+        "context_engineering_practice", "team_process", "anti_pattern",
+        "benchmark", "leaderboard", "dataset", "survey", "research_paper",
+        "experiment", "incident_report",
+        "vendor", "foundation", "standards_body", "research_lab",
+        "registry_operator", "community",
+        "capability"
+      ]
+    },
+
+    "relationshipPredicate": {
+      "description": "GRAPH.md §4. Closed vocabulary. v1.0 names succeeded_by, requires, provides_capability, scored_on are retired.",
+      "enum": [
+        "works_with", "incompatible_with", "depends_on", "dependency_of",
+        "optional_with", "bundles", "bundled_by", "provides", "provided_by",
+        "implements", "implemented_by", "extends", "extended_by",
+        "available_through", "offers", "hosted_by", "hosts",
+        "resells", "resold_by", "runs_on", "runs", "priced_under", "prices",
+        "replaces", "replaced_by", "version_of", "has_version",
+        "endpoint_of", "has_endpoint", "derived_from", "derivative_of",
+        "fork_of", "forked_into", "renamed_from", "renamed_to",
+        "made_by", "makes", "acquired_by", "acquired",
+        "governed_by", "governs", "funded_by", "funds",
+        "donated_to", "received",
+        "alternative_to", "competes_with",
+        "migration_target_of", "migrated_to",
+        "measured_on", "measures", "measured_by", "measured",
+        "published_in", "publishes", "evaluated_by", "evaluated",
+        "documented_in", "documents", "contradicted_by", "contradicts",
+        "recommended_for", "recommends", "unsuitable_for", "avoids",
+        "mitigates", "mitigated_by", "exhibits", "exhibited_by",
+        "requires_practice", "practice_for"
+      ]
+    },
+
+    "compatibilityState": {
+      "description": "GRAPH.md §2. Three-valued. Absence of an edge means unverified, NEVER compatible.",
+      "enum": ["compatible", "incompatible", "unverified"]
+    },
+
+    "temporalKind": {
+      "description": "TEMPORAL.md §2. Governs carry-forward, staleness, and rendering.",
+      "enum": ["static", "point", "step", "measurement", "series", "interval"]
+    },
+
+    "supersessionKind": {
+      "description": "TEMPORAL.md §3. Only 'correction' and 'retraction' reach the corrections register.",
+      "enum": ["change", "correction", "refinement", "retraction"]
+    },
+
+    "validPrecision": {
+      "enum": ["day", "month", "quarter", "year", "unknown"]
+    },
+
+    "claimType": {
+      "description": "SOURCES.md §2.",
+      "enum": ["S", "M", "X", "C", "T", "F"]
+    },
+
+    "sourceClass": {
+      "description": "SOURCES.md §1. E is pointer-only.",
+      "enum": ["A", "B", "C", "D", "E"]
+    },
+
+    "confidence": {
+      "description": "COMPUTED by the build. Authored values fail validation.",
+      "enum": ["high", "moderate", "low", "contested", "unknown"]
+    },
+
+    "freshness": {
+      "description": "COMPUTED, kind-aware (TEMPORAL.md §6).",
+      "enum": ["fresh", "aging", "stale", "expired", "never_current", "not_applicable"]
+    },
+
+    "sourceFlag": {
+      "enum": [
+        "self_interested", "early_access", "promotional_context",
+        "astroturf_risk", "contamination_risk", "metric_gaming_risk",
+        "anonymous", "funded_evaluation"
+      ]
+    },
+
+    "conflictCause": {
+      "enum": [
+        "version_drift", "config_difference", "harness_difference",
+        "contamination", "measurement_definition", "sample_bias",
+        "time_window", "incentive", "unexplained"
+      ]
+    },
+
+    "entityStatus": { "enum": ["stub", "researching", "active", "deprecated", "retired"] },
+    "claimStatus":  { "enum": ["draft", "published", "needs_review", "retracted"] },
+    "depthPriority":{ "enum": ["P0", "P1", "P2", "P3"] },
+
+    "dimension": {
+      "description": "EVALUATION.md §2. D13 added in v1.1.",
+      "enum": ["D1","D2","D3","D4","D5","D6","D7","D8","D9","D10","D11","D12","D13"]
+    },
+
+    "metricDirection": {
+      "enum": ["higher_better", "lower_better"]
+    },
+
+    "billingModel": {
+      "enum": ["metered", "subscription", "seat", "gpu_second", "free_tier", "local", "hybrid"]
+    },
+
+    "allowanceDisclosure": {
+      "description": "ADDED M4.1 (S3). How a plan's usage allowance is disclosed. 'not_publicly_disclosed' asserts the VENDOR has not published it and is distinct from 'unknown', which asserts only that WE have not established it. Conflating them would imply the gap is ours to close. 'relative_only' covers allowances stated as multiples of another plan with no absolute base — the condition that made RQ-08 not publicly computable.",
+      "enum": ["absolute", "relative_only", "not_publicly_disclosed", "unknown"]
+    },
+
+    "corpusN": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "ADDED M4.1 (S4). Number of independent samples behind a measurement. n=1 magnitudes are indicative, not precise, and must be rendered as such."
+    },
+
+    "refusalCode": {
+      "description": "RECOMMENDATION.md §9. Every refusal names what evidence would resolve it.",
+      "enum": [
+        "NO_CANDIDATES", "NO_MEASUREMENTS", "INSUFFICIENT_COVERAGE",
+        "INDISTINGUISHABLE", "EVIDENCE_EXPIRED", "BELOW_EVIDENCE_FLOOR",
+        "UNVERIFIED_ONLY", "UNDER_DETERMINED", "NOT_PUBLICLY_COMPUTABLE"
+      ]
+    },
+
+    "temporalInterval": {
+      "type": "object",
+      "description": "TEMPORAL.md §1. Bitemporal. Nothing is ever edited; assertions are closed and superseded.",
+      "required": ["valid_from", "asserted_from", "observed_at"],
+      "properties": {
+        "valid_from":     { "$ref": "#/$defs/dateOrUnknown" },
+        "valid_to":       { "$ref": "#/$defs/dateOrUnknown" },
+        "valid_precision":{ "$ref": "#/$defs/validPrecision" },
+        "asserted_from":  { "$ref": "#/$defs/date" },
+        "asserted_to":    { "oneOf": [{ "$ref": "#/$defs/date" }, { "type": "null" }] },
+        "observed_at":    { "$ref": "#/$defs/date" }
+      }
+    },
+
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "excerpt_ref", "supports"],
+      "properties": {
+        "source": { "$ref": "#/$defs/sourceId" },
+        "excerpt_ref": { "type": "integer", "minimum": 0 },
+        "supports": {
+          "type": "boolean",
+          "description": "false records evidence against. Contradicting evidence is stored, not discarded."
+        },
+        "note": { "type": "string" }
+      }
+    },
+
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positions", "likely_cause"],
+      "properties": {
+        "positions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["sources"],
+            "properties": {
+              "value": {},
+              "statement": { "type": "string" },
+              "sources": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/sourceId" }
+              }
+            }
+          }
+        },
+        "likely_cause": { "$ref": "#/$defs/conflictCause" },
+        "note": { "type": "string" }
+      }
+    },
+
+    "measurementConditions": {
+      "type": "object",
+      "description": "Required for measurement and series kinds. A measurement without conditions is a number without meaning.",
+      "required": ["harness", "date"],
+      "properties": {
+        "harness": { "type": ["string", "null"] },
+        "harness_version": { "type": ["string", "null"] },
+        "model_endpoint": { "$ref": "#/$defs/entityId" },
+        "config": { "type": "string" },
+        "runs": { "type": "integer", "minimum": 1 },
+        "corpus_n": { "$ref": "#/$defs/corpusN" },
+        "variance": { "type": "number", "minimum": 0 },
+        "date": { "$ref": "#/$defs/date" },
+        "operator": { "type": "string" },
+        "sample_window": { "type": "string" }
+      }
+    },
+
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date", "change"],
+      "properties": {
+        "date": { "$ref": "#/$defs/date" },
+        "change": { "type": "string" },
+        "by": { "type": "string" },
+        "invalidates": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

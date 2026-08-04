@@ -1,0 +1,60 @@
+from dataclasses import dataclass, field
+from typing import Iterable, Optional
+
+
+@dataclass(frozen=True)
+class Claim:
+    """A single dated, sourced assertion in the knowledge graph."""
+
+    identifier: str
+    predicate: str
+    value: Optional[float] = None
+    sources: tuple[str, ...] = field(default_factory=tuple)
+
+    def is_supported(self) -> bool:
+        return len(self.sources) > 0
+
+
+class ClaimIndex:
+    def __init__(self, claims: Iterable[Claim]) -> None:
+        self._by_predicate: dict[str, list[Claim]] = {}
+        for claim in claims:
+            self._by_predicate.setdefault(claim.predicate, []).append(claim)
+
+    def lookup(self, predicate: str) -> list[Claim]:
+        return self._by_predicate.get(predicate, [])
+
+    def unsupported(self) -> list[Claim]:
+        return [c for group in self._by_predicate.values() for c in group if not c.is_supported()]
+
+    def summarize(self) -> dict[str, int]:
+        return {predicate: len(group) for predicate, group in sorted(self._by_predicate.items())}
+
+
+def compute_freshness(observed_at: str, cadence_days: int, today: str) -> str:
+    from datetime import date
+
+    observed = date.fromisoformat(observed_at)
+    current = date.fromisoformat(today)
+    age = (current - observed).days
+    ratio = age / cadence_days if cadence_days else 0.0
+    if ratio <= 1.0:
+        return "fresh"
+    elif ratio <= 1.5:
+        return "aging"
+    elif ratio <= 3.0:
+        return "stale"
+    return "expired"
+
+
+if __name__ == "__main__":
+    index = ClaimIndex(
+        [
+            Claim("clm-001", "pricing.input_per_mtok", 2.0, ("src-a",)),
+            Claim("clm-002", "pricing.output_per_mtok", 10.0, ("src-a", "src-b")),
+            Claim("clm-003", "context.window_tokens", 1_000_000.0),
+        ]
+    )
+    print(index.summarize())
+    print([c.identifier for c in index.unsupported()])
+    print(compute_freshness("2026-08-03", 14, "2026-08-25"))

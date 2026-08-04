@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/entity.schema.json",
+  "title": "Entity",
+  "description": "A thing in the ecosystem. Faceted, multi-layer (TAXONOMY.md §1, Finding 1). IDs are permanent; names are not.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "layers", "roles", "status", "first_seen", "summary"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/entityId" },
+    "schema_version": { "type": "integer", "const": 1 },
+
+    "name": { "type": "string", "minLength": 1 },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Mandatory for anything ever called something else, including informal community names. Renaming is routine in this ecosystem."
+    },
+    "slug_frozen_at": { "$ref": "defs.schema.json#/$defs/date" },
+
+    "layers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "defs.schema.json#/$defs/layer" }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "defs.schema.json#/$defs/role" }
+    },
+
+    "facets": {
+      "type": "object",
+      "description": "Role-specific structured properties. Validated per-role by data/schema/facets/<role>.schema.json.",
+      "properties": {
+        "tokenizer_generation": {
+          "type": ["string", "null"],
+          "description": "ADDED M4.1 (S2). Identifier for the tokenizer generation this model uses. null means UNKNOWN, never 'same as sibling models' — exp-tokenizer-normalization-v1 H3 found within-vendor generational drift up to 1.27x, so tokenizers must not be assumed to carry across a vendor's product line."
+        },
+        "tokenizer_verified": {
+          "type": "boolean",
+          "default": false,
+          "description": "ADDED M4.1 (S2). True only when the tokenizer has been empirically measured or explicitly documented for THIS model. Vendor statements of the form 'version X and later' do not verify a specific model that is not named."
+        },
+        "tokenizer_repo": {
+          "type": ["string", "null"],
+          "description": "Exact repo/encoding used for measurement, where one is publicly available. null for vendors publishing no offline tokenizer."
+        }
+      }
+    },
+
+    "made_by": { "$ref": "defs.schema.json#/$defs/entityId" },
+    "status": { "$ref": "defs.schema.json#/$defs/entityStatus" },
+    "depth_priority": { "$ref": "defs.schema.json#/$defs/depthPriority" },
+
+    "first_seen": { "$ref": "defs.schema.json#/$defs/date" },
+    "canonical_url": { "type": "string", "format": "uri" },
+    "repo_url": { "type": ["string", "null"], "format": "uri" },
+    "docs_url": { "type": ["string", "null"], "format": "uri" },
+
+    "summary": {
+      "type": "string",
+      "maxLength": 320,
+      "description": "Placement, not evaluation. Deliberately too small to hold unsourced opinion; evaluation belongs in scores and claims."
+    },
+
+    "decision_questions": {
+      "type": "array",
+      "description": "The questions this entity exists to answer (CONSTITUTION §1).",
+      "items": {
+        "type": "object",
+        "required": ["q"],
+        "additionalProperties": false,
+        "properties": {
+          "q": { "type": "string" },
+          "page": { "type": "string" },
+          "status": { "enum": ["open", "answered", "unanswerable"] }
+        }
+      }
+    },
+
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "claim.schema.json" }
+    },
+
+    "scores": {
+      "type": "array",
+      "items": { "$ref": "score.schema.json" }
+    },
+
+    "relationships": {
+      "type": "array",
+      "items": { "$ref": "relationship.schema.json" },
+      "description": "Edges stored on the subject; inverses materialized at build time (GRAPH.md §2)."
+    },
+
+    "provides": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+      "description": "Convenience index of capability edges. Generated from relationships; authoring it directly fails validation."
+    },
+
+    "slots": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/slot" },
+      "description": "Stack positions this entity can fill (RECOMMENDATION.md §2). Derived from roles unless overridden."
+    },
+
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cadence_days", "last_reviewed"],
+      "properties": {
+        "cadence_days": { "type": "integer", "minimum": 1, "maximum": 730 },
+        "last_reviewed": { "$ref": "defs.schema.json#/$defs/date" },
+        "next_due": { "$ref": "defs.schema.json#/$defs/date", "readOnly": true },
+        "owner": { "type": "string" }
+      }
+    },
+
+    "revisions": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/revision" }
+    },
+
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Known unknowns. Surfaced in the gap register rather than hidden."
+    }
+  },
+
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "active" } }, "required": ["status"] },
+      "then": {
+        "required": ["claims", "review", "canonical_url"],
+        "properties": {
+          "claims": {
+            "minItems": 1,
+            "description": "An active entity with no claims is an unsourced assertion that it matters."
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["deprecated", "retired"] } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "relationships": {
+            "contains": {
+              "properties": { "predicate": { "const": "replaced_by" } },
+              "required": ["predicate"]
+            },
+            "description": "Retired entities are retained with a succession edge where one exists (TAXONOMY.md §6 rule 7). Waived case-by-case when nothing succeeded it."
+          }
+        }
+      }
+    }
+  ]
+}

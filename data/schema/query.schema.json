@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/query.schema.json",
+  "title": "Query",
+  "description": "The recommendation engine's input contract (RECOMMENDATION.md §1). Natural-language questions map to this by deterministic template, never by generation, so a question always resolves to the same query.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["objective", "reference_date"],
+
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["maximize", "satisfice", "minimize_subject_to", "compare",
+                   "enumerate", "marginal_value"],
+          "description": "'marginal_value' answers 'what does my next $X buy?' via the budget frontier and its knees (DECISION.md §5) — usually the real question behind a stated budget."
+        },
+        "target": {
+          "description": "A dimension (ordinal ranking), a metric (continuous), 'cost', or 'fit'.",
+          "type": "string"
+        },
+        "scoped_to": { "$ref": "defs.schema.json#/$defs/objectiveId" },
+        "subject_to": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dimension": { "$ref": "defs.schema.json#/$defs/dimension" },
+              "metric": { "$ref": "defs.schema.json#/$defs/metricId" },
+              "ratio_to_frontier": {
+                "type": "object",
+                "properties": { "gte": { "type": "number", "minimum": 0, "maximum": 1 } },
+                "description": "Computed from continuous measurements only. Ordinal rubric scores can never produce a ratio (RECOMMENDATION.md §7)."
+              },
+              "gte": { "type": "number" },
+              "lte": { "type": "number" }
+            }
+          }
+        },
+        "apply_implied_guards": { "type": "boolean", "default": true }
+      }
+    },
+
+    "context": {
+      "type": "object",
+      "properties": {
+        "persona": { "$ref": "defs.schema.json#/$defs/personaId" },
+        "overrides": { "type": "object" },
+        "usage_profile": { "$ref": "defs.schema.json#/$defs/usageProfileId" },
+        "horizon_months": {
+          "type": "integer", "minimum": 1,
+          "description": "Drives option value and expected decay (DECISION.md §6). A reader shipping in six weeks should weight substitutability near zero, and can."
+        }
+      }
+    },
+
+    "decision_criterion": {
+      "enum": ["auto", "p_best", "expected_value", "minimax_regret"],
+      "default": "auto",
+      "description": "'auto' derives from persona risk posture (DECISION.md §4) — this is where risk_tolerance finally does real work. Explicit values let a reader ask 'what if I'm willing to gamble?' and watch the answer change, which is itself informative."
+    },
+
+    "constraints": {
+      "type": "array",
+      "description": "Hard eliminations. Never softened into penalties (EVALUATION.md §4 rule 4).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requires_capability": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+          "forbids_capability": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+          "facet": { "type": "string" },
+          "in": { "type": "array" },
+          "not": {},
+          "reason": { "type": "string" }
+        }
+      }
+    },
+
+    "preferences": {
+      "type": "array",
+      "description": "QUERIES.md §8.3. Distinct from constraints: preferences re-rank, stay visible even when they lose, and get PRICED — 'this preference costs $X/month and buys you Y'.",
+      "items": {
+        "type": "object",
+        "required": ["strength"],
+        "properties": {
+          "facet": { "type": "string" },
+          "prefer": {},
+          "prefers_capability": { "$ref": "defs.schema.json#/$defs/capabilityId" },
+          "strength": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+
+    "budget": {
+      "type": "object",
+      "properties": {
+        "ceiling_usd_month": { "type": "number", "minimum": 0 },
+        "shape": { "enum": ["hard", "soft", "variable"] }
+      }
+    },
+
+    "scope": {
+      "type": "object",
+      "properties": {
+        "slots": { "type": "array", "items": { "$ref": "defs.schema.json#/$defs/slot" } },
+        "required_slots": { "type": "array", "items": { "$ref": "defs.schema.json#/$defs/slot" } }
+      }
+    },
+
+    "evidence_floor": {
+      "type": "object",
+      "description": "Exposed as a query parameter so the engine degrades honestly instead of padding answers with weak evidence.",
+      "properties": {
+        "confidence": { "$ref": "defs.schema.json#/$defs/confidence" },
+        "freshness": { "$ref": "defs.schema.json#/$defs/freshness" },
+        "admissibility": { "enum": ["strict", "permissive"] },
+        "allow_unverified_compatibility": { "type": "boolean", "default": true }
+      }
+    },
+
+    "reference_date": {
+      "$ref": "defs.schema.json#/$defs/date",
+      "description": "graph_at(date). Enables historical replay: running a past query against past evidence reproduces what the Atlas would have said then (RECOMMENDATION.md §11.10)."
+    }
+  }
+}

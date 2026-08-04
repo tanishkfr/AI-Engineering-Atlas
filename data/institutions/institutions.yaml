@@ -1,0 +1,185 @@
+"$schema": ../schema/entity.schema.json
+# M2 institution entities. Created to resolve made_by / publisher references.
+# Deliberately thin: these are stubs with the minimum needed to make the graph
+# referentially complete. Continuity-risk (D12) scoring requires funding and
+# governance research that has NOT been done.
+
+entities:
+
+  - id: ent-institution-anthropic
+    schema_version: 1
+    name: Anthropic
+    aliases: []
+    layers: [M2]
+    roles: [vendor, research_lab]
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-03
+    canonical_url: https://www.anthropic.com
+    summary: >
+      Developer of the Claude model family and the Claude API. Publisher of every
+      Class A source captured in the first M3 research pass.
+    claims:
+      - id: clm-institution-anthropic-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-institution-anthropic
+        predicate: products.model_families
+        statement: >
+          Publishes the Claude model family, documented as available through the
+          Claude API, Amazon Bedrock, Claude Platform on AWS, Google Cloud, and
+          Microsoft Foundry.
+        value: {surfaces: [claude_api, bedrock, claude_platform_aws, google_cloud, microsoft_foundry]}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 4, supports: true}
+        cadence_days: 180
+        status: published
+    review: {cadence_days: 180, last_reviewed: 2026-08-03, next_due: 2027-01-30}
+    open_questions:
+      - "No funding, governance, or continuity research. D12 cannot be scored."
+    revisions:
+      - {date: 2026-08-03, change: "Stub created to resolve made_by references.", by: milestone-3}
+
+  - id: ent-institution-openai
+    schema_version: 1
+    name: OpenAI
+    aliases: []
+    layers: [M2]
+    roles: [vendor, research_lab]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-03
+    canonical_url: https://openai.com
+    summary: >
+      Developer of the GPT model family and the OpenAI API. Pricing captured at
+      reduced fidelity only; no verbatim source yet.
+    open_questions:
+      - "No verbatim capture. The first-party pricing URL returned HTTP 403; the developer-docs mirror restructured on extraction."
+    revisions:
+      - {date: 2026-08-03, change: "Stub created to resolve publisher references.", by: milestone-3}
+
+  - id: ent-institution-google
+    schema_version: 1
+    name: Google
+    aliases: [Google DeepMind]
+    layers: [M2]
+    roles: [vendor, research_lab]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-03
+    canonical_url: https://ai.google.dev
+    summary: >
+      Developer of the Gemini model family. Pricing captured at reduced fidelity
+      and covering only Flash-tier models.
+    open_questions:
+      - "Pro-tier pricing not captured. Absence in our capture is not evidence of absence in the product."
+    revisions:
+      - {date: 2026-08-03, change: "Stub created to resolve publisher references.", by: milestone-3}
+
+  - id: ent-institution-aider
+    schema_version: 1
+    name: Aider
+    layers: [M2]
+    roles: [community]
+    status: stub
+    depth_priority: P2
+    first_seen: 2026-08-04
+    canonical_url: https://aider.chat
+    summary: Maintainer of the Aider terminal coding agent.
+    open_questions:
+      - "Governance, funding, and maintainer count not researched. D12 continuity risk unscoreable."
+    revisions:
+      - {date: 2026-08-04, change: "Stub created to resolve made_by references.", by: milestone-5}
+
+  - id: ent-institution-deepinfra
+    schema_version: 1
+    name: DeepInfra
+    layers: [M2]
+    roles: [vendor]
+    status: stub
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://deepinfra.com
+    summary: >
+      Serverless inference provider hosting open-weight models. First pricing
+      source enabling a normalized cross-vendor cost comparison.
+    revisions:
+      - {date: 2026-08-04, change: "Stub created from pricing capture.", by: milestone-5}
+
+  - id: ent-institution-mcp-governance
+    schema_version: 1
+    name: Model Context Protocol governance body
+    aliases: []
+    layers: [M2]
+    roles: [standards_body]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://modelcontextprotocol.io
+    summary: >
+      Publisher of the Model Context Protocol specification. PLACEHOLDER — the
+      actual governing entity is not established.
+    open_questions:
+      - "IDENTITY NOT ESTABLISHED. The M1 scan (Class E, pointer only) indicated a transfer from a vendor to a foundation in Dec 2025. Unverified. This stub is named descriptively rather than asserting an organisation, because naming the wrong body would be a fabricated fact about governance — precisely the D12 input that matters most for a standard."
+    revisions:
+      - {date: 2026-08-04, change: "Descriptive placeholder created; identity deliberately not asserted.", by: milestone-5}
+
+  - id: ent-institution-agentic-ai-foundation
+    schema_version: 1
+    name: Agentic AI Foundation
+    layers: [M2]
+    roles: [foundation, standards_body]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://agents.md/
+    summary: >
+      Steward of AGENTS.md, operating under the Linux Foundation. Vendor-neutral
+      governance — a D12 continuity-risk positive for standards it holds.
+    open_questions:
+      - "Whether this body also governs MCP is UNVERIFIED. The M1 scan (Class E) suggested a foundation transfer; ent-institution-mcp-governance remains a separate descriptive placeholder rather than being merged into this entity on a guess."
+    revisions:
+      - {date: 2026-08-04, change: "Created from AGENTS.md capture.", by: milestone-5-1}
+
+  - id: ent-institution-deepseek
+    schema_version: 1
+    name: DeepSeek
+    layers: [M2]
+    roles: [vendor, research_lab]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://api-docs.deepseek.com
+    summary: Developer of the DeepSeek open-weight model family and its first-party API.
+    revisions:
+      - {date: 2026-08-04, change: "Created from pricing capture.", by: milestone-5-1}
+
+  - id: ent-institution-swebench
+    schema_version: 1
+    name: SWE-bench project
+    layers: [M2]
+    roles: [research_lab]
+    status: stub
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://github.com/SWE-bench/SWE-bench
+    summary: Maintainer of the SWE-bench benchmark family.
+    revisions:
+      - {date: 2026-08-04, change: "Created from benchmark capture.", by: milestone-5-1}
+
+  - id: ent-institution-openrouter
+    schema_version: 1
+    name: OpenRouter
+    aliases: []
+    layers: [M2]
+    roles: [vendor, registry_operator]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-03
+    canonical_url: https://openrouter.ai
+    summary: >
+      Operator of a multi-provider model aggregator and routing layer.
+    revisions:
+      - {date: 2026-08-03, change: "Stub created to resolve publisher references.", by: milestone-3}

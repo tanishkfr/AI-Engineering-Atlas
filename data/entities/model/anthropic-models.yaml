@@ -1,0 +1,364 @@
+"$schema": ../../schema/entity.schema.json
+# Anthropic model entities other than Sonnet 5 (which has its own file as the
+# gold-standard exemplar). All claims from the same two verbatim Class A sources
+# captured 2026-08-03. Specification-only: no scores, no comparative claims.
+
+entities:
+
+  - id: ent-model-claude-fable-5
+    schema_version: 1
+    name: Claude Fable 5
+    aliases: [claude-fable-5, Fable 5]
+    slug_frozen_at: 2026-08-03
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      api_id: claude-fable-5
+      openness: closed
+      self_hostable: false
+      tokenizer_generation: "opus-4.7"
+      tokenizer_verified: true     # explicitly documented for THIS model (verbatim tooltip)
+      tokenizer_repo: null         # Anthropic publishes no offline tokenizer
+    made_by: ent-institution-anthropic
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-03
+    canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
+    summary: >
+      Anthropic's most capable widely released model, positioned for
+      long-running agents. 1M context, $10/$50 per MTok, GA 2026-06-09.
+    decision_questions:
+      - q: Is Fable 5 worth 2x Opus 5's price for agentic work?
+        status: open
+      - q: Does the newer tokenizer erase Fable 5's apparent price premium, or widen it?
+        status: open
+    claims:
+      - id: clm-claude-fable-5-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-fable-5
+        predicate: pricing.input_per_mtok
+        statement: Base input priced at $10 per million tokens.
+        value: {amount: 10.00, currency: USD, unit: per_mtok}
+        temporal: {valid_from: 2026-06-09, valid_to: null, valid_precision: day, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 2, supports: true}
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 0, supports: true}
+        cadence_days: 30
+        status: published
+      - id: clm-claude-fable-5-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-fable-5
+        predicate: pricing.output_per_mtok
+        statement: Output priced at $50 per million tokens.
+        value: {amount: 50.00, currency: USD, unit: per_mtok}
+        temporal: {valid_from: 2026-06-09, valid_to: null, valid_precision: day, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 2, supports: true}
+        cadence_days: 30
+        status: published
+      - id: clm-claude-fable-5-003
+        schema_version: 2
+        type: S
+        temporal_kind: point
+        subject: ent-model-claude-fable-5
+        predicate: lifecycle.general_availability
+        statement: >
+          Generally available on the Claude API, Amazon Bedrock, Claude Platform
+          on AWS, Google Cloud, and Microsoft Foundry beginning June 9, 2026.
+        value: {date: 2026-06-09}
+        temporal: {valid_from: 2026-06-09, valid_to: null, valid_precision: day, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 4, supports: true}
+        cadence_days: 3650
+        status: published
+      - id: clm-claude-fable-5-004
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-fable-5
+        predicate: cost.tokenizer_inflation
+        statement: >
+          Uses the tokenizer introduced with Claude Opus 4.7; compared to models
+          before Opus 4.7, the same text produces roughly 30% more tokens.
+          Posted per-token price therefore understates cost relative to
+          older-tokenizer models by a content-dependent factor.
+        value: {approx_multiplier: 1.30, exact: "content-dependent"}
+        temporal: {valid_from: 2026-06-09, valid_to: null, valid_precision: day, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 3, supports: true}
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 5, supports: true}
+        cadence_days: 180
+        status: published
+      - id: clm-claude-fable-5-005
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-fable-5
+        predicate: context.window_tokens
+        statement: Context window of 1M tokens; max output 128k tokens.
+        value: {context: 1000000, max_output: 128000}
+        temporal: {valid_from: 2026-06-09, valid_to: null, valid_precision: day, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 2, supports: true}
+        cadence_days: 90
+        status: published
+      - id: clm-claude-fable-5-006
+        schema_version: 2
+        type: S
+        temporal_kind: static
+        subject: ent-model-claude-fable-5
+        predicate: training.reliable_knowledge_cutoff
+        statement: Reliable knowledge cutoff and training data cutoff of Jan 2026.
+        value: {reliable: "2026-01", training: "2026-01"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: month, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 5, supports: true}
+        cadence_days: 3650
+        status: published
+    relationships:
+      - predicate: made_by
+        object: ent-institution-anthropic
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-fable-5-001]
+      - predicate: provides
+        object: cap-long-context
+        temporal_kind: step
+        temporal: {valid_from: 2026-06-09, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-fable-5-005]
+      - predicate: provides
+        object: cap-prompt-caching
+        temporal_kind: step
+        temporal: {valid_from: 2026-06-09, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-fable-5-001]
+    review: {cadence_days: 30, last_reviewed: 2026-08-03, next_due: 2026-09-02}
+    open_questions:
+      - "No Class B or C evidence. No scores."
+      - "Effective cost vs Opus 5 depends on whether Opus 5 shares the newer tokenizer — unresolved."
+    revisions:
+      - {date: 2026-08-03, change: "Created from verbatim Class A capture.", by: milestone-3}
+
+  - id: ent-model-claude-opus-5
+    schema_version: 1
+    name: Claude Opus 5
+    aliases: [claude-opus-5, Opus 5]
+    slug_frozen_at: 2026-08-03
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      api_id: claude-opus-5
+      openness: closed
+      self_hostable: false
+    made_by: ent-institution-anthropic
+    status: active
+    depth_priority: P0
+    first_seen: 2026-08-03
+    canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
+    summary: >
+      Anthropic's recommended default for complex agentic coding and enterprise
+      work. 1M context, $5/$25 per MTok, with an optional premium fast mode.
+    decision_questions:
+      - q: Opus 5 or Sonnet 5 for agentic coding?
+        status: open
+      - q: Is fast mode worth 2x the token price?
+        status: open
+    claims:
+      - id: clm-claude-opus-5-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-opus-5
+        predicate: pricing.input_per_mtok
+        statement: Base input priced at $5 per million tokens; output $25 per million tokens.
+        value: {input: 5.00, output: 25.00, currency: USD, unit: per_mtok}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 2, supports: true}
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 0, supports: true}
+        cadence_days: 30
+        status: published
+      - id: clm-claude-opus-5-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-opus-5
+        predicate: pricing.fast_mode_per_mtok
+        statement: >
+          Fast mode (research preview) is priced at $10/MTok input and $50/MTok
+          output — 2x standard — and applies across the full context window.
+          Available on the first-party Claude API only; not available with the
+          Batch API.
+        value: {input: 10.00, output: 50.00, currency: USD, unit: per_mtok}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 9, supports: true}
+        cadence_days: 30
+        status: published
+      - id: clm-claude-opus-5-003
+        schema_version: 2
+        type: S
+        temporal_kind: static
+        subject: ent-model-claude-opus-5
+        predicate: training.reliable_knowledge_cutoff
+        statement: >
+          Reliable knowledge cutoff and training data cutoff of May 2026 — the
+          most recent of any model documented on the page.
+        value: {reliable: "2026-05", training: "2026-05"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: month, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 5, supports: true}
+        cadence_days: 3650
+        status: published
+      - id: clm-claude-opus-5-004
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-opus-5
+        predicate: cost.tool_use_system_prompt_tokens
+        statement: >
+          Tool use adds 286 system-prompt tokens (auto/none) or 406 (any/tool) —
+          markedly lower than Opus 4.7's 675/804, a per-request cost reduction
+          invisible in headline pricing.
+        value: {auto_none: 286, any_tool: 406}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 10, supports: true}
+        cadence_days: 90
+        status: published
+      - id: clm-claude-opus-5-005
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-opus-5
+        predicate: context.window_tokens
+        statement: Context window of 1M tokens; max output 128k (300k via Batch API beta header).
+        value: {context: 1000000, max_output: 128000, batch_beta_output: 300000}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 2, supports: true}
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 8, supports: true}
+        cadence_days: 90
+        status: published
+    relationships:
+      - predicate: made_by
+        object: ent-institution-anthropic
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-opus-5-001]
+      - predicate: provides
+        object: cap-long-context
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-opus-5-005]
+      - predicate: alternative_to
+        object: ent-model-claude-sonnet-5
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-opus-5-001]
+    review: {cadence_days: 30, last_reviewed: 2026-08-03, next_due: 2026-09-02}
+    open_questions:
+      - "Tokenizer generation not stated for Opus 5 — same unresolved ambiguity as RG-001."
+      - "Fast mode's latency benefit is undocumented in quantitative terms; the price is known, the benefit is not."
+    revisions:
+      - {date: 2026-08-03, change: "Created from verbatim Class A capture.", by: milestone-3}
+
+  - id: ent-model-claude-haiku-4-5
+    schema_version: 1
+    name: Claude Haiku 4.5
+    aliases: [claude-haiku-4-5, claude-haiku-4-5-20251001, Haiku 4.5]
+    slug_frozen_at: 2026-08-03
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      api_id: claude-haiku-4-5-20251001
+      openness: closed
+      self_hostable: false
+      tokenizer_generation: "pre-4.7"
+      tokenizer_verified: false    # INFERRED from "4.7 and later"; Haiku 4.5 not named explicitly
+      tokenizer_repo: null
+    made_by: ent-institution-anthropic
+    status: active
+    depth_priority: P1
+    first_seen: 2026-08-03
+    canonical_url: https://platform.claude.com/docs/en/about-claude/models/overview
+    summary: >
+      Fastest Claude model at $1/$5 per MTok, with a 200k context window — the
+      only current Claude model not offering 1M context.
+    decision_questions:
+      - q: Where is Haiku 4.5 good enough to route work to, and where is it not?
+        status: open
+    claims:
+      - id: clm-claude-haiku-4-5-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-haiku-4-5
+        predicate: pricing.input_per_mtok
+        statement: Base input $1 per million tokens; output $5 per million tokens.
+        value: {input: 1.00, output: 5.00, currency: USD, unit: per_mtok}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 2, supports: true}
+        cadence_days: 30
+        status: published
+      - id: clm-claude-haiku-4-5-002
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-haiku-4-5
+        predicate: context.window_tokens
+        statement: >
+          Context window of 200k tokens and max output of 64k — the only current
+          Claude model without a 1M window.
+        value: {context: 200000, max_output: 64000}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 2, supports: true}
+        cadence_days: 90
+        status: published
+      - id: clm-claude-haiku-4-5-003
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-claude-haiku-4-5
+        predicate: capability.thinking_mode
+        statement: >
+          Supports extended thinking (thinking.type "enabled") but NOT adaptive
+          thinking — the inverse of the current larger models.
+        value: {adaptive_thinking: false, extended_thinking_enabled: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 7, supports: true}
+        cadence_days: 90
+        status: published
+      - id: clm-claude-haiku-4-5-004
+        schema_version: 2
+        type: S
+        temporal_kind: static
+        subject: ent-model-claude-haiku-4-5
+        predicate: training.reliable_knowledge_cutoff
+        statement: Reliable knowledge cutoff Feb 2025; training data cutoff Jul 2025.
+        value: {reliable: "2025-02", training: "2025-07"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: month, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence:
+          - {source: src-anthropic-models-overview-2026-08-03, excerpt_ref: 5, supports: true}
+        cadence_days: 3650
+        status: published
+    relationships:
+      - predicate: made_by
+        object: ent-institution-anthropic
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-03, asserted_to: null, observed_at: 2026-08-03}
+        evidence: [clm-claude-haiku-4-5-001]
+    review: {cadence_days: 60, last_reviewed: 2026-08-03, next_due: 2026-10-02}
+    open_questions:
+      - "Oldest knowledge cutoff of any current Claude model (Feb 2025 reliable). Practical impact unmeasured."
+    revisions:
+      - {date: 2026-08-03, change: "Created from verbatim Class A capture.", by: milestone-3}

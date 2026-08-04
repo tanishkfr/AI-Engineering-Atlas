@@ -1,0 +1,116 @@
+"$schema": ../schema/source.schema.json
+# Class A sources captured 2026-08-03 at REDUCED FIDELITY.
+#
+# Both returned tool-restructured text rather than the page's own markup. Under
+# research/capture-limitations-2026-08-03.md §2 that is `tool_extracted`:
+# admissible for S-type claims only, flagged, and CANNOT support a published
+# claim. Every claim sourced here sits at status: draft until re-captured.
+#
+# This matters. Publishing these figures at the same confidence as the Anthropic
+# ones would be laundering a restructured extraction into a primary citation.
+
+sources:
+
+  - id: src-openai-pricing-2026-08-03
+    schema_version: 1
+    class: A
+    url: https://developers.openai.com/api/docs/pricing
+    canonical_url: https://developers.openai.com/api/docs/pricing
+    archive_url: null
+    archive_status: pending
+    title: OpenAI API pricing
+    publisher: ent-institution-openai
+    author: null
+    published: null
+    retrieved: 2026-08-03
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Latest flagship models — standard pricing per 1M tokens"
+        text: >-
+          gpt-5.6-sol: Input $5.00 | Cached input $0.50 | Output $30.00.
+          gpt-5.6-terra: Input $2.00 | Cached input $0.20 | Output $12.00.
+          gpt-5.6-luna: Input $0.20 | Cached input $0.02 | Output $1.20.
+      - id: 1
+        locator: "Premium models"
+        text: >-
+          gpt-5.5-pro (<272K context): Input $30.00 | Output $180.00.
+          o3-pro: Input $20.00 | Output $80.00.
+      - id: 2
+        locator: "Economical options"
+        text: >-
+          gpt-5-nano: Input $0.05 | Cached input $0.005 | Output $0.40.
+          gpt-4o-mini: Input $0.15 | Cached input $0.075 | Output $0.60.
+      - id: 3
+        locator: "Batch pricing"
+        text: >-
+          Batch processing cuts Standard rates in half.
+      - id: 4
+        locator: "Regional processing note"
+        text: >-
+          Regional processing (data residency) endpoints are charged a 10%
+          uplift for models released on or after March 5, 2026.
+    methodology: null
+    notes: >
+      REDUCED FIDELITY — extraction opened with "Based on the pricing page, here
+      are the exact model IDs and rates", indicating restructuring. Figures and
+      model IDs appear reproduced but the surrounding structure was rebuilt.
+      Re-capture required (T-090) before any claim sourced here is published.
+      The first attempt against https://openai.com/api/pricing/ returned HTTP 403.
+
+  - id: src-google-gemini-pricing-2026-08-03
+    schema_version: 1
+    class: A
+    url: https://ai.google.dev/gemini-api/docs/pricing
+    canonical_url: https://ai.google.dev/gemini-api/docs/pricing
+    archive_url: null
+    archive_status: pending
+    title: Gemini API pricing
+    publisher: ent-institution-google
+    author: null
+    published: null
+    retrieved: 2026-08-03
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "Gemini 3.6 Flash — standard paid tier, per 1M tokens"
+        text: >-
+          gemini-3.6-flash. Input price: $1.50. Output price (including thinking
+          tokens): $7.50. Context caching price: $0.15 and $1.00 / 1,000,000
+          tokens per hour (storage price).
+      - id: 1
+        locator: "Gemini 3.6 Flash — batch and flex tiers"
+        text: >-
+          Batch: Input price $0.75, Output price (including thinking tokens)
+          $3.75, Context caching $0.075 plus $1.00/1M tokens per hour storage.
+          Flex: Input $0.75, Output $3.75, Caching $0.075 plus $1.00/hr storage.
+      - id: 2
+        locator: "Gemini 3.6 Flash — priority tier"
+        text: >-
+          Priority: Input price $2.70. Output price (including thinking tokens):
+          $13.50. Context caching price $0.27 and $1.00 / 1,000,000 tokens per
+          hour.
+      - id: 3
+        locator: "Gemini 3.5 Flash"
+        text: >-
+          gemini-3.5-flash. Standard: Input $1.50, Output $9.00, Caching $0.15
+          plus $1.00/hr. Batch: Input $0.75, Output $4.50. Priority: Input
+          $2.70, Output $16.20.
+    methodology: null
+    notes: >
+      REDUCED FIDELITY — individual figures quoted but page structure rebuilt by
+      the extraction model. Notably, only Flash-tier models were returned; the
+      Pro tier was not captured and its absence here is a COVERAGE GAP, not
+      evidence that it does not exist. Re-capture required (T-090).
+      Google's four-tier structure (standard / batch / flex / priority) plus
+      per-hour cache STORAGE billing is a materially different pricing shape from
+      Anthropic's and OpenAI's, and the cost model must represent it — see
+      research gap RG-004.

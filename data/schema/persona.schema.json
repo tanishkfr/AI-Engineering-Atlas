@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/persona.schema.json",
+  "title": "Persona",
+  "description": "A structured decision context the recommendation engine consumes. Hard constraints eliminate; weights rank. Weights are editorial opinion and are labeled as such in the data itself (EVALUATION.md §4).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "context", "weights", "weights_rationale", "weights_status", "weights_dated"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/personaId" },
+    "schema_version": { "type": "integer", "const": 1 },
+    "name": { "type": "string" },
+    "description": { "type": "string", "maxLength": 400 },
+
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["budget_month_usd", "risk_tolerance"],
+      "properties": {
+        "budget_month_usd": {
+          "type": "object",
+          "required": ["typical"],
+          "properties": {
+            "min": { "type": "number", "minimum": 0 },
+            "typical": { "type": "number", "minimum": 0 },
+            "max": { "type": "number", "minimum": 0 }
+          }
+        },
+        "team_size": { "type": "integer", "minimum": 1 },
+        "codebase": {
+          "type": "object",
+          "properties": {
+            "age": { "enum": ["greenfield", "young", "mature", "legacy"] },
+            "size": { "enum": ["small", "medium", "large", "very_large"] },
+            "languages": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "task_mix": {
+          "type": "object",
+          "description": "Fractions summing to ~1.0. Drives dimension weighting more than any stated preference does.",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "risk_tolerance": { "enum": ["low", "medium", "high"] },
+        "autonomy_appetite": { "enum": ["supervised", "mixed", "hands_off"] },
+        "compliance": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "e.g. data residency, no-training guarantees, audit requirements."
+        },
+        "expertise": { "enum": ["learning", "working", "senior", "specialist"] }
+      }
+    },
+
+    "hard_constraints": {
+      "type": "array",
+      "description": "Eliminations, never penalties (EVALUATION.md §4 rule 4). A constraint removes candidates from consideration entirely.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["facet"],
+        "properties": {
+          "facet": { "type": "string" },
+          "equals": {},
+          "not": {},
+          "in": { "type": "array" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-dimension weights, 0 to 1. Omitted dimensions are excluded, not zero-weighted.",
+      "patternProperties": {
+        "^D(1[0-3]|[1-9])$": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "weights_rationale": {
+      "type": "string",
+      "minLength": 40,
+      "description": "Why this persona weights the way it does. A weight vector without a rationale is an unexamined assumption about whose problem matters."
+    },
+
+    "weights_status": {
+      "const": "opinion",
+      "description": "Locked. Weights are editorial judgment; the interface must never render them as findings."
+    },
+    "weights_author": { "type": "string" },
+    "weights_dated": { "$ref": "defs.schema.json#/$defs/date" },
+
+    "anti_recommendations": {
+      "type": "array",
+      "description": "What this persona should specifically avoid, and why. Often more actionable than the recommendation.",
+      "items": {
+        "type": "object",
+        "required": ["entity", "reason"],
+        "properties": {
+          "entity": { "$ref": "defs.schema.json#/$defs/entityId" },
+          "reason": { "type": "string" },
+          "evidence": {
+            "type": "array",
+            "items": { "$ref": "defs.schema.json#/$defs/claimId" }
+          }
+        }
+      }
+    },
+
+    "revisions": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/revision" }
+    }
+  }
+}

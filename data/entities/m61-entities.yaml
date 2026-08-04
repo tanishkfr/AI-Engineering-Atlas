@@ -1,0 +1,100 @@
+"$schema": ../schema/entity.schema.json
+# Lane 1 reference population + Lane 2 evidence institutions.
+
+entities:
+
+  - id: ent-model-kimi-k3
+    schema_version: 1
+    name: Kimi K3
+    aliases: [kimi-k3, K3]
+    slug_frozen_at: 2026-08-04
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      openness: unknown          # NOT asserted — see open_questions
+      tokenizer_generation: null
+      tokenizer_verified: false
+      tokenizer_repo: null
+    made_by: ent-institution-moonshot
+    status: researching
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://platform.kimi.ai/docs/pricing/chat
+    summary: >
+      Moonshot's current Kimi generation, documented with a 1M-token context
+      window. Pricing not yet captured.
+    decision_questions:
+      - q: When is Kimi K3 the right choice over a Western frontier model?
+        status: open
+    claims:
+      - id: clm-model-kimi-k3-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-kimi-k3
+        predicate: context.window_tokens
+        statement: Documented with a 1M-token context window.
+        value: {context: 1000000}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-kimi-models-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 90
+        status: draft
+      - id: clm-model-kimi-k3-090
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-kimi-k3
+        predicate: pricing.per_mtok
+        statement: >
+          Pricing NOT established. The model index page lists K3 without prices;
+          per-model pricing lives on a deeper page that was not captured.
+        value: unknown
+        temporal: {valid_from: 2026-08-04, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-kimi-models-2026-08-04, excerpt_ref: 0, supports: false}
+        cadence_days: 14
+        status: published
+    relationships:
+      - predicate: made_by
+        object: ent-institution-moonshot
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-kimi-k3-001]
+    review: {cadence_days: 14, last_reviewed: 2026-08-04, next_due: 2026-08-18}
+    open_questions:
+      - "Pricing not captured — the primary reason this entity is `researching` not `active`."
+      - "Openness NOT asserted. Kimi models are widely described as open-weight; we have no captured licence evidence, and asserting it from reputation would be exactly the unsourced claim CONSTITUTION §2 forbids."
+      - "Sibling models observed on the index page (Kimi K2.7 Code, K2.6, Moonshot V1) not yet entities."
+
+  - id: ent-institution-moonshot
+    schema_version: 1
+    name: Moonshot AI
+    aliases: [Kimi]
+    layers: [M2]
+    roles: [vendor, research_lab]
+    status: stub
+    depth_priority: P0
+    first_seen: 2026-08-04
+    canonical_url: https://platform.kimi.ai
+    summary: Developer of the Kimi model family.
+    revisions:
+      - {date: 2026-08-04, change: "Stub from Lane 1 capture.", by: milestone-6-1}
+
+  - id: ent-institution-artificialanalysis
+    schema_version: 1
+    name: Artificial Analysis
+    layers: [M2]
+    roles: [research_lab]
+    status: stub
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://artificialanalysis.ai
+    summary: >
+      Independent benchmarking organisation publishing serving-performance
+      measurements. First Class B source admitted to the corpus.
+    open_questions:
+      - "Funding and business model not researched — relevant to independence assessment, and we should not assume neutrality from the word 'independent'."
+    revisions:
+      - {date: 2026-08-04, change: "Created on admission of the first Class B source.", by: milestone-6-1}

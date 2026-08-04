@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-engineering-atlas.dev/schema/usage-profile.schema.json",
+  "title": "Usage profile",
+  "description": "Monthly consumption for a working pattern. Introduced by QUERIES.md §8.1: every cost answer depends on one, and a cost figure resting on an invented token count is exactly the fabrication CLAUDE.md §1 prohibits. Until Class D experiments run, profiles are 'assumed' with low confidence, and that propagates into every cost result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "status", "tokens_in_month", "tokens_out_month", "assumptions"],
+
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/usageProfileId" },
+    "schema_version": { "type": "integer", "const": 1 },
+
+    "name": { "type": "string" },
+    "persona": { "$ref": "defs.schema.json#/$defs/personaId" },
+
+    "status": {
+      "enum": ["assumed", "measured"],
+      "description": "'measured' requires derived_from pointing at a Class D experiment."
+    },
+
+    "tokens_in_month": { "type": "number", "minimum": 0 },
+    "tokens_out_month": { "type": "number", "minimum": 0 },
+    "cache_hit_rate": {
+      "type": "number", "minimum": 0, "maximum": 1,
+      "description": "Materially changes cost on providers with cache pricing. Frequently the difference between two stacks."
+    },
+    "sessions_month": { "type": "integer", "minimum": 0 },
+    "concurrency_peak": { "type": "integer", "minimum": 1 },
+
+    "retry_rate": {
+      "type": "number", "minimum": 0,
+      "description": "Failed and re-run work. A model needing four attempts is not cheap; omitting this is how per-token comparisons mislead."
+    },
+
+    "distribution": {
+      "type": "object",
+      "description": "Usage is not uniform. Percentiles let the engine answer 'at your heavy months' as well as 'typical'.",
+      "properties": {
+        "p50_multiplier": { "type": "number", "minimum": 0 },
+        "p90_multiplier": { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "task_shape": {
+      "type": "object",
+      "properties": {
+        "avg_context_tokens": { "type": "number", "minimum": 0 },
+        "avg_output_tokens": { "type": "number", "minimum": 0 },
+        "long_horizon_share": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "content_mix": {
+      "type": "object",
+      "description": "ADDED M4.1 (S1). Share of tokens by content type. Tokenizer efficiency varies by content: exp-tokenizer-normalization-v1 found up to 23 points of spread between prose and structured data. A single per-vendor multiplier would be wrong by that margin. Shares should sum to ~1.0; omitted means unknown, NOT uniform.",
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "number", "minimum": 0, "maximum": 1 },
+        "prose": { "type": "number", "minimum": 0, "maximum": 1 },
+        "structured": { "type": "number", "minimum": 0, "maximum": 1 },
+        "mixed_repo_context": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": {
+          "enum": ["assumed", "measured"],
+          "description": "Inherits the profile's own status discipline."
+        }
+      }
+    },
+
+    "derived_from": {
+      "type": ["string", "null"],
+      "pattern": "^exp-[a-z0-9-]+-v\\d+$"
+    },
+
+    "assumptions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Written out in full and surfaced with every cost figure computed from this profile. Mandatory even when status is 'measured' — measurement conditions are assumptions too."
+    },
+
+    "confidence": { "$ref": "defs.schema.json#/$defs/confidence", "readOnly": true },
+    "as_of": { "$ref": "defs.schema.json#/$defs/date" },
+
+    "revisions": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/revision" }
+    }
+  },
+
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "measured" } }, "required": ["status"] },
+      "then": {
+        "required": ["derived_from"],
+        "properties": { "derived_from": { "type": "string" } }
+      }
+    }
+  ]
+}

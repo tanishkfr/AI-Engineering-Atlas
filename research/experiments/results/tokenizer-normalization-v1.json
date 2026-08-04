@@ -1,0 +1,261 @@
+{
+  "experiment": "exp-tokenizer-normalization-v1",
+  "preregistration": "research/experiments/PREREG-exp-tokenizer-normalization-v1.md",
+  "run_date": "2026-08-04",
+  "reference_tokenizer": "openai/cl100k_base",
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "tiktoken": "0.12.0",
+    "tokenizers": "0.22.2",
+    "transformers": "5.1.0"
+  },
+  "corpus": {
+    "code_python": {
+      "bytes": 1920,
+      "sha256": "be98433f30f6bc557d7233cd283e2a94795401cd2aad083bdb9a2f2283cb08f4"
+    },
+    "code_typescript": {
+      "bytes": 1773,
+      "sha256": "9808cf7a4ec90c0c84b10b2bc06352187db12a4e9d8e08d574d433e7a8219aa6"
+    },
+    "prose_documentation": {
+      "bytes": 2043,
+      "sha256": "ce512190f6990e5e6a1828a613ec9fa52b662e163faf2c570eb08feba527da98"
+    },
+    "structured_json": {
+      "bytes": 1849,
+      "sha256": "4df57eb0dc7b6cfa56c9204cc78849529d6e933885ec78337a44ff501e53edda"
+    },
+    "mixed_repo_context": {
+      "bytes": 2302,
+      "sha256": "05275654646d4d64a1be532543a7525253141fc0d5e396bf6a037d907921f31e"
+    }
+  },
+  "tokenizers_measured": {
+    "openai/o200k_base": {
+      "backend": "tiktoken",
+      "encoding": "o200k_base"
+    },
+    "openai/cl100k_base": {
+      "backend": "tiktoken",
+      "encoding": "cl100k_base"
+    },
+    "openai/p50k_base": {
+      "backend": "tiktoken",
+      "encoding": "p50k_base"
+    },
+    "qwen/Qwen2.5-Coder-7B-Instruct": {
+      "backend": "tokenizers",
+      "repo": "Qwen/Qwen2.5-Coder-7B-Instruct"
+    },
+    "deepseek/DeepSeek-V3": {
+      "backend": "tokenizers",
+      "repo": "deepseek-ai/DeepSeek-V3"
+    },
+    "mistral/Mistral-7B-Instruct-v0.3": {
+      "backend": "tokenizers",
+      "repo": "mistralai/Mistral-7B-Instruct-v0.3"
+    }
+  },
+  "tokenizers_failed": {
+    "meta/Llama-3.1-8B-Instruct": "GatedRepoError: 401 Client Error. (Request ID: Root=1-6a70f18a-485b22465828a3875e21ab9c;22dae84f-bc65-488c-883e-7ee55af5408e)\n\nCannot access gated repo for url https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct/"
+  },
+  "not_normalizable": {
+    "anthropic": "No public offline tokenizer. Counts require the count_tokens API endpoint, which requires an API key.",
+    "google": "No public offline tokenizer for Gemini. Counts require the countTokens API endpoint, which requires an API key."
+  },
+  "token_counts": {
+    "openai/o200k_base": {
+      "code_python": 507,
+      "code_typescript": 448,
+      "prose_documentation": 407,
+      "structured_json": 571,
+      "mixed_repo_context": 678
+    },
+    "openai/cl100k_base": {
+      "code_python": 503,
+      "code_typescript": 446,
+      "prose_documentation": 409,
+      "structured_json": 572,
+      "mixed_repo_context": 678
+    },
+    "openai/p50k_base": {
+      "code_python": 626,
+      "code_typescript": 568,
+      "prose_documentation": 427,
+      "structured_json": 704,
+      "mixed_repo_context": 830
+    },
+    "qwen/Qwen2.5-Coder-7B-Instruct": {
+      "code_python": 523,
+      "code_typescript": 446,
+      "prose_documentation": 409,
+      "structured_json": 611,
+      "mixed_repo_context": 729
+    },
+    "deepseek/DeepSeek-V3": {
+      "code_python": 541,
+      "code_typescript": 465,
+      "prose_documentation": 410,
+      "structured_json": 606,
+      "mixed_repo_context": 702
+    },
+    "mistral/Mistral-7B-Instruct-v0.3": {
+      "code_python": 670,
+      "code_typescript": 581,
+      "prose_documentation": 449,
+      "structured_json": 766,
+      "mixed_repo_context": 893
+    }
+  },
+  "tokens_per_1000_bytes": {
+    "openai/o200k_base": {
+      "code_python": 264.06,
+      "code_typescript": 252.68,
+      "prose_documentation": 199.22,
+      "structured_json": 308.82,
+      "mixed_repo_context": 294.53
+    },
+    "openai/cl100k_base": {
+      "code_python": 261.98,
+      "code_typescript": 251.55,
+      "prose_documentation": 200.2,
+      "structured_json": 309.36,
+      "mixed_repo_context": 294.53
+    },
+    "openai/p50k_base": {
+      "code_python": 326.04,
+      "code_typescript": 320.36,
+      "prose_documentation": 209.01,
+      "structured_json": 380.75,
+      "mixed_repo_context": 360.56
+    },
+    "qwen/Qwen2.5-Coder-7B-Instruct": {
+      "code_python": 272.4,
+      "code_typescript": 251.55,
+      "prose_documentation": 200.2,
+      "structured_json": 330.45,
+      "mixed_repo_context": 316.68
+    },
+    "deepseek/DeepSeek-V3": {
+      "code_python": 281.77,
+      "code_typescript": 262.27,
+      "prose_documentation": 200.69,
+      "structured_json": 327.74,
+      "mixed_repo_context": 304.95
+    },
+    "mistral/Mistral-7B-Instruct-v0.3": {
+      "code_python": 348.96,
+      "code_typescript": 327.69,
+      "prose_documentation": 219.77,
+      "structured_json": 414.28,
+      "mixed_repo_context": 387.92
+    }
+  },
+  "ratio_vs_reference": {
+    "openai/o200k_base": {
+      "code_python": 1.008,
+      "code_typescript": 1.0045,
+      "prose_documentation": 0.9951,
+      "structured_json": 0.9983,
+      "mixed_repo_context": 1.0
+    },
+    "openai/cl100k_base": {
+      "code_python": 1.0,
+      "code_typescript": 1.0,
+      "prose_documentation": 1.0,
+      "structured_json": 1.0,
+      "mixed_repo_context": 1.0
+    },
+    "openai/p50k_base": {
+      "code_python": 1.2445,
+      "code_typescript": 1.2735,
+      "prose_documentation": 1.044,
+      "structured_json": 1.2308,
+      "mixed_repo_context": 1.2242
+    },
+    "qwen/Qwen2.5-Coder-7B-Instruct": {
+      "code_python": 1.0398,
+      "code_typescript": 1.0,
+      "prose_documentation": 1.0,
+      "structured_json": 1.0682,
+      "mixed_repo_context": 1.0752
+    },
+    "deepseek/DeepSeek-V3": {
+      "code_python": 1.0755,
+      "code_typescript": 1.0426,
+      "prose_documentation": 1.0024,
+      "structured_json": 1.0594,
+      "mixed_repo_context": 1.0354
+    },
+    "mistral/Mistral-7B-Instruct-v0.3": {
+      "code_python": 1.332,
+      "code_typescript": 1.3027,
+      "prose_documentation": 1.0978,
+      "structured_json": 1.3392,
+      "mixed_repo_context": 1.3171
+    }
+  },
+  "cross_vendor_spread": {
+    "code_python": {
+      "min": 503,
+      "max": 670,
+      "ratio": 1.332,
+      "argmin": "openai/cl100k_base",
+      "argmax": "mistral/Mistral-7B-Instruct-v0.3"
+    },
+    "code_typescript": {
+      "min": 446,
+      "max": 581,
+      "ratio": 1.3027,
+      "argmin": "openai/cl100k_base",
+      "argmax": "mistral/Mistral-7B-Instruct-v0.3"
+    },
+    "prose_documentation": {
+      "min": 407,
+      "max": 449,
+      "ratio": 1.1032,
+      "argmin": "openai/o200k_base",
+      "argmax": "mistral/Mistral-7B-Instruct-v0.3"
+    },
+    "structured_json": {
+      "min": 571,
+      "max": 766,
+      "ratio": 1.3415,
+      "argmin": "openai/o200k_base",
+      "argmax": "mistral/Mistral-7B-Instruct-v0.3"
+    },
+    "mixed_repo_context": {
+      "min": 678,
+      "max": 893,
+      "ratio": 1.3171,
+      "argmin": "openai/o200k_base",
+      "argmax": "mistral/Mistral-7B-Instruct-v0.3"
+    }
+  },
+  "within_vendor_spread_openai": {
+    "code_python": 1.2445,
+    "code_typescript": 1.2735,
+    "prose_documentation": 1.0491,
+    "structured_json": 1.2329,
+    "mixed_repo_context": 1.2242
+  },
+  "hypotheses": {
+    "H1_code_spread_exceeds_1.20": {
+      "threshold": 1.2,
+      "observed_max_code_spread": 1.332,
+      "supported": true
+    },
+    "H2_code_spread_greater_than_prose": {
+      "observed_code": 1.332,
+      "observed_prose": 1.1032,
+      "supported": true
+    },
+    "H3_within_vendor_less_than_cross_vendor": {
+      "within_vendor_max": 1.2735,
+      "cross_vendor_max": 1.3415,
+      "supported": true
+    }
+  }
+}

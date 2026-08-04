@@ -1,0 +1,118 @@
+"$schema": ../schema/usage-profile.schema.json
+# Usage profiles v1 — ALL ASSUMED, NONE MEASURED.
+#
+# QUERIES.md §8.1 established these as the single most fragile input in the
+# system: every cost answer inherits their uncertainty, and Q7's sensitivity
+# analysis puts them at the top of the value-of-information ranking.
+#
+# READ THIS BEFORE USING ANY FIGURE BELOW.
+# No Class D experiment has been run. These numbers are STRUCTURED ASSUMPTIONS,
+# not measurements. They exist so the cost model has a declared input rather
+# than an invented one, and so that the assumption is visible in every figure
+# derived from it. They are stated as ranges, and the range is wide because our
+# uncertainty is wide.
+#
+# The correct engine behaviour today is to return UNDER_DETERMINED on budget
+# queries and cite these as the blocking unknown — not to compute a confident
+# monthly cost from them.
+
+profiles:
+
+  - id: use-solo-founder-typical
+    name: Solo founder, typical month
+    persona: per-solo-founder
+    status: assumed
+    tokens_in_month: 25000000        # 25M — midpoint of a 8M–60M assumed range
+    tokens_out_month: 2000000        # 2M
+    cache_hit_rate: 0.5
+    retry_rate: 0.20
+    sessions_month: 90
+    concurrency_peak: 1
+    distribution:
+      p50_multiplier: 1.0
+      p90_multiplier: 2.4
+    task_shape:
+      avg_context_tokens: 45000
+      avg_output_tokens: 3500
+      long_horizon_share: 0.25
+    as_of: 2026-08-03
+    assumptions:
+      - "ASSUMED, NOT MEASURED. No Class D experiment has produced a token count for this or any working pattern."
+      - "Assumes roughly 3 working sessions per day on 30 days, which likely overstates weekends and understates crunch periods."
+      - "Input:output ratio assumed ~12:1, reflecting agentic work where large context is read and small diffs are written. This ratio drives cost more than any other single figure and is unverified."
+      - "Cache hit rate of 0.5 assumes a harness that caches system prompt and repository context across turns. Harnesses differ enormously here; a harness without caching could double effective cost at identical token volume."
+      - "Retry rate of 0.20 assumes one in five units of work is redone. This is a guess. It could plausibly be 0.05 or 0.50, and the range materially changes which stack is cheapest."
+      - "Excludes tokenizer differences between vendors. Comparing per-token prices across tokenizers without normalizing is invalid (see met-effective-token-multiplier)."
+      - "p90 multiplier of 2.4 assumes usage is right-skewed — a heavy month costs well over double a typical one, which matters for anyone on a hard budget ceiling."
+
+  - id: use-student-light
+    name: Student, hard budget ceiling
+    persona: per-student
+    status: assumed
+    tokens_in_month: 4000000
+    tokens_out_month: 400000
+    cache_hit_rate: 0.35
+    retry_rate: 0.30
+    sessions_month: 30
+    concurrency_peak: 1
+    distribution:
+      p50_multiplier: 1.0
+      p90_multiplier: 3.0
+    task_shape:
+      avg_context_tokens: 20000
+      avg_output_tokens: 2000
+      long_horizon_share: 0.10
+    as_of: 2026-08-03
+    assumptions:
+      - "ASSUMED, NOT MEASURED."
+      - "Assumes coursework-shaped usage: bursts around deadlines, long idle periods. The p90 multiplier of 3.0 reflects that, and a hard ceiling makes the p90 the binding figure, not the median."
+      - "Higher retry rate than the founder profile assumes less prompting experience and more rework. Plausible but untested; it may equally be lower because tasks are smaller."
+      - "Smaller context per task assumes single-file and small-project work rather than large repositories."
+
+  - id: use-designer-frontend
+    name: Design-focused, frontend-heavy
+    persona: per-designer-engineer
+    status: assumed
+    tokens_in_month: 10000000
+    tokens_out_month: 2500000
+    cache_hit_rate: 0.4
+    retry_rate: 0.45
+    sessions_month: 60
+    concurrency_peak: 1
+    distribution:
+      p50_multiplier: 1.0
+      p90_multiplier: 2.0
+    task_shape:
+      avg_context_tokens: 18000
+      avg_output_tokens: 6000
+      long_horizon_share: 0.05
+    as_of: 2026-08-03
+    assumptions:
+      - "ASSUMED, NOT MEASURED."
+      - "Input:output ratio assumed ~4:1, much lower than the agentic profiles: interface work generates a lot of code from a short brief, rather than reading a lot to write a little. If correct, this profile is disproportionately sensitive to OUTPUT pricing, which inverts the usual ranking of cheap-input models."
+      - "Retry rate assumed high (0.45) because visual output is iterated to taste rather than to a passing test. This is the least confident figure in the whole file and is the reason exp-frontend-fidelity-v1 must measure iterations-to-acceptable."
+      - "Low long-horizon share assumes short, supervised generation cycles rather than unattended runs."
+
+  - id: use-backend-large-repo
+    name: Backend engineer, mature codebase
+    persona: per-backend-engineer
+    status: assumed
+    tokens_in_month: 40000000
+    tokens_out_month: 2000000
+    cache_hit_rate: 0.6
+    retry_rate: 0.15
+    sessions_month: 100
+    concurrency_peak: 2
+    distribution:
+      p50_multiplier: 1.0
+      p90_multiplier: 1.8
+    task_shape:
+      avg_context_tokens: 90000
+      avg_output_tokens: 2500
+      long_horizon_share: 0.30
+    as_of: 2026-08-03
+    assumptions:
+      - "ASSUMED, NOT MEASURED."
+      - "Highest input volume of any profile: large repositories mean large context per task. Input:output ratio assumed ~20:1."
+      - "Cache hit rate assumed highest here (0.6) because repository context is stable across a working session. If a provider lacks caching, this profile is penalized far more than the others — which is precisely the kind of interaction a per-token price comparison cannot show."
+      - "Concurrency of 2 assumes occasional parallel agent use; this affects rate-limit fit, not cost."
