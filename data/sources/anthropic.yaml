@@ -88,16 +88,18 @@ sources:
     class: A
     url: https://platform.claude.com/docs/en/about-claude/pricing
     canonical_url: https://platform.claude.com/docs/en/about-claude/pricing
-    archive_url: null
-    archive_status: pending
+    # Hashed and archived 2026-08-04 by scripts/atlas/capture.py.
+    # First source in the corpus with verifiable provenance.
+    archive_url: https://web.archive.org/web/20260804053539/https://platform.claude.com/docs/en/about-claude/pricing
+    archive_status: archived
     title: Pricing
     publisher: ent-institution-anthropic
     author: null
     published: null
     retrieved: 2026-08-03
-    content_hash: null
-    hash_status: unavailable_pending_tooling
-    reverification: calendar_only
+    content_hash: sha256:f067cfe0d20eaeeefa52adcde42cd194a26e45dc5f08dd20cbe1da82679370f1
+    hash_status: hashed
+    reverification: hash_triggered
     excerpt_fidelity: verbatim
     flags: [self_interested]
     excerpts:

@@ -1,0 +1,28 @@
+﻿{
+  "delta_type": "reference_date",
+  "from_date": "2026-08-15",
+  "to_date": "2026-09-15",
+  "order_before": [
+    "ent-model-claude-sonnet-5",
+    "ent-model-claude-fable-5"
+  ],
+  "order_after": [
+    "ent-model-claude-sonnet-5",
+    "ent-model-claude-fable-5"
+  ],
+  "order_changed": false,
+  "changes": [
+    {
+      "entity": "ent-model-claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "change": "cost_changed",
+      "before_usd": 57.0,
+      "after_usd": 85.5,
+      "pct": 50.0,
+      "band_before": 1,
+      "band_after": 1,
+      "d6_before": 4,
+      "d6_after": 3
+    }
+  ]
+}

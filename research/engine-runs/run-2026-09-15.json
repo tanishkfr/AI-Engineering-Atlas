@@ -1,0 +1,150 @@
+﻿{
+  "reference_date": "2026-09-15",
+  "persona": "per-solo-founder",
+  "usage_profile": {
+    "id": "use-solo-founder-typical",
+    "status": "assumed",
+    "assumptions": [
+      "ASSUMED, NOT MEASURED. No Class D experiment has produced a token count for this or any working pattern.",
+      "Assumes roughly 3 working sessions per day on 30 days, which likely overstates weekends and understates crunch periods."
+    ]
+  },
+  "coverage": "1/13 dimensions",
+  "confidence": "low",
+  "eliminated": [],
+  "candidates_without_pricing": [
+    "ent-model-deepseek-v4-pro",
+    "ent-model-kimi-k3",
+    "ent-model-claude-opus-5",
+    "ent-model-claude-haiku-4-5"
+  ],
+  "result": "refusal",
+  "refusal": {
+    "code": "INSUFFICIENT_COVERAGE",
+    "detail": "Ranked on 1/13 dimensions. RECOMMENDATION \u00a710 requires >=6 of 13 scored dimensions before a stack recommendation may be issued.",
+    "resolves_with": [
+      "Class B/C evidence for D1, D2, D4, D7 (EVIDENCE-ROADMAP streams 1-4)",
+      "Measured usage profile (currently assumed) to raise cost confidence"
+    ]
+  },
+  "stacks": [
+    {
+      "entity": "ent-model-claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "cost": {
+        "monthly_usd": 85.5,
+        "price_in": 3.0,
+        "price_out": 15.0,
+        "price_cache_read": 0.30000000000000004,
+        "pricing_confidence": "low",
+        "evidence": [
+          "clm-claude-sonnet-5-002",
+          "clm-claude-sonnet-5-004"
+        ]
+      },
+      "scores": {
+        "D6": {
+          "value": 3,
+          "rationale": "fair; cost management required at volume",
+          "confidence": "low",
+          "evidence": [
+            "clm-claude-sonnet-5-002",
+            "clm-claude-sonnet-5-004"
+          ]
+        }
+      },
+      "fit": 3.0,
+      "rank_band": 1
+    },
+    {
+      "entity": "ent-model-claude-fable-5",
+      "name": "Claude Fable 5",
+      "cost": {
+        "monthly_usd": 285.0,
+        "price_in": 10.0,
+        "price_out": 50.0,
+        "price_cache_read": 1.0,
+        "pricing_confidence": "low",
+        "evidence": [
+          "clm-claude-fable-5-001",
+          "clm-claude-fable-5-002"
+        ]
+      },
+      "scores": {
+        "D6": {
+          "value": 2,
+          "rationale": "expensive enough to change how you work",
+          "confidence": "low",
+          "evidence": [
+            "clm-claude-fable-5-001",
+            "clm-claude-fable-5-002"
+          ]
+        }
+      },
+      "fit": 2.0,
+      "rank_band": 2
+    }
+  ],
+  "explanation": {
+    "why_won": [
+      {
+        "factor": "cost (D6)",
+        "contribution": "$85.5/mo at the assumed profile",
+        "marginal_effect": 3.0
+      }
+    ],
+    "assumptions": [
+      {
+        "assumption": "monthly token volume",
+        "value": "25,000,000 in / 2,000,000 out",
+        "source": "usage_profile",
+        "editable": true
+      },
+      {
+        "assumption": "cache hit rate",
+        "value": 0.5,
+        "source": "usage_profile",
+        "editable": true
+      },
+      {
+        "assumption": "reference date",
+        "value": "2026-09-15",
+        "source": "query",
+        "editable": true
+      }
+    ],
+    "tradeoffs_accepted": [
+      {
+        "gave_up": "unmeasured quality, autonomy and reliability",
+        "versus": "Claude Fable 5",
+        "magnitude": "$199.50/mo cheaper, but nothing else about it has been scored"
+      }
+    ],
+    "evidence": [
+      "clm-claude-sonnet-5-002",
+      "clm-claude-sonnet-5-004"
+    ],
+    "uncertainty": {
+      "summary": "Ranked on cost alone, from an assumed usage profile. Not a quality judgement.",
+      "widest_distributions": [
+        "all unscored dimensions"
+      ],
+      "gaps": [
+        "12 of 13 dimensions unscored",
+        "usage profile assumed, not measured"
+      ]
+    },
+    "what_would_change_it": [
+      {
+        "input": "usage profile token volume",
+        "threshold": "any change scales all costs proportionally; ranking is volume-invariant",
+        "fragility": "robust"
+      },
+      {
+        "input": "reference date",
+        "threshold": "prices with dated validity intervals change the ranking",
+        "fragility": "fragile"
+      }
+    ]
+  }
+}
