@@ -49,6 +49,8 @@ def main() -> int:
     ap.add_argument("--days", type=int, default=7)
     ap.add_argument("--dry-run", action="store_true", help="validate only; write nothing")
     ap.add_argument("--limit-files", type=int, default=0)
+    ap.add_argument("--share", action="store_true",
+                    help="emit aggregate ratios only, safe to send to a third party")
     a = ap.parse_args()
 
     cutoff = datetime.now(timezone.utc) - timedelta(days=a.days)
@@ -163,6 +165,25 @@ def main() -> int:
             {k: v for s in live.values() for k, v in s["tools"].items()}
         ).most_common(12)),
     }
+
+    if a.share:
+        # Replication payload (REPLICATION-AUDIT-RQ-18 §5 R1).
+        # Aggregate ratios ONLY — no project hashes, session counts, tool names,
+        # or timestamps. Safe to send to a third party verbatim.
+        share = {
+            "replication_of": "RQ-18/19",
+            "window_days": a.days,
+            "cache_hit_rate": result["RQ-19_cache_hit_rate"],
+            "io_ratio": result["RQ-18_io_ratio"],
+            "turns": result["turns"],
+            "falsification_thresholds": {
+                ">=0.85": "replicates - correction is harness-level",
+                "0.70-0.85": "partial - report a range, not a point",
+                "<0.70": "FALSIFIED as general - revert to operator-scoped",
+            },
+        }
+        print(json.dumps(share, indent=2))
+        return 0
 
     print(json.dumps(result, indent=2))
     if not a.dry_run:

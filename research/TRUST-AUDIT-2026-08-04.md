@@ -12,6 +12,28 @@
 >
 > Two resolved, one partial, two untouched. Detail in
 > `research/VERTICAL-SLICE-REPORT.md`.
+>
+> **UPDATE 2026-08-04b — after RQ-18/19 execution**
+>
+> | # | Item | Status |
+> |---|---|---|
+> | 1 | Engine never produced a recommendation | ⚠️ **Improved** — now runs on **measured** rather than assumed cost input. Still refuses at low dimension coverage. |
+> | 5 | Corpus tiny and vendor-skewed | ⚠️ **Partially addressed** — the corpus now contains a first-party *measurement*, not only vendor documentation. Vendor skew in the entity set is unchanged. |
+>
+> **A sixth item is added, and it is severe.**
+>
+> | # | Item | Severity |
+> |---|---|---|
+> | **6** | **Every measurement in the Atlas comes from a single operator on a single harness.** RQ-18/19 replaced two assumptions with measurements — and the measurements have n=1. An expert will ask whether a 0.9432 cache hit rate is a fact about the ecosystem or about one person's setup, and today the honest answer is *we do not know*. | **High** |
+>
+> Item 6 is the direct cost of item 4 being resolved: having real data invites
+> the question of whose data it is. The replication design that would close it is
+> `research/experiments/REPLICATION-AUDIT-RQ-18.md` §5 R1 — **one other person,
+> one command, two minutes.**
+>
+> Progress is real but the shape has changed: the Atlas has moved from *"asserts
+> things it has not verified"* toward *"has verified things, on a sample of one."*
+> That is a better problem and it is not yet a solved one.
 
 ---
 
