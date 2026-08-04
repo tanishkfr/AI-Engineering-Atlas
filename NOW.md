@@ -11,15 +11,17 @@
 
 ## Current Priority
 
-**Synthesize Harvest 003.** ~300KB of primary community records sit in
-`research/evidence/raw/` un-analysed. Clustering them into convergent behaviours
-is the first real chance to move a dimension out of `not_scored`.
+**Score a second dimension.** The engine now runs end-to-end but refuses at
+1/13 coverage. D6 (cost) is computable from Class A pricing; everything else
+needs Class B/C evidence. Synthesizing the ~300KB of primary community records
+in `research/evidence/raw/` is the shortest path to D7 or D4.
 
 ## Current Blocker
 
-**Nothing is enforced.** ~25 validation rules in SCHEMA §11 are specified as
-"the build fails" and there is no build. No validator has run. Confidence and
-freshness are specified as computed and have never been computed.
+**Every dollar figure rests on an invented usage profile.** The engine computes
+$57.00/mo for Sonnet 5 from a token count with no measurement behind it. It is
+labelled `assumed` and floors confidence to `low` — but labelling a fabrication
+does not make it a measurement.
 
 ## Current Milestone
 
@@ -35,17 +37,18 @@ returns.
 ## Current Coverage
 
 ```
-Decision Coverage     8 / 50
+Decision Coverage     8 / 50   (engine executable; refuses at 1/13 dims)
 Reference Coverage    26 entities · 3 gold-standard
-Evidence Coverage     1 Class B · 0 Class C admitted · 0 / 13 dimensions scored
+Evidence Coverage     1 Class B · 0 Class C admitted · 1 / 13 dimensions scored
+Executable            validator ✅ · capture ✅ · engine ✅ · delta ✅
 ```
 
 ## Next Three Actions
 
-1. **Synthesize the harvest** — cluster by behaviour, apply the ≥3-independent
+1. **Backfill capture** — run `scripts/atlas/capture.py` over the other 14
+   sources. The tool works; the chore is unfinished.
+2. **Synthesize the harvest** — cluster by behaviour, apply the ≥3-independent
    bar, record `population_gap: reddit_unavailable` on everything.
-2. **Build the validator** — turn SCHEMA §11 from prose into a script that fails.
-   Highest-leverage engineering task in the repo.
 3. **Resolve RQ-17** — is vendor top-model access restricted through third-party
    harnesses? Class A, cheap, and a live delta for the lock-in question.
 
@@ -58,13 +61,17 @@ Evidence Coverage     1 Class B · 0 Class C admitted · 0 / 13 dimensions score
   not whoever is best.
 - **Decaying sources.** No hashes, no archives. Cited pages can change silently
   and we would not know.
-- **Untested machinery.** The decision engine has never produced a single output.
+- **Untested machinery above one dimension.** The engine runs, but belief
+  distributions, dominance pruning, regret, and the budget frontier are
+  unexercised — they need ≥4 scored dimensions to mean anything.
+- **Never edit UTF-8 data files with PowerShell 5.1 text cmdlets.** They decode
+  as ANSI and write BOMs. Corrupted four schemas today. Use Python or the
+  editor tooling.
 
 ## Decision Needed From User
 
 1. **Reddit OAuth credentials** — blocks the highest-volume Class C source.
    Requires registering an application; cannot be resolved from inside the
    pipeline.
-2. **Is `git init` wanted?** Still not a repository. Versioned corrections and
-   public changelogs are load-bearing in the constitution and currently
-   unenforceable without it.
+2. ~~git init~~ — **done.** Four commits; methodology, schema, and engine
+   changes versioned independently.
