@@ -1,0 +1,79 @@
+"$schema": ../schema/source.schema.json
+
+sources:
+
+  - id: src-mistral-models-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://docs.mistral.ai/getting-started/models/models_overview/
+    canonical_url: https://docs.mistral.ai/getting-started/models/models_overview/
+    archive_url: null
+    archive_status: pending
+    title: Mistral AI — Models overview
+    publisher: ent-institution-mistral
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "General purpose models"
+        text: >-
+          Mistral Medium 3.5 — "Our frontier-class multimodal model optimized for
+          agentic and coding use cases." (v26.04, Modified MIT license).
+          Mistral Small 4 — "Hybrid model unifying instruct, reasoning, and
+          coding in a single efficient model." (v26.03, Apache 2.0).
+          Mistral Large 3 — "A state-of-the-art, open-weight, general-purpose
+          multimodal model." (v25.12, Apache 2.0).
+      - id: 1
+        locator: "Specialized models"
+        text: >-
+          Codestral (v25.08) — "Our cutting-edge language model for code
+          completion released end of July 2025" (Premier tier). Codestral Embed
+          (v25.05). Ministral 3 family — 3B, 8B and 14B variants (v25.12,
+          Apache 2.0).
+    methodology: null
+    notes: >
+      First source in the corpus carrying explicit LICENCE terms per model. This
+      converts openness from a category assumption into a sourced fact — and by
+      contrast exposes that Kimi K3 and DeepSeek V4 remain openness: unknown
+      because no equivalent evidence was captured for them.
+
+      Context windows and pricing are NOT on this page.
+
+  - id: src-mistral-pricing-2026-08-04
+    schema_version: 1
+    class: A
+    url: https://mistral.ai/pricing
+    canonical_url: https://mistral.ai/pricing
+    archive_url: null
+    archive_status: pending
+    title: Mistral AI — Pricing
+    publisher: ent-institution-mistral
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: [self_interested]
+    excerpts:
+      - id: 0
+        locator: "FAQ — illustrative example only"
+        text: >-
+          For example, Mistral Large costs $2 /M tokens in and $6 /M tokens out.
+    methodology: null
+    notes: >
+      NEGATIVE CAPTURE. This page does NOT carry a per-model price table at the
+      URL retrieved. The single figure present is an illustrative FAQ example
+      that names "Mistral Large" without a version.
+
+      Recorded deliberately rather than discarded: a captured absence is a fact
+      about the vendor's disclosure, and it prevents a future pass from assuming
+      the page was simply never checked. The figure is NOT attributed to
+      Mistral Large 3 — versionless examples cannot be assigned to a version.
+
+      Detailed pricing is referenced at /pricing/api, uncaptured.

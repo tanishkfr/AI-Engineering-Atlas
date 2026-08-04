@@ -1,4 +1,4 @@
-"""Atlas validator — turns SCHEMA.md §11 from prose into an executable gate.
+﻿"""Atlas validator â€” turns SCHEMA.md Â§11 from prose into an executable gate.
 
 Exits non-zero on any error. This is the "the build fails" that the documents
 have been asserting in the present tense since M2.
@@ -29,6 +29,14 @@ COLLECTIONS = {
     "objectives": "objective.schema.json",
     "profiles": "usage-profile.schema.json",
 }
+
+
+def rel(p: Path) -> str:
+    """Path label that works for corpora outside the repo (tests, contributors)."""
+    try:
+        return str(p.relative_to(ROOT))
+    except ValueError:
+        return str(p)
 
 
 class Report:
@@ -116,7 +124,7 @@ def validate(corpus: Path) -> Report:
 
     # ---- pass 1: structure + index ----
     for path, doc in docs:
-        where = str(path.relative_to(ROOT))
+        where = rel(path)
         if "__yaml_error__" in doc:
             rep.error("STRUCT", where, f"YAML parse failure: {doc['__yaml_error__']}")
             continue
@@ -148,7 +156,7 @@ def validate(corpus: Path) -> Report:
             except Exception as e:  # noqa: BLE001
                 rep.warn("SCHEMA", f"{where}#{rid}", f"validator error: {type(e).__name__}: {e}")
 
-    # ---- pass 2: cross-record rules (SCHEMA §11) ----
+    # ---- pass 2: cross-record rules (SCHEMA Â§11) ----
     for where, claim in all_claims:
         cid = claim.get("id", "<no id>")
         loc = f"{where}#{cid}"
@@ -170,7 +178,7 @@ def validate(corpus: Path) -> Report:
             if src and src not in source_ids:
                 rep.error("EVID-2", loc, f"evidence cites unknown source {src}")
 
-        # R-EVID-3: no Class-E-only published claims (SOURCES §1)
+        # R-EVID-3: no Class-E-only published claims (SOURCES Â§1)
         if status == "published" and evidence:
             classes = {source_class.get(e.get("source"), "?") for e in evidence}
             if classes and classes <= {"E"}:
@@ -211,7 +219,7 @@ def validate(corpus: Path) -> Report:
             else:
                 if el.get("default") is not None:
                     rep.error("SCOPE-2", loc,
-                              "elicit.default must be null — a default silently reintroduces "
+                              "elicit.default must be null â€” a default silently reintroduces "
                               "the unasked assumption this field exists to prevent")
                 if len(el.get("options") or []) < 2:
                     rep.error("SCOPE-3", loc, "elicit requires at least two options")
@@ -221,7 +229,7 @@ def validate(corpus: Path) -> Report:
     # replace it. An assumption without a path to measurement is a permanent
     # guess wearing a temporary label.
     for path, doc in docs:
-        where = str(path.relative_to(ROOT))
+        where = rel(path)
         for key in ("profiles", "entities", "sources"):
             for rec in doc.get(key) or []:
                 if not isinstance(rec, dict):
@@ -231,6 +239,53 @@ def validate(corpus: Path) -> Report:
                               "status: assumed requires an 'rq:' field naming the "
                               "research question that would replace it")
 
+    # ---- pass 2.7: temporal integrity ----
+    # TEMP-3: two open assertions on the same subject+predicate means the graph
+    # cannot answer "what is true now" without guessing. Supersession exists to
+    # prevent exactly this.
+    open_assertions: dict[tuple, list[str]] = {}
+    for where, claim in all_claims:
+        if claim.get("status") != "published":
+            continue
+        t = claim.get("temporal") or {}
+        if t.get("asserted_to") is not None:
+            continue
+        if t.get("valid_to") not in (None, "unknown"):
+            continue
+        key = (claim.get("subject"), claim.get("predicate"))
+        open_assertions.setdefault(key, []).append(claim.get("id", "?"))
+    for (subj, pred), ids in open_assertions.items():
+        if len(ids) > 1:
+            rep.error("TEMP-3", f"{subj}::{pred}",
+                      f"{len(ids)} simultaneously-open assertions ({', '.join(ids)}) â€” "
+                      "'what is true now' is ambiguous; supersede or close one")
+
+    # TEMP-4: a fact cannot be valid before its subject existed.
+    first_seen = {e.get("id"): e.get("first_seen") for _, e in all_entities}
+    for where, claim in all_claims:
+        vf = (claim.get("temporal") or {}).get("valid_from")
+        fs = first_seen.get(claim.get("subject"))
+        if isinstance(vf, str) and isinstance(fs, str) and vf < fs and vf != "unknown":
+            rep.warn("TEMP-4", f"{where}#{claim.get('id')}",
+                     f"valid_from {vf} precedes subject first_seen {fs}")
+
+    # ---- pass 2.8: source integrity (SOURCES Â§9) ----
+    for path, doc in docs:
+        where = rel(path)
+        for s in doc.get("sources") or []:
+            if not isinstance(s, dict):
+                continue
+            sid = s.get("id", "?")
+            loc = f"{where}#{sid}"
+            if s.get("class") in ("B", "D") and not s.get("methodology"):
+                rep.error("SRC-1", loc, "Class B/D source requires a methodology block")
+            if not (s.get("excerpts") or []):
+                rep.error("SRC-2", loc, "every source needs at least one excerpt")
+            if not s.get("retrieved"):
+                rep.error("SRC-3", loc, "every source needs a retrieval date")
+            if s.get("content_hash") is None and s.get("hash_status") != "unavailable_pending_tooling":
+                rep.error("SRC-4", loc, "null content_hash requires hash_status: unavailable_pending_tooling")
+
     # ---- pass 3: graph integrity ----
     for where, ent in all_entities:
         eid = ent.get("id")
@@ -238,19 +293,63 @@ def validate(corpus: Path) -> Report:
         mb = ent.get("made_by")
         if mb and mb not in entity_ids:
             rep.error("GRAPH-1", loc, f"made_by references unknown entity {mb}")
-        for rel in ent.get("relationships") or []:
-            obj = rel.get("object", "")
-            pred = rel.get("predicate")
+        for edge in ent.get("relationships") or []:
+            obj = edge.get("object", "")
+            pred = edge.get("predicate")
             if obj == eid:
                 rep.error("GRAPH-2", loc, f"self-edge on {pred}")
             known = entity_ids | capability_ids | source_ids
             if obj.startswith(("ent-", "cap-")) and obj not in known:
                 rep.warn("GRAPH-3", loc, f"{pred} -> unknown object {obj}")
-            if pred in ("recommended_for", "unsuitable_for") and not rel.get("derived"):
+            if pred in ("recommended_for", "unsuitable_for") and not edge.get("derived"):
                 rep.error("GRAPH-4", loc, f"{pred} must be engine-derived, not authored")
         # active entities must carry claims
         if ent.get("status") == "active" and not (ent.get("claims") or []):
             rep.error("GRAPH-5", loc, "active entity with zero claims")
+
+    # ---- pass 4: acyclicity of lineage edges (GRAPH-6) ----
+    for pred in ("depends_on", "replaces"):
+        adj: dict[str, list[str]] = {}
+        for _, ent in all_entities:
+            eid = ent.get("id")
+            for edge in ent.get("relationships") or []:
+                if edge.get("predicate") == pred:
+                    adj.setdefault(eid, []).append(edge.get("object"))
+        seen, stack = set(), set()
+
+        def walk(n, path):
+            if n in stack:
+                rep.error("GRAPH-6", pred, f"cycle: {' -> '.join(path + [n])}")
+                return
+            if n in seen:
+                return
+            seen.add(n); stack.add(n)
+            for m in adj.get(n, []):
+                walk(m, path + [n])
+            stack.discard(n)
+
+        for n in list(adj):
+            walk(n, [])
+
+    # ---- pass 5: engine purity (RECOMMENDATION Â§16.1) ----
+    # The extensibility guarantee is grep-checkable: the engine must contain no
+    # entity, vendor, or product name. If it does, "absorbs new categories
+    # without redesign" is an aspiration rather than a property.
+    ENGINE_MANIFEST = ROOT / "scripts" / "engine"
+    FORBIDDEN = ("anthropic", "openai", "deepseek", "google", "gemini", "mistral",
+                 "qwen", "moonshot", "kimi", "aider", "cursor", "openrouter", "deepinfra")
+    if ENGINE_MANIFEST.exists():
+        for p in sorted(ENGINE_MANIFEST.rglob("*.py")):
+            low = p.read_text(encoding="utf-8").lower()
+            hits = sorted({v for v in FORBIDDEN if v in low})
+            if hits:
+                rep.error("ENGINE-1", f"scripts/engine/{p.name}",
+                          f"engine names specific vendors: {', '.join(hits)} - breaks extensibility")
+    else:
+        rep.warn("ENGINE-1", "scripts/engine/",
+                 "no engine directory - the extensibility invariant is UNTESTED where it matters. "
+                 "Analysis scripts in scripts/atlas hardcode vendor names (known debt: they should "
+                 "load model data from /data instead)")
 
     rep.stats = {
         "documents": len(docs),

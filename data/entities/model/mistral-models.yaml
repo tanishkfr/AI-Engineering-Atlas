@@ -1,0 +1,206 @@
+"$schema": ../../schema/entity.schema.json
+# Third vendor in the corpus. Added to reduce the single-vendor skew the Trust
+# Audit identified: evidence density was correlating with documentation quality
+# rather than with importance.
+#
+# Notable: this is the first vendor whose LICENCES are captured verbatim, which
+# lets openness be a sourced fact rather than a category assumption. Two prior
+# entities (Kimi K3, DeepSeek V4) carry openness: unknown precisely because we
+# had no licence evidence for them.
+
+entities:
+
+  - id: ent-model-mistral-large-3
+    schema_version: 1
+    name: Mistral Large 3
+    aliases: [mistral-large-3]
+    slug_frozen_at: 2026-08-04
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      openness: open_weight
+      licence: apache-2.0
+      self_hostable: true
+      tokenizer_generation: null
+      tokenizer_verified: false
+      tokenizer_repo: null
+    made_by: ent-institution-mistral
+    status: active
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://docs.mistral.ai/getting-started/models/models_overview/
+    summary: >
+      Open-weight general-purpose multimodal model under Apache 2.0, version
+      25.12.
+    decision_questions:
+      - q: When is an Apache-licensed open-weight model the right choice?
+        status: open
+
+    claims:
+      - id: clm-model-mistral-large-3-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-mistral-large-3
+        predicate: licence.terms
+        statement: >
+          Released under Apache 2.0 and described as open-weight, version 25.12.
+        value: {licence: "apache-2.0", version: "25.12", open_weight: true}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mistral-models-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 180
+        status: draft
+
+      - id: clm-model-mistral-large-3-090
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-mistral-large-3
+        predicate: pricing.per_mtok
+        statement: >
+          Pricing NOT established. The pricing page states only an illustrative
+          example — "$2 /M tokens in and $6 /M tokens out" for "Mistral Large" —
+          inside an FAQ, without naming a version. An illustrative figure in an
+          FAQ is not a price list, and applying it to Large 3 would be inference.
+        value: unknown
+        temporal: {valid_from: 2026-08-04, valid_to: null, valid_precision: day, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mistral-pricing-2026-08-04, excerpt_ref: 0, supports: false}
+        cadence_days: 30
+        status: published
+
+    relationships:
+      - predicate: made_by
+        object: ent-institution-mistral
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-mistral-large-3-001]
+      - predicate: provides
+        object: cap-self-hostable
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-mistral-large-3-001]
+
+    review: {cadence_days: 90, last_reviewed: 2026-08-04, next_due: 2026-11-02}
+    open_questions:
+      - "Pricing not captured — the FAQ example names no version and cannot be attributed."
+      - "Context window not stated on the overview page."
+      - "Tokenizer not verified for this version. RQ-01 H3 forbids assuming it carries from Mistral-7B."
+
+  - id: ent-model-mistral-medium-3-5
+    schema_version: 1
+    name: Mistral Medium 3.5
+    aliases: [mistral-medium-3.5]
+    slug_frozen_at: 2026-08-04
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      openness: source_available
+      licence: modified-mit
+      self_hostable: unknown
+      tokenizer_verified: false
+    made_by: ent-institution-mistral
+    status: active
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://docs.mistral.ai/getting-started/models/models_overview/
+    summary: >
+      Frontier-class multimodal model the vendor positions for agentic and coding
+      use, version 26.04, under a Modified MIT licence.
+    claims:
+      - id: clm-model-mistral-medium-3-5-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-mistral-medium-3-5
+        predicate: capability.positioning
+        statement: >
+          Described by the vendor as "Our frontier-class multimodal model
+          optimized for agentic and coding use cases", version 26.04, under a
+          Modified MIT licence.
+        value: {version: "26.04", licence: "modified-mit", positioned_for: [agentic, coding]}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mistral-models-2026-08-04, excerpt_ref: 0, supports: true}
+        cadence_days: 180
+        status: draft
+        conflicts:
+          - positions:
+              - statement: "Vendor positions this model as optimised for agentic and coding use"
+                sources: [src-mistral-models-2026-08-04]
+              - statement: "No independent evaluation supports or refutes that positioning"
+                sources: [src-mistral-models-2026-08-04]
+            likely_cause: incentive
+            note: >
+              Vendor positioning is a Class A statement about intent, not
+              evidence of performance. Recorded as what the vendor CLAIMS, which
+              is an S-type fact, never as a capability finding. SOURCES §3 makes
+              Class A inadmissible for comparative judgement.
+
+    relationships:
+      - predicate: made_by
+        object: ent-institution-mistral
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-mistral-medium-3-5-001]
+      - predicate: alternative_to
+        object: ent-model-mistral-large-3
+        temporal_kind: step
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-mistral-medium-3-5-001]
+
+    review: {cadence_days: 90, last_reviewed: 2026-08-04, next_due: 2026-11-02}
+    open_questions:
+      - "'Modified MIT' is not a standard identifier. The actual terms are uncaptured, so self-hostability is unknown rather than assumed."
+      - "No pricing, no context window, no independent evaluation."
+
+  - id: ent-model-codestral
+    schema_version: 1
+    name: Codestral
+    aliases: [codestral]
+    slug_frozen_at: 2026-08-04
+    layers: [L1]
+    roles: [model_version]
+    slots: [model]
+    facets:
+      openness: unknown
+      licence: unknown
+      tier: premier
+      tokenizer_verified: false
+    made_by: ent-institution-mistral
+    status: active
+    depth_priority: P2
+    first_seen: 2026-08-04
+    canonical_url: https://docs.mistral.ai/getting-started/models/models_overview/
+    summary: >
+      Code-completion specialist model, version 25.08, on the vendor's Premier
+      tier.
+    claims:
+      - id: clm-model-codestral-001
+        schema_version: 2
+        type: S
+        temporal_kind: step
+        subject: ent-model-codestral
+        predicate: capability.specialisation
+        statement: >
+          A code-completion specialist, version 25.08, offered on the Premier
+          tier. Distinct from general models in being scoped to completion rather
+          than to agentic work.
+        value: {version: "25.08", tier: "premier", specialisation: "code completion"}
+        temporal: {valid_from: unknown, valid_to: null, valid_precision: unknown, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence:
+          - {source: src-mistral-models-2026-08-04, excerpt_ref: 1, supports: true}
+        cadence_days: 180
+        status: draft
+    relationships:
+      - predicate: made_by
+        object: ent-institution-mistral
+        temporal_kind: static
+        temporal: {valid_from: unknown, valid_to: null, asserted_from: 2026-08-04, asserted_to: null, observed_at: 2026-08-04}
+        evidence: [clm-model-codestral-001]
+    review: {cadence_days: 120, last_reviewed: 2026-08-04, next_due: 2026-12-02}
+    open_questions:
+      - "Code COMPLETION is a different construct from agentic coding. It should not be compared against agentic models on the same axis — a taxonomy question worth resolving before either is scored."

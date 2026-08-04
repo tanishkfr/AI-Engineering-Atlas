@@ -169,6 +169,23 @@ entities:
     revisions:
       - {date: 2026-08-04, change: "Created from benchmark capture.", by: milestone-5-1}
 
+  - id: ent-institution-mistral
+    schema_version: 1
+    name: Mistral AI
+    layers: [M2]
+    roles: [vendor, research_lab]
+    status: stub
+    depth_priority: P1
+    first_seen: 2026-08-04
+    canonical_url: https://mistral.ai
+    summary: >
+      Developer of the Mistral model family. First vendor in the corpus to
+      publish per-model licence terms, which is a D11 positive.
+    open_questions:
+      - "'Modified MIT' appears as a licence label without published terms. Whether it meets an open-source definition is unestablished."
+    revisions:
+      - {date: 2026-08-04, change: "Created to broaden vendor coverage beyond a single dominant source.", by: corpus-breadth}
+
   - id: ent-institution-openrouter
     schema_version: 1
     name: OpenRouter
