@@ -1,0 +1,110 @@
+﻿"$schema": ../schema/claim.schema.json
+# The two measured inputs that drive every cost figure â€” now carrying SCOPE.
+#
+# Both were previously stored inside usage profiles, where they read as
+# properties of the Atlas rather than facts about a particular person. That
+# framing is what let a confident cost figure reach a reader it did not apply to.
+# Promoted to first-class claims so they can be scoped, elicited, and refused.
+
+claims:
+
+  - id: clm-usage-cache-hit-001
+    schema_version: 2
+    type: M
+    temporal_kind: measurement
+    subject: ent-harness-claude-code
+    predicate: usage.cache_hit_rate
+    statement: >
+      Cache hit rate of 0.9432, measured across 18,604 assistant turns over 56
+      days of real agentic work.
+    value: {rate: 0.9432, turns: 18604, window_days: 56}
+
+    scope: harness
+    elicit:
+      question: "Which coding tool do you actually use day to day?"
+      default: null
+      options:
+        - {label: "The harness this was measured on", value: 0.9432,
+           note: "Applies directly. Still n=1 and unreplicated."}
+        - {label: "A different tool that caches aggressively", value: null,
+           note: "Unmeasured. The engine refuses rather than substituting a number."}
+        - {label: "A tool with little or no prompt caching", value: 0.15,
+           note: "Illustrative floor, NOT measured. Cost rises roughly fivefold."}
+        - {label: "I don't know", value: null,
+           note: "Correct answer for most people. The engine reports a range."}
+
+    conditions:
+      harness: "claude-code"
+      harness_version: "unrecorded"
+      date: 2026-08-04
+      operator: single
+      runs: 1
+      corpus_n: 2132
+    qualifiers: {via: "claude-code"}
+    temporal:
+      valid_from: 2026-06-09
+      valid_to: null
+      valid_precision: day
+      asserted_from: 2026-08-04
+      asserted_to: null
+      observed_at: 2026-08-04
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 3, supports: true}
+    cadence_days: 90
+    status: published
+
+  - id: clm-usage-io-ratio-001
+    schema_version: 2
+    type: M
+    temporal_kind: measurement
+    subject: ent-harness-claude-code
+    predicate: usage.io_ratio
+    statement: >
+      Input-to-output token ratio of 197.7 : 1, measured over the same 56-day
+      window. Determined by the KIND OF WORK done, not by the tooling.
+    value: {ratio: 197.69}
+
+    scope: workload
+    elicit:
+      question: "Roughly, do you read more than you write â€” or the reverse?"
+      default: null
+      options:
+        - {label: "Mostly reading and reasoning over existing code",
+           value: 197.7, note: "Large context in, small diffs out. What we measured."}
+        - {label: "A mix of reading and generating",
+           value: 100, note: "Sonnet 5 still fits $20."}
+        - {label: "Mostly generating new code",
+           value: 50, note: "Sonnet 5 at the edge of $20."}
+        - {label: "Heavy generation â€” new files, scaffolding, UI",
+           value: 20, note: "Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}
+
+    conditions:
+      harness: "claude-code"
+      date: 2026-08-04
+      operator: single
+      runs: 1
+      corpus_n: 2132
+    qualifiers: {via: "claude-code"}
+    temporal:
+      valid_from: 2026-06-09
+      valid_to: null
+      valid_precision: day
+      asserted_from: 2026-08-04
+      asserted_to: null
+      observed_at: 2026-08-04
+    evidence:
+      - {source: src-anthropic-pricing-2026-08-03, excerpt_ref: 0, supports: false}
+    conflicts:
+      - positions:
+          - statement: "197.7:1 measured on document-heavy research work"
+            sources: [src-anthropic-pricing-2026-08-03]
+          - statement: "A code-generation workload plausibly sits near 20:1 â€” an order of magnitude apart"
+            sources: [src-anthropic-pricing-2026-08-03]
+        likely_cause: sample_bias
+        note: >
+          Not a conflict between sources. A conflict between the measured
+          population and the reader. The Atlas cannot know which applies without
+          asking, which is what the elicit block is for. Crossover for Sonnet 5
+          at a $20 budget is 43:1 â€” inside the disputed range.
+    cadence_days: 90
+    status: published

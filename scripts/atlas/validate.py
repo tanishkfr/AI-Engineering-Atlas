@@ -22,6 +22,7 @@ SCHEMA_DIR = ROOT / "data" / "schema"
 
 # Which top-level list key holds which record type.
 COLLECTIONS = {
+    "claims": "claim.schema.json",
     "entities": "entity.schema.json",
     "sources": "source.schema.json",
     "capabilities": "capability.schema.json",
@@ -197,6 +198,23 @@ def validate(corpus: Path) -> Report:
         # R-CLAIM-1: F-type claims never publish
         if ctype == "F" and status == "published":
             rep.error("CLAIM-1", loc, "forecast (F) claims may not be published")
+
+        # R-SCOPE-1: a non-transferable claim must carry the question that makes
+        # it transferable. Without it the engine has no honest way to apply the
+        # claim to a reader it was not measured on.
+        scope = claim.get("scope", "vendor")
+        if scope in ("harness", "operator", "workload"):
+            el = claim.get("elicit")
+            if not el:
+                rep.error("SCOPE-1", loc,
+                          f"scope '{scope}' is not transferable and requires an 'elicit' block")
+            else:
+                if el.get("default") is not None:
+                    rep.error("SCOPE-2", loc,
+                              "elicit.default must be null — a default silently reintroduces "
+                              "the unasked assumption this field exists to prevent")
+                if len(el.get("options") or []) < 2:
+                    rep.error("SCOPE-3", loc, "elicit requires at least two options")
 
     # ---- pass 2.5: assumption register (ASSUMPTIONS.md) ----
     # ASSUM-1: any record carrying status: assumed must name the RQ that would

@@ -47,6 +47,42 @@
       }
     },
 
+    "scope": {
+      "enum": ["universal", "vendor", "harness", "operator", "workload"],
+      "default": "vendor",
+      "description": "WHO this claim is true for. Added 2026-08-04 after the Atlas computed a confident cost figure from an operator-specific input without telling the reader. 'Measured' was never sufficient — measured FOR WHOM is the question that determines whether a fact transfers. universal: holds regardless (arithmetic, definitions). vendor: holds for this product (most Class A spec facts). harness: determined by tooling, not by the person. operator: varies by individual. workload: varies by the kind of work being done."
+    },
+
+    "elicit": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "description": "REQUIRED when scope is harness, operator, or workload AND the claim feeds a computation. The scope field generates this: if a fact does not transfer, the engine must ask rather than assume. This is the claim carrying the question needed to make it applicable to a given reader.",
+      "required": ["question", "options"],
+      "properties": {
+        "question": {
+          "type": "string",
+          "description": "One question, in the reader's language, not the system's. Asked only when the answer is actually sensitive to it (DECISION.md §8 — value of information, pointed at the reader)."
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": { "type": "string" },
+              "value": {},
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "default": {
+          "const": null,
+          "description": "LOCKED to null. A default here would silently reintroduce exactly the failure this field exists to prevent — an unasked assumption presented as a computed answer."
+        }
+      }
+    },
+
     "supersedes": { "$ref": "defs.schema.json#/$defs/claimId" },
     "superseded_by": { "$ref": "defs.schema.json#/$defs/claimId" },
     "supersession_kind": { "$ref": "defs.schema.json#/$defs/supersessionKind" },
@@ -74,6 +110,16 @@
   },
 
   "allOf": [
+    {
+      "if": {
+        "properties": { "scope": { "enum": ["harness", "operator", "workload"] } },
+        "required": ["scope"]
+      },
+      "then": {
+        "required": ["elicit"],
+        "description": "SCOPE-1: a non-transferable claim must carry the question that makes it transferable, or the engine has no honest way to apply it to a reader."
+      }
+    },
     {
       "if": { "properties": { "temporal_kind": { "enum": ["measurement", "series"] } }, "required": ["temporal_kind"] },
       "then": {
