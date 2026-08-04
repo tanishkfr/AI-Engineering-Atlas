@@ -62,7 +62,7 @@ entities:
       - id: clm-benchmark-swe-bench-003
         schema_version: 2
         type: S
-        temporal_kind: static
+        temporal_kind: step
         subject: ent-benchmark-swe-bench
         predicate: benchmark.construct_validity
         statement: >
@@ -91,7 +91,7 @@ entities:
       - id: clm-benchmark-swe-bench-004
         schema_version: 2
         type: S
-        temporal_kind: static
+        temporal_kind: step
         subject: ent-benchmark-swe-bench
         predicate: benchmark.selection_bias
         statement: >

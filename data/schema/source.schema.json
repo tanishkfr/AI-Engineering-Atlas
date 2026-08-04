@@ -127,7 +127,7 @@
         "run_by": { "type": "string" },
         "funded_by": { "type": ["string", "null"] },
         "contamination_risk": { "enum": ["low", "medium", "high", "unknown"] },
-        "sample_size": { "type": "integer" }
+        "sample_size": { "type": ["integer", "null"] }
       }
     },
 
@@ -195,3 +195,4 @@
     }
   ]
 }
+

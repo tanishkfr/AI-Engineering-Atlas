@@ -8,6 +8,7 @@
   "required": ["id", "name", "context", "weights", "weights_rationale", "weights_status", "weights_dated"],
 
   "properties": {
+    "$schema": { "type": "string" },
     "id": { "$ref": "defs.schema.json#/$defs/personaId" },
     "schema_version": { "type": "integer", "const": 1 },
     "name": { "type": "string" },
@@ -114,3 +115,4 @@
     }
   }
 }
+

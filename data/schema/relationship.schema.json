@@ -18,6 +18,7 @@
         { "$ref": "defs.schema.json#/$defs/capabilityId" },
         { "$ref": "defs.schema.json#/$defs/personaId" },
         { "$ref": "defs.schema.json#/$defs/benchmarkId" },
+        { "$ref": "defs.schema.json#/$defs/objectiveId" },
         { "$ref": "defs.schema.json#/$defs/sourceId" }
       ]
     },
@@ -111,3 +112,4 @@
     }
   ]
 }
+

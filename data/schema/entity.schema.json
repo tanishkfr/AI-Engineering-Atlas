@@ -8,6 +8,7 @@
   "required": ["id", "name", "layers", "roles", "status", "first_seen", "summary"],
 
   "properties": {
+    "$schema": { "type": "string" },
     "id": { "$ref": "defs.schema.json#/$defs/entityId" },
     "schema_version": { "type": "integer", "const": 1 },
 
@@ -163,3 +164,4 @@
     }
   ]
 }
+
