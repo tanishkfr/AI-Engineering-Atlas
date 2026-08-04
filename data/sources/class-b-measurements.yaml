@@ -1,0 +1,68 @@
+"$schema": ../schema/source.schema.json
+
+sources:
+
+  - id: src-artificialanalysis-sonnet5-2026-08-04
+    schema_version: 1
+    class: B
+    url: https://artificialanalysis.ai/models/claude-sonnet-5
+    canonical_url: https://artificialanalysis.ai/models/claude-sonnet-5
+    archive_url: null
+    archive_status: pending
+    title: Artificial Analysis — Claude Sonnet 5 performance
+    publisher: ent-institution-artificialanalysis
+    published: null
+    retrieved: 2026-08-04
+    content_hash: null
+    hash_status: unavailable_pending_tooling
+    reverification: calendar_only
+    excerpt_fidelity: tool_extracted
+    flags: []
+    excerpts:
+      - id: 0
+        locator: "Output speed"
+        text: >-
+          Generates output at 80.9 tokens per second (based on Anthropic's API),
+          which is above average compared to other reasoning models in a similar
+          price tier (median: 74.0 t/s).
+      - id: 1
+        locator: "Time to first token"
+        text: >-
+          200.59s for time to first token (TTFT) via Anthropic's API, described
+          as at the higher end compared to other reasoning models in a similar
+          price tier (median: 2.82s).
+    methodology:
+      published: true
+      url: https://artificialanalysis.ai/methodology/performance-benchmarking
+      assessed_at_url: https://artificialanalysis.ai/methodology/performance-benchmarking
+      depth_searched: 1
+      searched: true
+      found: true
+      grade: B-full
+      completeness:
+        methodology_disclosure: true
+        measurement_procedure: true
+        statistical_treatment: true
+        sampling_strategy: true
+        update_cadence: true
+        limitations: true
+        reproducibility: false
+      run_by: "Artificial Analysis"
+      funded_by: null
+      contamination_risk: low
+    notes: >
+      MEASUREMENT ANOMALY, recorded rather than published. The reported TTFT of
+      200.59s is roughly 71x the stated tier median of 2.82s. A genuine 200-second
+      wait before the first token would make interactive use impossible, which
+      contradicts every other property recorded for this model.
+
+      The likely cause is definitional, not an error: the publisher's own
+      methodology defines TTFT as "the time in seconds between sending a request
+      to the service and receiving the first token of the response." For a model
+      that reasons before emitting a visible response, that interval includes the
+      entire reasoning phase. The metric is measuring something real; it is not
+      measuring what the name implies, and it is not comparable to the same metric
+      on a non-reasoning model.
+
+      Consequence: output speed is admissible. TTFT is recorded as contested and
+      does NOT enter the D8 score. See clm-model-claude-sonnet-5-d8-ttft.
