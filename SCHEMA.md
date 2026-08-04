@@ -376,6 +376,37 @@ actually happened. The Atlas can audit itself.
 
 ## 11. Validation
 
+> **Implementation status, stated plainly.** This section previously described
+> every rule in the present tense while roughly half of them did not run — the
+> sharpest finding in the Trust Audit. Each rule is now marked.
+>
+> **✅ = implemented and verified to fire** against a deliberately broken fixture
+> (`scripts/atlas/test_validate.py`, 14/14 passing).
+> **⚠ = specified, not implemented.** These do not run. Do not rely on them.
+
+**Implemented and tested (✅)** — schema conformance · unique IDs · dangling
+references · published claim has evidence · no Class-E-only claims · comparative
+claims need ≥2 sources · no authored confidence or freshness · forecasts never
+publish · `scope` requires `elicit` · `elicit.default` locked null · bitemporal
+completeness · no two simultaneously-open assertions · source needs excerpt,
+retrieval date, and honest hash status · Class B/D needs methodology ·
+`made_by` resolves · active entity has claims · lineage acyclicity ·
+engine purity grep.
+
+**Specified, not implemented (⚠)** — no orphan numbers in MDX prose ·
+no claim record mutated after assertion (needs git history) · comparison tables
+computed at a single reference date · full domain/range conformance per
+predicate (needs `predicates.yaml`) · `works_with` co-use evidence on inline
+edges · derived-edge provenance · `model_endpoint` cardinality · every
+recommendation reversible to sources · no ratio from an ordinal score ·
+no cost figure without a usage profile · expired claims never render as current.
+
+**Engine purity is a partial pass.** `scripts/engine/` is clean and greppable.
+The analysis scripts in `scripts/atlas/` still hardcode model names and are
+excluded — a recorded debt, not a passed test.
+
+---
+
 CI-enforced. All are errors, not warnings.
 
 **Structural** — schema conformance · unique IDs · no dangling references ·

@@ -1,0 +1,328 @@
+﻿<title>Aletheia â€” what should I actually use?</title>
+<style>
+  :root{
+    --bg:#F6F6F4; --card:#FFFFFF; --sunk:#EFEFEC;
+    --ink:#16181A; --body:#4B5054; --soft:#767C80; --faint:#A9AEB1;
+    --line:#E2E3DF; --line2:#CFD1CC;
+    --flag:#B04012; --flag-bg:#FBEEE7; --flag-line:#E8C4B0;
+    --good:#2C5F4E; --good-bg:#EAF1EE;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,"Cascadia Mono",Menlo,Consolas,monospace;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --e:cubic-bezier(.2,.9,.3,1);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme]){
+    --bg:#131415; --card:#1B1D1E; --sunk:#191A1B; --ink:#EDEEED; --body:#B4B9BB; --soft:#8A9093;
+    --faint:#63686B; --line:#2A2C2E; --line2:#3A3D3F; --flag:#E07845; --flag-bg:#2C1A11;
+    --flag-line:#4A2C1B; --good:#7FBFA6; --good-bg:#16241F}}
+  :root[data-theme=dark]{--bg:#131415;--card:#1B1D1E;--sunk:#191A1B;--ink:#EDEEED;--body:#B4B9BB;
+    --soft:#8A9093;--faint:#63686B;--line:#2A2C2E;--line2:#3A3D3F;--flag:#E07845;--flag-bg:#2C1A11;
+    --flag-line:#4A2C1B;--good:#7FBFA6;--good-bg:#16241F}
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;text-align:left}
+  :focus-visible{outline:2px solid var(--flag);outline-offset:3px;border-radius:3px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 24px}
+  .n{font-variant-numeric:tabular-nums}
+
+  header{border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:10}
+  header .wrap{display:flex;align-items:center;gap:14px;height:56px}
+  .logo{display:flex;align-items:baseline;gap:1px;font-family:var(--mono);font-size:13px;
+    letter-spacing:.22em;font-weight:600;user-select:none}
+  .logo .o{color:transparent;-webkit-text-stroke:1px var(--flag)}
+  .tag{font-size:13px;color:var(--soft)}
+  .grow{flex:1}
+  .ghost{padding:6px 12px;border:1px solid var(--line2);border-radius:6px;font-size:13.5px;
+    color:var(--body);transition:border-color .15s,color .15s,background .15s}
+  .ghost:hover{border-color:var(--ink);color:var(--ink)}
+
+  main{padding:44px 0 90px}
+  h1{font-size:31px;line-height:1.25;letter-spacing:-.022em;font-weight:600;margin:0 0 12px;text-wrap:balance}
+  .sub{font-size:17px;color:var(--body);margin:0 0 34px;max-width:52ch}
+
+  /* â”€ STEPS â”€ */
+  .step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;
+    margin-bottom:14px;transition:opacity .3s,border-color .25s}
+  .step.done{opacity:.62;padding:14px 24px}
+  .step.done .qh{margin:0}
+  .step.done .opts,.step.done .helper{display:none}
+  .step.locked{opacity:.35;pointer-events:none}
+  .stepn{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--faint);margin-bottom:9px}
+  .qh{font-size:19px;font-weight:550;letter-spacing:-.012em;margin:0 0 6px;display:flex;
+    align-items:center;gap:10px;flex-wrap:wrap}
+  .helper{font-size:14px;color:var(--soft);margin:0 0 16px;max-width:48ch}
+  .chosen{font-size:15px;color:var(--body);font-weight:400}
+  .edit{font-size:13px;color:var(--flag);text-decoration:underline;text-underline-offset:3px}
+  .opts{display:grid;gap:8px}
+  .opt{border:1px solid var(--line2);border-radius:8px;padding:13px 15px;display:flex;
+    align-items:center;gap:13px;transition:border-color .15s,background .15s,transform .12s}
+  .opt:hover{border-color:var(--ink);background:var(--sunk)}
+  .opt:active{transform:scale(.995)}
+  .opt[aria-pressed=true]{border-color:var(--ink);background:var(--sunk)}
+  .opt .ttl{font-size:15px;flex:1}
+  .opt .eg{font-size:13px;color:var(--soft);display:block;margin-top:2px}
+  .money{display:flex;gap:8px;flex-wrap:wrap}
+  .money .opt{padding:11px 18px;font-family:var(--mono);font-size:15px}
+
+  /* â”€ ANSWER â”€ */
+  .ans{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    margin-top:26px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--e),transform .4s var(--e)}
+  .ans.in{opacity:1;transform:none}
+  .ansh{padding:24px 26px 20px}
+  .rec{font-size:14px;color:var(--soft);margin:0 0 6px}
+  .pick{font-size:27px;font-weight:600;letter-spacing:-.02em;margin:0 0 4px}
+  .price{font-family:var(--mono);font-size:15px;color:var(--body)}
+  .price b{color:var(--ink);font-weight:500}
+  .why{font-family:var(--serif);font-size:16.5px;line-height:1.6;color:var(--body);margin:16px 0 0;max-width:54ch}
+  .why strong{color:var(--ink);font-weight:400}
+
+  .picks{border-top:1px solid var(--line);padding:6px 26px 18px}
+  .prow{display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .prow:last-child{border:none}
+  .prow .nm{flex:1;font-size:15px}
+  .prow .amt{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums}
+  .prow .st{font-size:12.5px;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .st.fit{background:var(--good-bg);color:var(--good)}
+  .st.over{background:var(--flag-bg);color:var(--flag)}
+  .prow.dim{opacity:.5}
+
+  .care{border-top:1px solid var(--line);background:var(--flag-bg);padding:18px 26px;
+    display:flex;gap:14px;align-items:flex-start}
+  .care .ic{width:18px;height:18px;flex-shrink:0;margin-top:2px;color:var(--flag)}
+  .care h3{margin:0 0 5px;font-size:14.5px;font-weight:600;color:var(--flag)}
+  .care p{margin:0;font-size:14px;color:var(--body);line-height:1.55}
+  .care p+p{margin-top:8px}
+
+  /* â”€ DISCLOSURE â”€ */
+  .more{margin-top:16px}
+  .discl{border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:10px;overflow:hidden}
+  .dh{width:100%;padding:15px 22px;display:flex;align-items:center;gap:12px;transition:background .15s}
+  .dh:hover{background:var(--sunk)}
+  .dh .t{flex:1;font-size:15px;font-weight:500}
+  .dh .s{font-size:13.5px;color:var(--soft)}
+  .dh .cv{width:14px;height:14px;color:var(--faint);transition:transform .25s var(--e);flex-shrink:0}
+  .discl[open] .cv{transform:rotate(90deg)}
+  .dc{padding:2px 22px 22px;font-size:14.5px;color:var(--body);line-height:1.65}
+  .dc p{margin:0 0 12px;max-width:56ch}.dc p:last-child{margin:0}
+  .dc strong{color:var(--ink);font-weight:500}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0 6px}
+  th{text-align:left;font-size:12px;font-weight:500;color:var(--faint);padding:0 12px 8px 0;
+    border-bottom:1px solid var(--line)}
+  td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line)}
+  tr:last-child td{border:none}
+  td.r{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;padding-right:0}
+
+  .ev{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+  .ev:last-child{border:none}
+  .ev .dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;margin-top:5px}
+  .dot.meas{background:var(--ink)}
+  .dot.doc{background:var(--soft)}
+  .dot.unk{box-shadow:inset 0 0 0 1.5px var(--flag)}
+  .ev .body{flex:1;min-width:0}
+  .ev .t{font-size:14.5px;color:var(--ink);margin-bottom:2px}
+  .ev .m{font-size:13px;color:var(--soft)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--soft);margin-bottom:14px}
+  .legend span{display:flex;align-items:center;gap:7px}
+
+  footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:13.5px;color:var(--soft)}
+  footer .wrap{display:flex;gap:8px;flex-direction:column}
+  footer a{color:var(--body)}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  @media(max-width:560px){h1{font-size:26px}.pick{font-size:23px}.wrap{padding:0 18px}}
+</style>
+
+<header><div class="wrap">
+  <div class="logo"><span class="o">A</span>LETHEIA</div>
+  <span class="tag">Evidence-based advice on AI coding tools</span>
+  <div class="grow"></div>
+  <button class="ghost" id="theme">Theme</button>
+</div></header>
+
+<main><div class="wrap">
+  <h1>What should you actually use?</h1>
+  <p class="sub">Answer two questions. You'll get a real recommendation, the reasoning behind it,
+    and an honest account of what we don't know.</p>
+
+  <section class="step" id="s1">
+    <div class="stepn">Question 1 of 2</div>
+    <h2 class="qh">What's your monthly budget? <span class="chosen" id="c1" hidden></span>
+      <button class="edit" id="e1" hidden>change</button></h2>
+    <p class="helper">Roughly what you're willing to spend on AI coding tools each month.</p>
+    <div class="opts money" id="o1">
+      <button class="opt" data-v="10">$10</button>
+      <button class="opt" data-v="20">$20</button>
+      <button class="opt" data-v="50">$50</button>
+      <button class="opt" data-v="100">$100</button>
+    </div>
+  </section>
+
+  <section class="step locked" id="s2">
+    <div class="stepn">Question 2 of 2</div>
+    <h2 class="qh">What kind of work do you do? <span class="chosen" id="c2" hidden></span>
+      <button class="edit" id="e2" hidden>change</button></h2>
+    <p class="helper">This matters more than you'd think â€” it changes the cost by up to three times.</p>
+    <div class="opts" id="o2">
+      <button class="opt" data-v="197.7"><span class="ttl">Mostly understanding existing code
+        <span class="eg">Debugging, refactoring, reading a large codebase</span></span></button>
+      <button class="opt" data-v="100"><span class="ttl">A bit of both
+        <span class="eg">Some reading, some writing new code</span></span></button>
+      <button class="opt" data-v="50"><span class="ttl">Mostly writing new code
+        <span class="eg">Building features, adding files</span></span></button>
+      <button class="opt" data-v="20"><span class="ttl">Heavy generation
+        <span class="eg">Scaffolding whole apps, generating lots of UI</span></span></button>
+    </div>
+  </section>
+
+  <div id="out"></div>
+</div></main>
+
+<footer><div class="wrap">
+  <span>Aletheia is a research project. Every figure traces to a dated, archived first-party source.</span>
+  <span>Prices verified 4 August 2026. Quality is not yet rated for any tool â€” we say so rather than guess.</span>
+</div></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const S={budget:null,io:null};
+const PRES=25e6;const HIT=HIT_;
+const cost=(i,c,o,io)=>(PRES*(1-HIT)*i+PRES*HIT*c+(PRES/io)*o)/1e6;
+const CORPUS={"generated":"2026-08-04","models":[{"name":"DeepSeek V4 Pro","openness":"open_weight","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":0.435,"cache":0.003625,"out":0.87,"cache_inferred":false,"claims":["clm-model-deepseek-v4-pro-001"]}]},{"name":"Claude Haiku 4.5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":1.0,"cache":0.1,"out":5.0,"cache_inferred":true,"claims":["clm-claude-haiku-4-5-001"]}]},{"name":"Claude Sonnet 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"2026-08-31","in":2.0,"cache":0.2,"out":10.0,"cache_inferred":false,"claims":["clm-claude-sonnet-5-001","clm-claude-sonnet-5-003","clm-claude-sonnet-5-005"]},{"from":"2026-09-01","to":"9999-12-31","in":3.0,"cache":0.3,"out":15.0,"cache_inferred":true,"claims":["clm-claude-sonnet-5-002","clm-claude-sonnet-5-004"]}]},{"name":"Claude Opus 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":5.0,"cache":0.5,"out":25.0,"cache_inferred":true,"claims":["clm-claude-opus-5-001"]}]},{"name":"Claude Fable 5","openness":"closed","tokenizer_verified":true,"intervals":[{"from":"2026-06-09","to":"9999-12-31","in":10.0,"cache":1.0,"out":50.0,"cache_inferred":true,"claims":["clm-claude-fable-5-001","clm-claude-fable-5-002"]}]}],"elicit":{"workload":{"question":"Roughly, do you read more than you write \u00e2\u20ac\u201d or the reverse?","default":null,"options":[{"label":"Mostly reading and reasoning over existing code","value":197.7,"note":"Large context in, small diffs out. What we measured."},{"label":"A mix of reading and generating","value":100,"note":"Sonnet 5 still fits $20."},{"label":"Mostly generating new code","value":50,"note":"Sonnet 5 at the edge of $20."},{"label":"Heavy generation \u00e2\u20ac\u201d new files, scaffolding, UI","value":20,"note":"Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}]},"harness":{"question":"Which coding tool do you actually use day to day?","default":null,"options":[{"label":"The harness this was measured on","value":0.9432,"note":"Applies directly. Still n=1 and unreplicated."},{"label":"A different tool that caches aggressively","value":null,"note":"Unmeasured. The engine refuses rather than substituting a number."},{"label":"A tool with little or no prompt caching","value":0.15,"note":"Illustrative floor, NOT measured. Cost rises roughly fivefold."},{"label":"I don't know","value":null,"note":"Correct answer for most people. The engine reports a range."}]}},"cache_hit":0.9432,"unknowns":[{"id":"clm-benchmark-swe-bench-090","subject":"ent-benchmark-swe-bench","statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.\n"},{"id":"clm-protocol-mcp-090","subject":"ent-protocol-mcp","statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.\n"},{"id":"clm-model-kimi-k3-090","subject":"ent-model-kimi-k3","statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.\n"},{"id":"clm-claude-sonnet-5-090","subject":"ent-model-claude-sonnet-5","statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.\n"},{"id":"clm-model-mistral-large-3-090","subject":"ent-model-mistral-large-3","statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.\n"}],"counts":{"entities":30,"claims":70,"sources":17,"priced":5,"unknowns":5}}null;
+const HIT_=CORPUS.cache_hit??.9432;
+const active=(iv,d)=>iv.find(x=>d>=x.from&&d<=x.to)||iv[0];
+const TODAY=new Date().toISOString().slice(0,10);
+const MODELS=CORPUS.models.map(m=>{const p=active(m.intervals,TODAY);
+  return{n:m.name,p:[p.in,p.cache,p.out],note:m.openness==="open_weight"
+    ?"Open-weight. You can run it yourself.":"Hosted by the vendor.",
+    inferred:p.cache_inferred,claims:p.claims}});
+const LBL={10:"$10",20:"$20",50:"$50",100:"$100"};
+const WLBL={197.7:"Mostly understanding code",100:"A bit of both",50:"Mostly writing code",20:"Heavy generation"};
+
+function pick(el,id,val,lblmap,next){
+  S[id==="c1"?"budget":"io"]=val;
+  $("#o"+id.slice(1)).parentElement.classList.add("done");
+  const c=$("#"+id);c.hidden=false;c.textContent="â€” "+lblmap[val];
+  $("#e"+id.slice(1)).hidden=false;
+  if(next){next.classList.remove("locked");next.scrollIntoView({behavior:"smooth",block:"center"})}
+  if(S.budget&&S.io)render();
+}
+$("#o1").addEventListener("click",e=>{const b=e.target.closest(".opt");if(b)
+  pick(b,"c1",+b.dataset.v,LBL,$("#s2"))});
+$("#o2").addEventListener("click",e=>{const b=e.target.closest(".opt");if(b)
+  pick(b,"c2",parseFloat(b.dataset.v),WLBL,null)});
+$("#e1").onclick=()=>{$("#s1").classList.remove("done");$("#c1").hidden=$("#e1").hidden=true};
+$("#e2").onclick=()=>{$("#s2").classList.remove("done");$("#c2").hidden=$("#e2").hidden=true};
+
+function render(){
+  const rows=MODELS.map(m=>({...m,c:cost(...m.p,S.io)})).sort((a,b)=>a.c-b.c);
+  const fits=rows.filter(r=>r.c<=S.budget);
+  const best=fits[fits.length-1]||rows[0];
+  const overByWork=MODELS.map(m=>({n:m.n,lo:cost(...m.p,197.7),hi:cost(...m.p,20)}))
+    .filter(x=>x.lo<=S.budget&&x.hi>S.budget).map(x=>x.n);
+
+  $("#out").innerHTML=`
+  <section class="ans" id="ans">
+    <div class="ansh">
+      <p class="rec">${fits.length?"Our recommendation":"Nothing fits this budget"}</p>
+      <p class="pick">${fits.length?best.n:rows[0].n}</p>
+      <p class="price">about <b>$${best.c.toFixed(2)}</b> a month at your usage${
+        fits.length?` Â· leaves $${(S.budget-best.c).toFixed(2)} spare`:""}</p>
+      <p class="why">${fits.length
+        ? `It's the most capable option that fits your $${S.budget} budget for the kind of work you described. ${best.note}`
+        : `Everything we've priced comes to more than $${S.budget} at this usage. The closest is ${rows[0].n} at $${rows[0].c.toFixed(2)}.`}</p>
+    </div>
+
+    <div class="picks">
+      ${rows.map(r=>`<div class="prow${r.c>S.budget?" dim":""}">
+        <span class="nm">${r.n}</span>
+        <span class="amt">$${r.c.toFixed(2)}</span>
+        <span class="st ${r.c<=S.budget?"fit":"over"}">${r.c<=S.budget?"fits":"over budget"}</span>
+      </div>`).join("")}
+    </div>
+
+    <div class="care">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+      <div>
+        <h3>Two things you should know before acting on this</h3>
+        <p><strong>We haven't rated quality.</strong> These are costs, not verdicts. Nobody has
+          measured which of these writes better code, including us â€” so this tells you what fits,
+          not what's best.</p>
+        <p><strong>The cost figures come from one person's usage.</strong> We measured them properly,
+          but only on one setup. Your real bill could differ.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="more">
+    <details class="discl"><summary class="dh">
+      <svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+      <span class="t">Why does the kind of work change the price?</span>
+      <span class="s">the biggest surprise here</span></summary>
+      <div class="dc">
+        <p>Reading code is cheap. Writing it is expensive â€” often <strong>ten to twenty times</strong>
+          more per word, because generating text costs far more than consuming it.</p>
+        <p>So someone debugging a big codebase and someone scaffolding a new app can pay wildly
+          different amounts for the same tool.</p>
+        ${overByWork.length?`<p><strong>For your budget this actually changes the answer.</strong>
+          ${overByWork.join(" and ")} fits if you mostly read code, and doesn't if you mostly write it.
+          That's why we asked.</p>`:`<p>At your budget the answer happens to be stable either way â€”
+          every option that fits keeps fitting whichever kind of work you do.</p>`}
+        <table><thead><tr><th>Tool</th><th class="r">If reading</th><th class="r">If writing</th></tr></thead>
+          <tbody>${MODELS.map(m=>`<tr><td>${m.n}</td>
+            <td class="r">$${cost(...m.p,197.7).toFixed(2)}</td>
+            <td class="r">$${cost(...m.p,20).toFixed(2)}</td></tr>`).join("")}</tbody></table>
+      </div></details>
+
+    <details class="discl"><summary class="dh">
+      <svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+      <span class="t">What about a monthly subscription instead?</span>
+      <span class="s">we genuinely can't tell you</span></summary>
+      <div class="dc">
+        <p><strong>Nobody can answer this, and that's not us being cautious.</strong> Subscriptions are
+          measured in sessions and weekly limits. Pay-as-you-go is measured in words. No company
+          publishes a number that lets you convert between the two.</p>
+        <p>So any site telling you confidently that a subscription is better value has quietly made
+          up the missing number.</p>
+        <p>Our honest reasoning: <em>if</em> your usage is spiky â€” quiet weeks then intense days â€” a
+          subscription probably absorbs the peaks better, because running out mid-task is worse than
+          paying a flat fee. That's an argument, not a measurement, and we could be wrong.</p>
+      </div></details>
+
+    <details class="discl"><summary class="dh">
+      <svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+      <span class="t">Where do these numbers come from?</span>
+      <span class="s">4 sources Â· all archived</span></summary>
+      <div class="dc">
+        <div class="legend">
+          <span><i class="dot meas" style="width:9px;height:9px;border-radius:2px;display:inline-block"></i> we measured it</span>
+          <span><i class="dot doc" style="width:9px;height:9px;border-radius:2px;display:inline-block"></i> published by the company</span>
+          <span><i class="dot unk" style="width:9px;height:9px;border-radius:2px;display:inline-block"></i> nobody knows</span>
+        </div>
+        <div class="ev"><span class="dot doc"></span><div class="body">
+          <div class="t">Prices for every tool listed</div>
+          <div class="m">Copied word-for-word from each company's own pricing page, then archived so we can prove what it said. Checked 4 Aug 2026.</div></div></div>
+        <div class="ev"><span class="dot meas"></span><div class="body">
+          <div class="t">How much gets reused between messages</div>
+          <div class="m">Measured across 18,604 real exchanges over 56 days. This is what makes the prices lower than a naive calculation suggests.</div></div></div>
+        <div class="ev"><span class="dot meas"></span><div class="body">
+          <div class="t">How much reading vs writing you do</div>
+          <div class="m">Measured on one person's work â€” which is why we asked you instead of assuming.</div></div></div>
+        <div class="ev"><span class="dot unk"></span><div class="body">
+          <div class="t">Which tool writes better code</div>
+          <div class="m">Not established. The usual benchmarks measure fixing bugs in open-source Python, which tells you very little about most real work.</div></div></div>
+        <div class="ev"><span class="dot unk"></span><div class="body">
+          <div class="t">Whether anyone else gets our numbers</div>
+          <div class="m">Nobody has repeated our measurement yet. If someone does and gets a different result, we'll publish that and correct these figures.</div></div></div>
+      </div></details>
+  </div>`;
+  requestAnimationFrame(()=>$("#ans").classList.add("in"));
+  $("#ans").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("#theme").onclick=()=>{const c=document.documentElement.getAttribute("data-theme")
+  ||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  document.documentElement.setAttribute("data-theme",c==="dark"?"light":"dark")};
+</script>
