@@ -155,7 +155,23 @@ main{flex:1 0 auto}
   font-size:9.5px;letter-spacing:.2em;color:var(--faint)}
 .shsub{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-bottom:18px;
   line-height:1.5}
-#support{max-height:min(70vh,640px);overflow:auto}
+#support{max-height:min(70vh,640px);overflow:auto;scrollbar-width:thin;
+  scrollbar-color:var(--rule2) transparent}
+#support::-webkit-scrollbar{width:7px}
+#support::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:4px}
+#support::-webkit-scrollbar-track{background:transparent}
+/* the panel fades where it continues, and stops fading when it doesn't */
+#support:not(.at-end){mask-image:linear-gradient(180deg,#000 calc(100% - 34px),transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 34px),transparent 100%)}
+
+/* KINSHIP: 13 switches, 3 sources. Hovering one reveals every other place the
+   SAME page is doing work. Provenance, not prediction — it never says whether
+   the thing would survive, which is the discovery the interaction is for. */
+#support.kin .src:not(.is-kin){opacity:.3}
+#support.kin .cl:not(:has(.is-kin)){opacity:.42}
+.src.is-kin .pub{color:var(--ink)}
+.src.is-kin .sw{border-color:var(--dim)}
+.cl,.src{transition:opacity .14s var(--ease)}
 /* group header — the graph is grouped by WHAT DEPENDS ON IT, so load is structural */
 .gh{display:flex;align-items:baseline;gap:12px;margin:22px 0 2px;padding-bottom:5px;
   border-bottom:1px solid var(--rule2)}
@@ -183,8 +199,10 @@ main{flex:1 0 auto}
 /* a switch, not a checkbox. Instruments have switches. */
 .sw{width:26px;height:14px;flex:0 0 26px;border:1px solid var(--rule2);border-radius:2px;
   position:relative;transition:border-color .15s}
+/* the lever moves because YOU moved it — this animates the input, not the state */
 .sw::after{content:"";position:absolute;top:2px;left:2px;width:9px;height:8px;
-  background:var(--sig);transition:transform .13s var(--ease),background .13s}
+  background:var(--sig);
+  transition:transform .09s cubic-bezier(.3,1.4,.5,1),background .09s linear}
 .src.off .sw::after{transform:translateX(11px);background:var(--rule2)}
 .src:hover .sw{border-color:var(--dim)}
 .note{font-family:var(--mono);font-size:9.5px;color:var(--faint);line-height:1.5;
@@ -214,7 +232,24 @@ footer a{color:var(--dim)}
   .chan{grid-template-columns:104px 1fr 64px;gap:14px}
   #support{max-height:none}
 }
-@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+/* ── POWER-ON ─────────────────────────────────────────────────────────────
+   Once, at load, before any state exists to misrepresent. Instruments boot. */
+@keyframes warm{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+body.boot header{animation:warm .4s var(--ease) both}
+body.boot .left{animation:rise .5s var(--ease) .06s both}
+body.boot .right{animation:rise .5s var(--ease) .16s both}
+body.boot footer{animation:warm .45s var(--ease) .3s both}
+
+/* new text, marked as new. Never a state transition — the state already changed. */
+@keyframes settle{from{opacity:0}to{opacity:1}}
+.consequence.fresh{animation:settle .16s var(--ease) both}
+
+kbd{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--faint);
+  border:1px solid var(--rule);border-radius:2px;padding:1px 4px;margin-left:2px}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
 </style>
 
 <div id="face">
@@ -223,7 +258,7 @@ footer a{color:var(--dim)}
   <div class="mark"><b>ALETHEIA</b><i>ἀλήθεια · unconcealment</i></div>
   <span class="grow"></span>
   <span class="lamp"><span class="bulb"></span><span id="lampt">READING</span></span>
-  <button class="hbtn" id="restore" disabled>RESTORE ALL</button>
+  <button class="hbtn" id="restore" disabled>RESTORE ALL<kbd>R</kbd></button>
   <button class="hbtn" id="whatbtn" aria-expanded="false">WHAT THIS IS</button>
   <button class="hbtn" id="theme" aria-label="Switch light or dark">◐</button>
 </div></header>
@@ -702,8 +737,54 @@ function render(){
     if(back)back.focus();
   }
   $("#restore").disabled=S.withdrawn.size===0;
-  describeInto($("#conseq"),summarise());
+
+  const c=$("#conseq"), was=c.textContent;
+  describeInto(c,summarise());
+  if(c.textContent!==was){ c.classList.remove("fresh"); void c.offsetWidth;
+    c.classList.add("fresh"); }
+
+  if(kinSid) markKin(kinSid);          /* survive the rebuild */
+  scrollEdge();
 }
+
+/* ── kinship: show every place the SAME page is doing work ─────────────── */
+let kinSid=null;
+function markKin(sid){
+  const box=$("#support"); if(!box)return;
+  box.classList.toggle("kin",!!sid);
+  box.querySelectorAll(".src").forEach(s=>
+    s.classList.toggle("is-kin",!!sid&&s.dataset.src===sid));
+}
+function setKin(sid){ kinSid=sid; markKin(sid); }
+$("#support").addEventListener("pointerover",e=>{
+  const s=e.target.closest(".src"); if(s)setKin(s.dataset.src)});
+$("#support").addEventListener("pointerleave",()=>setKin(null));
+$("#support").addEventListener("focusin",e=>{
+  const s=e.target.closest(".src"); if(s)setKin(s.dataset.src)});
+$("#support").addEventListener("focusout",e=>{
+  if(!$("#support").contains(e.relatedTarget))setKin(null)});
+
+function scrollEdge(){
+  const b=$("#support");
+  b.classList.toggle("at-end",b.scrollHeight-b.scrollTop-b.clientHeight<6);
+}
+$("#support").addEventListener("scroll",scrollEdge,{passive:true});
+
+/* ── keyboard: move along the switches, throw them, put them back ──────── */
+addEventListener("keydown",e=>{
+  const tag=(document.activeElement.tagName||"").toLowerCase();
+  if(tag==="select"||tag==="input")return;
+  const rows=[...document.querySelectorAll(".src")];
+  const here=rows.indexOf(document.activeElement.closest?.(".src"));
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+    if(!rows.length)return; e.preventDefault();
+    const next=here<0?0:(here+(e.key==="ArrowDown"?1:-1)+rows.length)%rows.length;
+    rows[next].focus(); rows[next].scrollIntoView({block:"nearest"});
+    setKin(rows[next].dataset.src);   /* not reliant on the focus event firing */
+  }else if(e.key.toLowerCase()==="r"&&S.withdrawn.size){
+    e.preventDefault(); $("#restore").click();
+  }else if(e.key.toLowerCase()==="t"){ e.preventDefault(); $("#theme").click(); }
+});
 
 /* ── chrome ───────────────────────────────────────────────────────────── */
 if(matchMedia("(prefers-color-scheme:light)").matches)
@@ -723,5 +804,7 @@ $("#fcal").textContent=Math.round(cal.dominant_share*100)+"% of citations are "+
 $("#fgen").textContent="built "+CORPUS.generated;
 
 work.value=ioToPos(IO_MAX);
+document.body.classList.add("boot");
 render();   /* the ONLY paint. Everything on screen is derived from the graph. */
+addEventListener("load",()=>setTimeout(()=>document.body.classList.remove("boot"),900));
 </script>
