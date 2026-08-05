@@ -1,284 +1,727 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aletheia — what evidence could be withdrawn before this should be</title>
+<title>Aletheia — what would have to disappear before this conclusion should</title>
 
 <style>
-/* ══ ALETHEIA — THE CIRCUIT ════════════════════════════════════════════════
-   The epistemics ARE a boolean circuit, so they are drawn as one:
+/* ══ ALETHEIA ══════════════════════════════════════════════════════════════
+   ἀλήθεια — unconcealment.
 
-       conclusion = AND(claims)      -> series along a spine
-       claim      = OR(sources)      -> parallel branches into one node
-       source     = publisher & switch
+   One instrument, one operation: WITHDRAW A SOURCE AND SEE WHAT HOLDS.
 
-   Series is conjunction. Parallel is disjunction. Nothing here is metaphor.
+   The dependency graph is the hero. The conclusion is the thing being tested,
+   not the thing being sold. Every visual change corresponds to a real change
+   in what the engine can compute — nothing here degrades for effect.
 
-   Geometry carries the meaning, so there is no explanatory prose anywhere in
-   this file. Two branches leaving the SAME rail are duplication — you can see
-   they share an origin. A branch that never reaches a rail is derivation. A
-   publisher rail is where a constitutive fact ORIGINATES, so it does not read
-   as fragile. An open socket is a corroboration that could exist and does not.
-
-   NOTHING ANIMATES. A circuit is open or closed. Transitions would be theatre.
+   MOTION RULE (DEPENDENCE §6): positions transition, existence does not.
+   A price moving along the scale is a continuous quantity and animates.
+   A model ceasing to be computable is a discrete fact and happens at once.
    ═════════════════════════════════════════════════════════════════════════ */
 
 :root{
-  --face:#0B0C0D; --ink:#EAE7E1; --dim:#8C9095; --faint:#5E6266;
-  --live:#E8A33D; --dead:#33383C; --socket:#7F8D96;
+  --face:#0C0D0E; --rule:#212325; --rule2:#31353A;
+  --ink:#EAE7E1; --dim:#A0A4A8; --faint:#7C8084;
+  --sig:#E8A33D; --sig-deep:#8A6526;
+  --cold:#7F8D96;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,"Cascadia Mono",Menlo,Consolas,monospace;
+  --voice:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.22,.86,.28,1);
 }
 :root[data-theme=light]{
-  --face:#F2F0EB; --ink:#16171A; --dim:#4C5054; --faint:#7A7E82;
-  --live:#8A5808; --dead:#CBC6BC; --socket:#4F646F;
+  --face:#F1EFEA; --rule:#DFDBD2; --rule2:#C2BCB0;
+  --ink:#16171A; --dim:#4A4E52; --faint:#66696D;
+  --sig:#8A5808; --sig-deep:#C9A669; --cold:#4F646F;
 }
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--face);color:var(--ink);font-family:var(--mono);
-  font-size:13px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
-:focus-visible{outline:none}
-:focus-visible .hit{stroke:var(--live);stroke-width:2}
-
-header{display:flex;align-items:baseline;gap:14px;padding:20px 30px 0;flex-wrap:wrap}
-h1{font-size:12.5px;font-weight:600;letter-spacing:.34em}
-.sub{font-size:11px;color:var(--faint);letter-spacing:.02em}
+html{height:100%}
+body{min-height:100%;background:var(--face);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;text-align:left}
+:focus-visible{outline:1.5px solid var(--sig);outline-offset:3px}
+.n{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
 .grow{flex:1}
-.hbtn{font-size:10px;letter-spacing:.14em;color:var(--dim);padding:5px 9px;
-  border:1px solid var(--dead);border-radius:2px}
-.hbtn:hover{color:var(--ink)}
-.hbtn[disabled]{opacity:.3}
+.w{width:100%;max-width:1280px;margin:0 auto;padding:0 34px}
 
-#stage{width:100%;padding:6px 18px 24px}
-svg{width:100%;height:auto;display:block;touch-action:manipulation}
+#face{min-height:100vh;display:flex;flex-direction:column;
+  transition:filter .3s var(--ease)}
+#face.refusing{filter:saturate(.05)}
 
-.wire{stroke-width:1.4;fill:none;stroke-linecap:square}
-.wire.on{stroke:var(--live)}
-.wire.off{stroke:var(--dead)}
-.bus{stroke-width:2.6}
-.hit{fill:transparent;stroke:transparent;cursor:pointer}
-.node{fill:var(--live)}
-.node.off{fill:var(--dead)}
-.lamp-glass{fill:none;stroke-width:1.6}
-.lamp-glass.on{stroke:var(--live);fill:var(--live);fill-opacity:.13}
-.lamp-glass.off{stroke:var(--dead)}
-.lamp-x{stroke-width:1.3}
-.lamp-x.on{stroke:var(--live)}
-.lamp-x.off{stroke:var(--dead)}
-.sock{fill:none;stroke:var(--socket);stroke-width:1.4;stroke-dasharray:2.5 2.5}
-text{font-family:var(--mono);fill:var(--dim)}
-.lbl{font-size:9.5px;letter-spacing:.09em}
-.lbl.on{fill:var(--dim)}
-.lbl.off{fill:var(--dead)}
-.pubname{font-size:10px;letter-spacing:.16em;fill:var(--ink)}
-.pubname.off{fill:var(--dead)}
-.model{font-size:11.5px;letter-spacing:.04em;fill:var(--ink)}
-.model.off{fill:var(--dead)}
-.price{font-size:13px;letter-spacing:.02em;fill:var(--live)}
-.price.off{fill:var(--dead)}
-footer{padding:0 30px 26px;font-size:10px;letter-spacing:.06em;color:var(--faint);
-  display:flex;gap:20px;flex-wrap:wrap}
+/* ── HEADER ───────────────────────────────────────────────────────────── */
+header{border-bottom:1px solid var(--rule);flex:0 0 auto}
+header .w{display:flex;align-items:center;gap:18px;height:54px}
+.mark{display:flex;align-items:baseline;gap:11px;user-select:none;min-width:0}
+.mark b{font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.34em}
+.mark i{font-style:normal;font-size:11px;color:var(--faint);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lamp{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.18em;color:var(--dim);white-space:nowrap}
+.bulb{width:7px;height:7px;border-radius:50%;background:var(--sig);
+  box-shadow:0 0 10px var(--sig)}
+#face.refusing .bulb{background:var(--cold);box-shadow:none}
+.hbtn{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);
+  padding:5px 9px;border:1px solid var(--rule);border-radius:3px;white-space:nowrap;
+  transition:color .16s,border-color .16s}
+.hbtn:hover{color:var(--ink);border-color:var(--rule2)}
+.hbtn[disabled]{opacity:.32;cursor:default}
+
+/* ── DECK ─────────────────────────────────────────────────────────────── */
+main{flex:1 0 auto}
+.deck{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(330px,1fr);gap:0 44px;
+  align-items:start}
+.left{padding:32px 0 26px;min-width:0}
+.right{padding:32px 0 26px;border-left:1px solid var(--rule);padding-left:44px;
+  margin-left:-44px;min-width:0}
+
+/* ── READOUT ──────────────────────────────────────────────────────────── */
+.state{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--sig);
+  margin-bottom:13px}
+#face.refusing .state{color:var(--cold)}
+.subject{font-size:clamp(28px,3.7vw,42px);line-height:1.04;letter-spacing:-.03em;
+  font-weight:500;margin-bottom:11px}
+.figure{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin-bottom:20px}
+.amount{font-family:var(--mono);font-size:clamp(19px,2.2vw,25px);letter-spacing:-.02em;
+  color:var(--sig)}
+#face.refusing .amount{color:var(--cold)}
+.against{font-family:var(--mono);font-size:12px;color:var(--dim)}
+
+/* the component that tells the truth about a NON-event */
+.consequence{border-left:2px solid var(--sig-deep);padding:2px 0 2px 16px;
+  font-family:var(--voice);font-size:16px;line-height:1.55;color:var(--ink);
+  max-width:52ch;min-height:74px}
+.consequence.none{border-color:var(--rule2)}
+.consequence.gone{border-color:var(--cold)}
+.consequence b{font-weight:400;color:var(--sig)}
+.consequence.gone b{color:var(--cold)}
+.consequence .q{display:block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;color:var(--faint);margin-bottom:7px}
+
+/* ── BAND ─────────────────────────────────────────────────────────────── */
+#band{margin-top:26px}
+.bandhead{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--faint)}
+.chart{position:relative;padding-top:2px}
+.gatewrap{position:absolute;left:148px;right:84px;top:-14px;bottom:22px;pointer-events:none}
+.gate{position:absolute;top:0;bottom:0;width:1px;background:var(--sig);left:70%;
+  transition:left .34s var(--ease);box-shadow:0 0 10px var(--sig-deep)}
+.gate::after{content:attr(data-l);position:absolute;top:0;left:0;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--sig);white-space:nowrap}
+#face.refusing .gate{background:var(--cold);box-shadow:none}
+#face.refusing .gate::after{color:var(--cold)}
+
+.chan{display:grid;grid-template-columns:132px 1fr 68px;align-items:center;gap:16px;height:32px}
+.chan .nm{font-size:12.5px;color:var(--dim);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.chan.rec .nm{color:var(--ink)}
+.chan.over{opacity:.44}
+/* EXISTENCE IS DISCRETE — no transition on this state, by design */
+.chan.gone{opacity:.3}
+.chan.gone .nm{text-decoration:line-through;text-decoration-thickness:1px;color:var(--cold)}
+.track{position:relative;height:100%}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule)}
+.dot{position:absolute;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  background:var(--sig);transition:left .34s var(--ease)}
+.chan.rec .dot{transform:scale(1.3)}
+.chan.over .dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--dim)}
+.chan.gone .dot{display:none}
+.bar{position:absolute;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;
+  background:var(--cold);display:none;transition:left .34s var(--ease),width .34s var(--ease)}
+.chan.ranged .bar{display:block}
+.chan.ranged .dot{display:none}
+.val{font-family:var(--mono);font-size:12px;text-align:right;color:var(--dim)}
+.chan.rec .val{color:var(--sig)}
+.chan.over .val{text-decoration:line-through;text-decoration-thickness:1px}
+.chan.gone .val{color:var(--cold);text-decoration:none}
+.axis{display:flex;justify-content:space-between;margin-top:12px;font-family:var(--mono);
+  font-size:9px;letter-spacing:.1em;color:var(--faint)}
+
+/* ── CONDITIONS — demoted. They pick the conclusion; they are not the instrument ── */
+#cond{margin-top:28px;padding-top:20px;border-top:1px solid var(--rule);
+  display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cond .lab{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--faint);
+  margin-bottom:6px;display:flex;gap:9px}
+.cond .lab b{color:var(--dim);font-weight:400;letter-spacing:.04em}
+.cond input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:18px;
+  background:transparent;cursor:grab;margin:0;display:block}
+.cond input::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;
+  border-radius:50%;background:var(--dim);border:3px solid var(--face)}
+.cond input::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--dim);
+  border:3px solid var(--face)}
+.railwrap{position:relative;height:18px}
+.rail{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule2)}
+
+/* ── SUPPORT PANEL — the graph. The hero. ─────────────────────────────── */
+.sh{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;font-family:var(--mono);
+  font-size:9.5px;letter-spacing:.2em;color:var(--faint)}
+.shsub{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-bottom:18px;
+  line-height:1.5}
+#support{max-height:min(70vh,640px);overflow:auto}
+/* group header — the graph is grouped by WHAT DEPENDS ON IT, so load is structural */
+.gh{display:flex;align-items:baseline;gap:12px;margin:22px 0 2px;padding-bottom:5px;
+  border-bottom:1px solid var(--rule2)}
+.gh:first-child{margin-top:0}
+.gn{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ink)}
+.gl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--faint);
+  margin-left:auto}
+.gh.dead .gn{color:var(--cold);text-decoration:line-through;text-decoration-thickness:1px}
+.gh.dead .gl{color:var(--cold)}
+.cl{border-top:1px solid var(--rule);padding:13px 0}
+.gh+.cl{border-top:none}
+.cl.dead .cid{color:var(--cold);text-decoration:line-through;text-decoration-thickness:1px}
+.clh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:3px}
+.cid{font-family:var(--mono);font-size:10.5px;color:var(--ink)}
+.tag{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--faint);
+  border:1px solid var(--rule2);border-radius:2px;padding:1px 5px}
+.tag.crit{color:var(--sig);border-color:var(--sig-deep)}
+.cst{font-size:12.5px;color:var(--dim);line-height:1.45;margin-bottom:9px;max-width:46ch}
+.margin{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-bottom:8px}
+
+.src{display:flex;align-items:center;gap:11px;padding:5px 0}
+.src .pub{font-size:12.5px;color:var(--dim);flex:1;min-width:0;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.src.off .pub{color:var(--cold);text-decoration:line-through;text-decoration-thickness:1px}
+/* a switch, not a checkbox. Instruments have switches. */
+.sw{width:26px;height:14px;flex:0 0 26px;border:1px solid var(--rule2);border-radius:2px;
+  position:relative;transition:border-color .15s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:9px;height:8px;
+  background:var(--sig);transition:transform .13s var(--ease),background .13s}
+.src.off .sw::after{transform:translateX(11px);background:var(--rule2)}
+.src:hover .sw{border-color:var(--dim)}
+.note{font-family:var(--mono);font-size:9.5px;color:var(--faint);line-height:1.5;
+  margin-top:5px;padding-left:37px}
+.note.warn{color:var(--cold)}
+
+.scope{margin-top:9px;padding-left:37px}
+.scope select{font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  background:var(--face);border:1px solid var(--rule2);border-radius:2px;padding:3px 5px;
+  max-width:100%}
+
+footer{border-top:1px solid var(--rule);flex:0 0 auto}
+footer .w{padding:15px 34px 24px;display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);
+  font-size:10px;letter-spacing:.06em;color:var(--faint)}
 footer a{color:var(--dim)}
-@media (max-width:700px){header,footer{padding-left:16px;padding-right:16px}#stage{padding:6px 8px 20px}}
+#about{margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);
+  font-family:var(--voice);font-size:15.5px;line-height:1.6;color:var(--dim);max-width:54ch}
+#about p+p{margin-top:10px}
+#about b{color:var(--ink);font-weight:400}
+
+@media (max-width:1000px){
+  .deck{grid-template-columns:1fr;gap:0}
+  .right{border-left:none;border-top:1px solid var(--rule);padding-left:0;margin-left:0;
+    padding-top:26px}
+  .w{padding:0 20px}
+  .gatewrap{left:118px;right:80px}
+  .chan{grid-template-columns:104px 1fr 64px;gap:14px}
+  #support{max-height:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
 </style>
 
-<header>
-  <h1>ALETHEIA</h1>
-  <span class="sub">ἀλήθεια · unconcealment</span>
+<div id="face">
+
+<header><div class="w">
+  <div class="mark"><b>ALETHEIA</b><i>ἀλήθεια · unconcealment</i></div>
   <span class="grow"></span>
-  <button class="hbtn" id="restore" disabled>CLOSE ALL</button>
-  <button class="hbtn" id="theme">◐</button>
-</header>
+  <span class="lamp"><span class="bulb"></span><span id="lampt">READING</span></span>
+  <button class="hbtn" id="restore" disabled>RESTORE ALL</button>
+  <button class="hbtn" id="whatbtn" aria-expanded="false">WHAT THIS IS</button>
+  <button class="hbtn" id="theme" aria-label="Switch light or dark">◐</button>
+</div></header>
 
-<div id="stage"></div>
+<main><div class="w"><div class="deck">
 
-<footer>
-  <span id="fcount"></span><span id="fcal"></span><span class="grow"></span>
+  <div class="left">
+    <div class="state" id="state">—</div>
+    <h1 class="subject" id="subject">—</h1>
+    <div class="figure">
+      <span class="amount n" id="amount">—</span>
+      <span class="against n" id="against"></span>
+    </div>
+
+    <p class="consequence" id="conseq" role="status" aria-live="polite"></p>
+
+    <div id="band">
+      <div class="bandhead"><span id="bandtitle">WHAT CAN STILL BE PRICED</span>
+        <span class="grow"></span><span id="bandnote"></span></div>
+      <div class="chart" id="chart"><div class="gatewrap"><div class="gate" id="gate" data-l=""></div></div></div>
+      <div class="axis"><span id="axlo"></span><span>cost per month · log scale</span><span id="axhi"></span></div>
+    </div>
+
+    <div id="cond">
+      <div class="cond">
+        <div class="lab">BUDGET<b id="brd">$20</b></div>
+        <div class="railwrap"><div class="rail"></div>
+          <input type="range" id="budget" min="5" max="100" step="1" value="20"
+                 aria-label="Monthly budget in dollars"></div>
+      </div>
+      <div class="cond">
+        <div class="lab">READ VS WRITE<b id="wrd">—</b></div>
+        <div class="railwrap"><div class="rail"></div>
+          <input type="range" id="work" min="0" max="1000" step="1" value="1000"
+                 aria-label="Reading versus writing ratio"></div>
+      </div>
+    </div>
+
+    <div id="about" hidden>
+      <p><b>Aletheia shows what a conclusion rests on.</b> Every figure here is computed
+      from individual claims, each traceable to the page it came from. Switch a source
+      off and the engine genuinely recomputes without it — nothing here degrades for
+      effect.</p>
+      <p>The question is not which tool is best. It is
+      <em>what evidence could disappear before this conclusion should?</em> AI coding
+      economics is the first corpus, not the point.</p>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="sh"><span>SUPPORT</span><span class="grow"></span><span id="supn"></span></div>
+    <p class="shsub" id="shsub"></p>
+    <div id="support"></div>
+  </div>
+
+</div></div></main>
+
+<footer><div class="w">
+  <span id="fcounts"></span><span id="fcal"></span>
+  <span class="grow"></span>
   <a href="https://github.com/tanishkfr/AI-Engineering-Atlas">source &amp; corpus</a>
   <span id="fgen"></span>
-</footer>
+</div></footer>
+
+</div>
 
 <script>
-const CORPUS={"generated":"2026-08-05","models":[{"name":"DeepSeek V4 Pro","openness":"open_weight","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":0.435,"cache":0.003625,"out":0.87,"cache_inferred":false,"claims":["clm-model-deepseek-v4-pro-001"]}]},{"name":"Claude Haiku 4.5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":1.0,"cache":0.1,"out":5.0,"cache_inferred":true,"claims":["clm-claude-haiku-4-5-001"]}]},{"name":"Claude Sonnet 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"2026-08-31","in":2.0,"cache":0.2,"out":10.0,"cache_inferred":false,"claims":["clm-claude-sonnet-5-001","clm-claude-sonnet-5-003","clm-claude-sonnet-5-005"]},{"from":"2026-09-01","to":"9999-12-31","in":3.0,"cache":0.3,"out":15.0,"cache_inferred":true,"claims":["clm-claude-sonnet-5-002","clm-claude-sonnet-5-004"]}]},{"name":"Claude Opus 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":5.0,"cache":0.5,"out":25.0,"cache_inferred":true,"claims":["clm-claude-opus-5-001"]}]},{"name":"Claude Fable 5","openness":"closed","tokenizer_verified":true,"intervals":[{"from":"2026-06-09","to":"9999-12-31","in":10.0,"cache":1.0,"out":50.0,"cache_inferred":true,"claims":["clm-claude-fable-5-001","clm-claude-fable-5-002"]}]}],"elicit":{"workload":{"question":"Roughly, do you read more than you write \u2014 or the reverse?","default":null,"options":[{"label":"Mostly reading and reasoning over existing code","value":197.7,"note":"Large context in, small diffs out. What we measured."},{"label":"A mix of reading and generating","value":100,"note":"Sonnet 5 still fits $20."},{"label":"Mostly generating new code","value":50,"note":"Sonnet 5 at the edge of $20."},{"label":"Heavy generation \u2014 new files, scaffolding, UI","value":20,"note":"Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}]},"harness":{"question":"Which coding tool do you actually use day to day?","default":null,"options":[{"label":"The harness this was measured on","value":0.9432,"note":"Applies directly. Still n=1 and unreplicated."},{"label":"A different tool that caches aggressively","value":null,"note":"Unmeasured. The engine refuses rather than substituting a number."},{"label":"A tool with little or no prompt caching","value":0.15,"note":"Illustrative floor, NOT measured. Cost rises roughly fivefold."},{"label":"I don't know","value":null,"note":"Correct answer for most people. The engine reports a range."}]}},"cache_hit":0.9432,"cache_claim":"clm-usage-cache-hit-001","workload_claim":"clm-usage-io-ratio-001","unknowns":[{"id":"clm-benchmark-swe-bench-090","subject":"ent-benchmark-swe-bench","statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.\n"},{"id":"clm-protocol-mcp-090","subject":"ent-protocol-mcp","statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.\n"},{"id":"clm-model-kimi-k3-090","subject":"ent-model-kimi-k3","statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.\n"},{"id":"clm-claude-sonnet-5-021","subject":"ent-model-claude-sonnet-5","statement":"Time-to-first-token is NOT established. The one available measurement reports 200.59s against a tier median of 2.82s \u2014 a 71x outlier that would make interactive use impossible if taken at face value.\n"},{"id":"clm-claude-sonnet-5-090","subject":"ent-model-claude-sonnet-5","statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.\n"},{"id":"clm-model-mistral-large-3-090","subject":"ent-model-mistral-large-3","statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.\n"}],"calibration":{"dominant_publisher":"Anthropic","dominant_share":0.5978,"distinct_publishers":10,"published_claims":50,"explicit_unknowns":6,"unknown_ratio":0.12,"citations":[["Anthropic",55],["SWE-bench project",8],["Model Context Protocol governance body",6],["OpenRouter",4],["Agentic AI Foundation",4],["DeepSeek",4],["Mistral AI",4],["Aider",3],["Moonshot AI",2],["Artificial Analysis",2]]},"counts":{"entities":30,"claims":72,"sources":18,"priced":5,"unknowns":6},"claims":{"clm-claude-sonnet-5-003":{"statement":"Output priced at $10 per million tokens through 2026-08-31.","predicate":"pricing.output_per_mtok","type":"S","scope":null,"kind":"interval","valid_from":"unknown","valid_to":"2026-08-31","observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true}]},"clm-claude-opus-5-001":{"statement":"Base input priced at $5 per million tokens; output $25 per million tokens.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"unknown","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true},{"source":"src-anthropic-models-overview-2026-08-03","excerpt":"Claude Fable 5: $10 / input MTok $50 / output MTok | Claude Opus 5: $5 / input MTok $25 / output MTok | Claude Sonnet 5: $3 / input MTok $15 / output MTok | Claude Haiku 4.5: $1 / input MTok $5 / output MTok","locator":"Latest models comparison \u2014 Pricing row","supports":true}]},"clm-usage-io-ratio-001":{"statement":"Input-to-output token ratio of 197.7 : 1, measured over the same 56-day window. Determined by the KIND OF WORK done, not by the tooling.","predicate":"usage.io_ratio","type":"M","scope":"workload","kind":"measurement","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{"harness":"claude-code","date":"2026-08-04","operator":"single","runs":1,"corpus_n":2132},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":false}]},"clm-benchmark-swe-bench-090":{"statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.","predicate":"benchmark.full_set_size","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-swebench-repo-2026-08-04","excerpt":"SWE-bench Verified: A subset of 500 problems that real software engineers have confirmed are solvable.","locator":"Verified subset","supports":false}]},"clm-claude-fable-5-002":{"statement":"Output priced at $50 per million tokens.","predicate":"pricing.output_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true}]},"clm-usage-cache-hit-001":{"statement":"Cache hit rate of 0.9432, measured across 18,604 assistant turns over 56 days of real agentic work.","predicate":"usage.cache_hit_rate","type":"M","scope":"harness","kind":"measurement","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{"harness":"claude-code","harness_version":"unrecorded","date":"2026-08-04","operator":"single","runs":1,"corpus_n":2132},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"5-minute cache write: 1.25x base input price, cache valid for 5 minutes. 1-hour cache write: 2x base input price, cache valid for 1 hour. Cache read (hit): 0.1x base input price, same duration as the preceding write.","locator":"Prompt caching multipliers table","supports":true}]},"clm-model-mistral-large-3-090":{"statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-mistral-pricing-2026-08-04","excerpt":"For example, Mistral Large costs $2 /M tokens in and $6 /M tokens out.","locator":"FAQ \u2014 illustrative example only","supports":false}]},"clm-claude-sonnet-5-021":{"statement":"Time-to-first-token is NOT established. The one available measurement reports 200.59s against a tier median of 2.82s \u2014 a 71x outlier that would make interactive use impossible if taken at face value.","predicate":"performance.time_to_first_token","type":"M","scope":null,"kind":"measurement","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{"harness":null,"config":"publisher defines TTFT as request-sent to first-token-received","date":"2026-08-04","operator":"Artificial Analysis","runs":1},"evidence":[{"source":"src-artificialanalysis-sonnet5-2026-08-04","excerpt":"200.59s for time to first token (TTFT) via Anthropic's API, described as at the higher end compared to other reasoning models in a similar price tier (median: 2.82s).","locator":"Time to first token","supports":false}]},"clm-claude-sonnet-5-002":{"statement":"Base input priced at $3 per million tokens from 2026-09-01, when introductory pricing ends.","predicate":"pricing.input_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-09-01","valid_to":null,"observed_at":"2026-08-03","supersedes":"clm-claude-sonnet-5-001","supersession_kind":"change","conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true},{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Introductory pricing of $2/$10 per million input/output tokens is in effect through August 31, 2026, after which the standard pricing of $3/$15 per million input/output tokens will take effect.","locator":"Introductory pricing note","supports":true}]},"clm-claude-fable-5-001":{"statement":"Base input priced at $10 per million tokens.","predicate":"pricing.input_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true},{"source":"src-anthropic-models-overview-2026-08-03","excerpt":"Claude Fable 5: $10 / input MTok $50 / output MTok | Claude Opus 5: $5 / input MTok $25 / output MTok | Claude Sonnet 5: $3 / input MTok $15 / output MTok | Claude Haiku 4.5: $1 / input MTok $5 / output MTok","locator":"Latest models comparison \u2014 Pricing row","supports":true}]},"clm-claude-sonnet-5-090":{"statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.","predicate":"measurement.tokenizer_inflation_factor","type":"M","scope":null,"kind":"measurement","valid_from":"2026-08-03","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{"harness":null,"date":"2026-08-03"},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude 4.7 and later models and Claude Mythos Preview use a newer tokenizer that contributes to their improved performance on a wide range of tasks. This tokenizer produces approximately 30% more tokens for the same text. The exact increase depends on the content and workload shape. Claude Sonnet 4.6 and earlier models use the previous tokenizer.","locator":"Tokenizer note under model pricing table","supports":false}]},"clm-claude-sonnet-5-005":{"statement":"Cache hits and refreshes priced at $0.20 per million tokens through 2026-08-31 ($0.30 from 2026-09-01), i.e. 0.1x base input.","predicate":"pricing.cache_read_per_mtok","type":"S","scope":null,"kind":"interval","valid_from":"unknown","valid_to":"2026-08-31","observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true},{"source":"src-anthropic-pricing-2026-08-03","excerpt":"5-minute cache write: 1.25x base input price, cache valid for 5 minutes. 1-hour cache write: 2x base input price, cache valid for 1 hour. Cache read (hit): 0.1x base input price, same duration as the preceding write.","locator":"Prompt caching multipliers table","supports":true}]},"clm-model-kimi-k3-090":{"statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-kimi-models-2026-08-04","excerpt":"Kimi K3 with a 1M-token context window. Kimi K2.7 Code, a dedicated Coding model, multi-modal model. Kimi K2.6, supports visual and text input. Moonshot V1, classic generation model series.","locator":"Model index cards","supports":false}]},"clm-protocol-mcp-090":{"statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.","predicate":"spec.current_revision","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-mcp-spec-2025-06-18-2026-08-04","excerpt":"This specification defines the authoritative protocol requirements, based on the TypeScript schema in schema.ts (2025-06-18).","locator":"Specification basis","supports":false}]},"clm-claude-sonnet-5-004":{"statement":"Output priced at $15 per million tokens from 2026-09-01.","predicate":"pricing.output_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-09-01","valid_to":null,"observed_at":"2026-08-03","supersedes":"clm-claude-sonnet-5-003","supersession_kind":"change","conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true}]},"clm-claude-haiku-4-5-001":{"statement":"Base input $1 per million tokens; output $5 per million tokens.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"unknown","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true}]},"clm-claude-sonnet-5-001":{"statement":"Base input priced at $2 per million tokens under introductory pricing, in effect through 2026-08-31.","predicate":"pricing.input_per_mtok","type":"S","scope":null,"kind":"interval","valid_from":"unknown","valid_to":"2026-08-31","observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true},{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Introductory pricing of $2/$10 per million input/output tokens is in effect through August 31, 2026, after which the standard pricing of $3/$15 per million input/output tokens will take effect.","locator":"Introductory pricing note","supports":true},{"source":"src-anthropic-models-overview-2026-08-03","excerpt":"Introductory pricing of $2 / $10 per MTok applies to Claude Sonnet 5 through August 31, 2026.","locator":"Latest models comparison \u2014 footnote 4","supports":true}]},"clm-model-deepseek-v4-pro-001":{"statement":"$0.435 per 1M input tokens on cache miss, $0.003625 on cache hit, and $0.87 per 1M output tokens.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"unknown","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-deepseek-pricing-2026-08-04","excerpt":"deepseek-v4-pro: 1M INPUT TOKENS (CACHE HIT) $0.003625; 1M INPUT TOKENS (CACHE MISS) $0.435; 1M OUTPUT TOKENS $0.87.","locator":"deepseek-v4-pro pricing","supports":true}]}},"sources":{"src-anthropic-pricing-2026-08-03":{"class":"A","title":"Pricing","publisher":"Anthropic","url":"https://platform.claude.com/docs/en/about-claude/pricing","archive_url":"https://web.archive.org/web/20260804053539/https://platform.claude.com/docs/en/about-claude/pricing","retrieved":"2026-08-03","hash_status":"hashed","archive_status":"archived","fidelity":"verbatim","flags":["self_interested"]},"src-anthropic-models-overview-2026-08-03":{"class":"A","title":"Models overview","publisher":"Anthropic","url":"https://platform.claude.com/docs/en/about-claude/models/overview","archive_url":"https://web.archive.org/web/20260804055329/https://platform.claude.com/docs/en/about-claude/models/overview","retrieved":"2026-08-03","hash_status":"hashed","archive_status":"archived","fidelity":"verbatim","flags":["self_interested"]},"src-swebench-repo-2026-08-04":{"class":"A","title":"SWE-bench repository README","publisher":"SWE-bench project","url":"https://github.com/SWE-bench/SWE-bench","archive_url":"http://web.archive.org/web/20260724003640/https://github.com/SWE-bench/SWE-bench","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"tool_extracted","flags":[]},"src-mistral-pricing-2026-08-04":{"class":"A","title":"Mistral AI \u2014 Pricing","publisher":"Mistral AI","url":"https://mistral.ai/pricing","archive_url":null,"retrieved":"2026-08-04","hash_status":"unavailable_pending_tooling","archive_status":"pending","fidelity":"tool_extracted","flags":["self_interested"]},"src-artificialanalysis-sonnet5-2026-08-04":{"class":"B","title":"Artificial Analysis \u2014 Claude Sonnet 5 performance","publisher":"Artificial Analysis","url":"https://artificialanalysis.ai/models/claude-sonnet-5","archive_url":null,"retrieved":"2026-08-04","hash_status":"unavailable_pending_tooling","archive_status":"pending","fidelity":"tool_extracted","flags":[]},"src-kimi-models-2026-08-04":{"class":"A","title":"Kimi platform \u2014 chat model index","publisher":"Moonshot AI","url":"https://platform.kimi.ai/docs/pricing/chat","archive_url":"http://web.archive.org/web/20260801074348/https://platform.kimi.ai/docs/pricing/chat","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"tool_extracted","flags":["self_interested"]},"src-mcp-spec-2025-06-18-2026-08-04":{"class":"A","title":"Model Context Protocol \u2014 Specification (2025-06-18)","publisher":"Model Context Protocol governance body","url":"https://modelcontextprotocol.io/specification/2025-06-18","archive_url":"http://web.archive.org/web/20260727063112/https://modelcontextprotocol.io/specification/2025-06-18","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"verbatim","flags":[]},"src-deepseek-pricing-2026-08-04":{"class":"A","title":"DeepSeek API \u2014 Models & Pricing","publisher":"DeepSeek","url":"https://api-docs.deepseek.com/quick_start/pricing","archive_url":"http://web.archive.org/web/20260803150728/https://api-docs.deepseek.com/quick_start/pricing/","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"tool_extracted","flags":["self_interested"]}}};
+const CORPUS={"generated":"2026-08-05","models":[{"name":"DeepSeek V4 Pro","openness":"open_weight","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":0.435,"cache":0.003625,"out":0.87,"cache_inferred":false,"claims":["clm-model-deepseek-v4-pro-001"]}]},{"name":"Claude Haiku 4.5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":1.0,"cache":0.1,"out":5.0,"cache_inferred":true,"claims":["clm-claude-haiku-4-5-001"]}]},{"name":"Claude Sonnet 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"2026-08-31","in":2.0,"cache":0.2,"out":10.0,"cache_inferred":false,"claims":["clm-claude-sonnet-5-001","clm-claude-sonnet-5-003","clm-claude-sonnet-5-005"]},{"from":"2026-09-01","to":"9999-12-31","in":3.0,"cache":0.3,"out":15.0,"cache_inferred":true,"claims":["clm-claude-sonnet-5-002","clm-claude-sonnet-5-004"]}]},{"name":"Claude Opus 5","openness":"closed","tokenizer_verified":false,"intervals":[{"from":"2026-01-01","to":"9999-12-31","in":5.0,"cache":0.5,"out":25.0,"cache_inferred":true,"claims":["clm-claude-opus-5-001"]}]},{"name":"Claude Fable 5","openness":"closed","tokenizer_verified":true,"intervals":[{"from":"2026-06-09","to":"9999-12-31","in":10.0,"cache":1.0,"out":50.0,"cache_inferred":true,"claims":["clm-claude-fable-5-001","clm-claude-fable-5-002"]}]}],"elicit":{"workload":{"question":"Roughly, do you read more than you write \u2014 or the reverse?","default":null,"options":[{"label":"Mostly reading and reasoning over existing code","value":197.7,"note":"Large context in, small diffs out. What we measured."},{"label":"A mix of reading and generating","value":100,"note":"Sonnet 5 still fits $20."},{"label":"Mostly generating new code","value":50,"note":"Sonnet 5 at the edge of $20."},{"label":"Heavy generation \u2014 new files, scaffolding, UI","value":20,"note":"Sonnet 5 EXCEEDS $20. Haiku and DeepSeek still fit."}]},"harness":{"question":"Which coding tool do you actually use day to day?","default":null,"options":[{"label":"The harness this was measured on","value":0.9432,"note":"Applies directly. Still n=1 and unreplicated."},{"label":"A different tool that caches aggressively","value":null,"note":"Unmeasured. The engine refuses rather than substituting a number."},{"label":"A tool with little or no prompt caching","value":0.15,"note":"Illustrative floor, NOT measured. Cost rises roughly fivefold."},{"label":"I don't know","value":null,"note":"Correct answer for most people. The engine reports a range."}]}},"cache_hit":0.9432,"cache_claim":"clm-usage-cache-hit-001","workload_claim":"clm-usage-io-ratio-001","unknowns":[{"id":"clm-benchmark-swe-bench-090","subject":"ent-benchmark-swe-bench","statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.\n"},{"id":"clm-protocol-mcp-090","subject":"ent-protocol-mcp","statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.\n"},{"id":"clm-model-kimi-k3-090","subject":"ent-model-kimi-k3","statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.\n"},{"id":"clm-claude-sonnet-5-021","subject":"ent-model-claude-sonnet-5","statement":"Time-to-first-token is NOT established. The one available measurement reports 200.59s against a tier median of 2.82s \u2014 a 71x outlier that would make interactive use impossible if taken at face value.\n"},{"id":"clm-claude-sonnet-5-090","subject":"ent-model-claude-sonnet-5","statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.\n"},{"id":"clm-model-mistral-large-3-090","subject":"ent-model-mistral-large-3","statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.\n"}],"calibration":{"dominant_publisher":"Anthropic","dominant_share":0.5978,"distinct_publishers":10,"published_claims":50,"explicit_unknowns":6,"unknown_ratio":0.12,"citations":[["Anthropic",55],["SWE-bench project",8],["Model Context Protocol governance body",6],["OpenRouter",4],["Agentic AI Foundation",4],["DeepSeek",4],["Mistral AI",4],["Aider",3],["Moonshot AI",2],["Artificial Analysis",2]]},"counts":{"entities":30,"claims":72,"sources":18,"priced":5,"unknowns":6},"claims":{"clm-claude-sonnet-5-004":{"statement":"Output priced at $15 per million tokens from 2026-09-01.","predicate":"pricing.output_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-09-01","valid_to":null,"observed_at":"2026-08-03","supersedes":"clm-claude-sonnet-5-003","supersession_kind":"change","conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true}]},"clm-benchmark-swe-bench-090":{"statement":"The total instance count of the full SWE-bench set is NOT established. It is not stated in the repository README we captured. A figure circulated in the M1 landscape scan, but that was Class E and is inadmissible.","predicate":"benchmark.full_set_size","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-swebench-repo-2026-08-04","excerpt":"SWE-bench Verified: A subset of 500 problems that real software engineers have confirmed are solvable.","locator":"Verified subset","supports":false}]},"clm-claude-sonnet-5-003":{"statement":"Output priced at $10 per million tokens through 2026-08-31.","predicate":"pricing.output_per_mtok","type":"S","scope":null,"kind":"interval","valid_from":"unknown","valid_to":"2026-08-31","observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true}]},"clm-claude-fable-5-001":{"statement":"Base input priced at $10 per million tokens.","predicate":"pricing.input_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true},{"source":"src-anthropic-models-overview-2026-08-03","excerpt":"Claude Fable 5: $10 / input MTok $50 / output MTok | Claude Opus 5: $5 / input MTok $25 / output MTok | Claude Sonnet 5: $3 / input MTok $15 / output MTok | Claude Haiku 4.5: $1 / input MTok $5 / output MTok","locator":"Latest models comparison \u2014 Pricing row","supports":true}]},"clm-claude-fable-5-002":{"statement":"Output priced at $50 per million tokens.","predicate":"pricing.output_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true}]},"clm-model-kimi-k3-090":{"statement":"Pricing NOT established. The model index page lists K3 without prices; per-model pricing lives on a deeper page that was not captured.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-kimi-models-2026-08-04","excerpt":"Kimi K3 with a 1M-token context window. Kimi K2.7 Code, a dedicated Coding model, multi-modal model. Kimi K2.6, supports visual and text input. Moonshot V1, classic generation model series.","locator":"Model index cards","supports":false}]},"clm-protocol-mcp-090":{"statement":"The current specification revision as of 2026-08-04 is NOT established. We retrieved the 2025-06-18 revision at a version-pinned URL; whether a later revision exists was not checked, and the M1 scan indicated governance moved to a foundation in December 2025 with a 2026 roadmap.","predicate":"spec.current_revision","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-mcp-spec-2025-06-18-2026-08-04","excerpt":"This specification defines the authoritative protocol requirements, based on the TypeScript schema in schema.ts (2025-06-18).","locator":"Specification basis","supports":false}]},"clm-claude-sonnet-5-002":{"statement":"Base input priced at $3 per million tokens from 2026-09-01, when introductory pricing ends.","predicate":"pricing.input_per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-09-01","valid_to":null,"observed_at":"2026-08-03","supersedes":"clm-claude-sonnet-5-001","supersession_kind":"change","conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true},{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Introductory pricing of $2/$10 per million input/output tokens is in effect through August 31, 2026, after which the standard pricing of $3/$15 per million input/output tokens will take effect.","locator":"Introductory pricing note","supports":true}]},"clm-claude-sonnet-5-090":{"statement":"Whether Sonnet 5 uses the newer tokenizer (~30% more tokens for the same text) is NOT established. Anthropic documents the change as applying to \"Claude 4.7 and later models\"; Sonnet 5 is later than 4.7 by name, but the documentation names Sonnet 4.6 and earlier as using the previous tokenizer and does not list Sonnet 5 explicitly either way.","predicate":"measurement.tokenizer_inflation_factor","type":"M","scope":null,"kind":"measurement","valid_from":"2026-08-03","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{"harness":null,"date":"2026-08-03"},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude 4.7 and later models and Claude Mythos Preview use a newer tokenizer that contributes to their improved performance on a wide range of tasks. This tokenizer produces approximately 30% more tokens for the same text. The exact increase depends on the content and workload shape. Claude Sonnet 4.6 and earlier models use the previous tokenizer.","locator":"Tokenizer note under model pricing table","supports":false}]},"clm-claude-haiku-4-5-001":{"statement":"Base input $1 per million tokens; output $5 per million tokens.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"unknown","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true}]},"clm-claude-opus-5-001":{"statement":"Base input priced at $5 per million tokens; output $25 per million tokens.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"unknown","valid_to":null,"observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Fable 5: $10 / MTok, $12.50 / MTok, $20 / MTok, $1 / MTok, $50 / MTok. Claude Opus 5: $5 / MTok, $6.25 / MTok, $10 / MTok, $0.50 / MTok, $25 / MTok. Claude Haiku 4.5: $1 / MTok, $1.25 / MTok, $2 / MTok, $0.10 / MTok, $5 / MTok.","locator":"Model pricing table \u2014 Opus 5 and Fable 5 rows","supports":true},{"source":"src-anthropic-models-overview-2026-08-03","excerpt":"Claude Fable 5: $10 / input MTok $50 / output MTok | Claude Opus 5: $5 / input MTok $25 / output MTok | Claude Sonnet 5: $3 / input MTok $15 / output MTok | Claude Haiku 4.5: $1 / input MTok $5 / output MTok","locator":"Latest models comparison \u2014 Pricing row","supports":true}]},"clm-usage-cache-hit-001":{"statement":"Cache hit rate of 0.9432, measured across 18,604 assistant turns over 56 days of real agentic work.","predicate":"usage.cache_hit_rate","type":"M","scope":"harness","kind":"measurement","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{"harness":"claude-code","harness_version":"unrecorded","date":"2026-08-04","operator":"single","runs":1,"corpus_n":2132},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"5-minute cache write: 1.25x base input price, cache valid for 5 minutes. 1-hour cache write: 2x base input price, cache valid for 1 hour. Cache read (hit): 0.1x base input price, same duration as the preceding write.","locator":"Prompt caching multipliers table","supports":true}]},"clm-model-deepseek-v4-pro-001":{"statement":"$0.435 per 1M input tokens on cache miss, $0.003625 on cache hit, and $0.87 per 1M output tokens.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"unknown","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-deepseek-pricing-2026-08-04","excerpt":"deepseek-v4-pro: 1M INPUT TOKENS (CACHE HIT) $0.003625; 1M INPUT TOKENS (CACHE MISS) $0.435; 1M OUTPUT TOKENS $0.87.","locator":"deepseek-v4-pro pricing","supports":true}]},"clm-model-mistral-large-3-090":{"statement":"Pricing NOT established. The pricing page states only an illustrative example \u2014 \"$2 /M tokens in and $6 /M tokens out\" for \"Mistral Large\" \u2014 inside an FAQ, without naming a version. An illustrative figure in an FAQ is not a price list, and applying it to Large 3 would be inference.","predicate":"pricing.per_mtok","type":"S","scope":null,"kind":"step","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-mistral-pricing-2026-08-04","excerpt":"For example, Mistral Large costs $2 /M tokens in and $6 /M tokens out.","locator":"FAQ \u2014 illustrative example only","supports":false}]},"clm-claude-sonnet-5-021":{"statement":"Time-to-first-token is NOT established. The one available measurement reports 200.59s against a tier median of 2.82s \u2014 a 71x outlier that would make interactive use impossible if taken at face value.","predicate":"performance.time_to_first_token","type":"M","scope":null,"kind":"measurement","valid_from":"2026-08-04","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{"harness":null,"config":"publisher defines TTFT as request-sent to first-token-received","date":"2026-08-04","operator":"Artificial Analysis","runs":1},"evidence":[{"source":"src-artificialanalysis-sonnet5-2026-08-04","excerpt":"200.59s for time to first token (TTFT) via Anthropic's API, described as at the higher end compared to other reasoning models in a similar price tier (median: 2.82s).","locator":"Time to first token","supports":false}]},"clm-claude-sonnet-5-005":{"statement":"Cache hits and refreshes priced at $0.20 per million tokens through 2026-08-31 ($0.30 from 2026-09-01), i.e. 0.1x base input.","predicate":"pricing.cache_read_per_mtok","type":"S","scope":null,"kind":"interval","valid_from":"unknown","valid_to":"2026-08-31","observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true},{"source":"src-anthropic-pricing-2026-08-03","excerpt":"5-minute cache write: 1.25x base input price, cache valid for 5 minutes. 1-hour cache write: 2x base input price, cache valid for 1 hour. Cache read (hit): 0.1x base input price, same duration as the preceding write.","locator":"Prompt caching multipliers table","supports":true}]},"clm-claude-sonnet-5-001":{"statement":"Base input priced at $2 per million tokens under introductory pricing, in effect through 2026-08-31.","predicate":"pricing.input_per_mtok","type":"S","scope":null,"kind":"interval","valid_from":"unknown","valid_to":"2026-08-31","observed_at":"2026-08-03","supersedes":null,"supersession_kind":null,"conditions":{},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":true},{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Introductory pricing of $2/$10 per million input/output tokens is in effect through August 31, 2026, after which the standard pricing of $3/$15 per million input/output tokens will take effect.","locator":"Introductory pricing note","supports":true},{"source":"src-anthropic-models-overview-2026-08-03","excerpt":"Introductory pricing of $2 / $10 per MTok applies to Claude Sonnet 5 through August 31, 2026.","locator":"Latest models comparison \u2014 footnote 4","supports":true}]},"clm-usage-io-ratio-001":{"statement":"Input-to-output token ratio of 197.7 : 1, measured over the same 56-day window. Determined by the KIND OF WORK done, not by the tooling.","predicate":"usage.io_ratio","type":"M","scope":"workload","kind":"measurement","valid_from":"2026-06-09","valid_to":null,"observed_at":"2026-08-04","supersedes":null,"supersession_kind":null,"conditions":{"harness":"claude-code","date":"2026-08-04","operator":"single","runs":1,"corpus_n":2132},"evidence":[{"source":"src-anthropic-pricing-2026-08-03","excerpt":"Claude Sonnet 5 through August 31, 2026: $2 / MTok base input, $2.50 / MTok 5m cache writes, $4 / MTok 1h cache writes, $0.20 / MTok cache hits & refreshes, $10 / MTok output. Claude Sonnet 5 starting September 1, 2026: $3 / MTok, $3.75 / MTok, $6 / MTok, $0.30 / MTok, $15 / MTok.","locator":"Model pricing table \u2014 Claude Sonnet 5 rows","supports":false}]}},"sources":{"src-anthropic-pricing-2026-08-03":{"class":"A","title":"Pricing","publisher":"Anthropic","url":"https://platform.claude.com/docs/en/about-claude/pricing","archive_url":"https://web.archive.org/web/20260804053539/https://platform.claude.com/docs/en/about-claude/pricing","retrieved":"2026-08-03","hash_status":"hashed","archive_status":"archived","fidelity":"verbatim","flags":["self_interested"]},"src-swebench-repo-2026-08-04":{"class":"A","title":"SWE-bench repository README","publisher":"SWE-bench project","url":"https://github.com/SWE-bench/SWE-bench","archive_url":"http://web.archive.org/web/20260724003640/https://github.com/SWE-bench/SWE-bench","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"tool_extracted","flags":[]},"src-anthropic-models-overview-2026-08-03":{"class":"A","title":"Models overview","publisher":"Anthropic","url":"https://platform.claude.com/docs/en/about-claude/models/overview","archive_url":"https://web.archive.org/web/20260804055329/https://platform.claude.com/docs/en/about-claude/models/overview","retrieved":"2026-08-03","hash_status":"hashed","archive_status":"archived","fidelity":"verbatim","flags":["self_interested"]},"src-kimi-models-2026-08-04":{"class":"A","title":"Kimi platform \u2014 chat model index","publisher":"Moonshot AI","url":"https://platform.kimi.ai/docs/pricing/chat","archive_url":"http://web.archive.org/web/20260801074348/https://platform.kimi.ai/docs/pricing/chat","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"tool_extracted","flags":["self_interested"]},"src-mcp-spec-2025-06-18-2026-08-04":{"class":"A","title":"Model Context Protocol \u2014 Specification (2025-06-18)","publisher":"Model Context Protocol governance body","url":"https://modelcontextprotocol.io/specification/2025-06-18","archive_url":"http://web.archive.org/web/20260727063112/https://modelcontextprotocol.io/specification/2025-06-18","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"verbatim","flags":[]},"src-deepseek-pricing-2026-08-04":{"class":"A","title":"DeepSeek API \u2014 Models & Pricing","publisher":"DeepSeek","url":"https://api-docs.deepseek.com/quick_start/pricing","archive_url":"http://web.archive.org/web/20260803150728/https://api-docs.deepseek.com/quick_start/pricing/","retrieved":"2026-08-04","hash_status":"hashed","archive_status":"archived","fidelity":"tool_extracted","flags":["self_interested"]},"src-mistral-pricing-2026-08-04":{"class":"A","title":"Mistral AI \u2014 Pricing","publisher":"Mistral AI","url":"https://mistral.ai/pricing","archive_url":null,"retrieved":"2026-08-04","hash_status":"unavailable_pending_tooling","archive_status":"pending","fidelity":"tool_extracted","flags":["self_interested"]},"src-artificialanalysis-sonnet5-2026-08-04":{"class":"B","title":"Artificial Analysis \u2014 Claude Sonnet 5 performance","publisher":"Artificial Analysis","url":"https://artificialanalysis.ai/models/claude-sonnet-5","archive_url":null,"retrieved":"2026-08-04","hash_status":"unavailable_pending_tooling","archive_status":"pending","fidelity":"tool_extracted","flags":[]}}};
 const $=s=>document.querySelector(s);
-const NS="http://www.w3.org/2000/svg";
-const E=(t,a)=>{const n=document.createElementNS(NS,t);
-  for(const k in a) n.setAttribute(k,a[k]); return n};
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-/* ── the graph ─────────────────────────────────────────────────────────── */
-const CACHE=CORPUS.cache_claim, WORK=CORPUS.workload_claim;
+const PRES=25e6;
+const cost=(p,io,hit)=>(PRES*(1-hit)*p[0]+PRES*hit*p[1]+(PRES/io)*p[2])/1e6;
 const TODAY=new Date().toISOString().slice(0,10);
 const MODELS=CORPUS.models.map(m=>{
   const iv=m.intervals.find(x=>TODAY>=x.from&&TODAY<=x.to)||m.intervals[0];
-  return{name:m.name,p:[iv.in,iv.cache,iv.out],claims:iv.claims.filter(c=>CORPUS.claims[c])};
+  return{name:m.name,p:[iv.in,iv.cache,iv.out],claims:iv.claims};
 });
-const SHARED=[CACHE,WORK].filter(c=>CORPUS.claims[c]);
-const srcOf=cid=>[...new Set((CORPUS.claims[cid].evidence||[])
-  .map(e=>e.source).filter(s=>CORPUS.sources[s]))];
-const pubOf=sid=>CORPUS.sources[sid].publisher;
-const PUBS=[...new Set([...SHARED,...MODELS.flatMap(m=>m.claims)].flatMap(srcOf).map(pubOf))];
+const WL=CORPUS.elicit.workload, HW=CORPUS.elicit.harness;
+const WV=WL.options.map(o=>o.value).filter(v=>typeof v==="number").sort((a,b)=>a-b);
+const IO_MIN=WV[0], IO_MAX=WV[WV.length-1], IO_LO=IO_MIN/4;
+const MEASURED_HIT=CORPUS.cache_hit;
+const FLOOR_HIT=HW.options.map(o=>o.value).filter(v=>typeof v==="number")
+  .reduce((a,b)=>Math.min(a,b),MEASURED_HIT);
+const CACHE=CORPUS.cache_claim, WORK=CORPUS.workload_claim;
 
-const S={withdrawn:new Set()};
-const live=cid=>srcOf(cid).some(s=>!S.withdrawn.has(s));
-const busOpen=p=>[...new Set([...SHARED,...MODELS.flatMap(m=>m.claims)].flatMap(srcOf))]
-  .filter(s=>pubOf(s)===p).every(s=>S.withdrawn.has(s));
-const supplyLive=()=>SHARED.every(live);
-const lampLive=m=>supplyLive()&&m.claims.every(live);
+/* ── THE GRAPH ────────────────────────────────────────────────────────────
+   withdrawn is a set of SOURCE ids. Everything else is derived from it.
+   No visual state exists that is not computed from this set. */
+const S={budget:20, io:IO_MAX, hw:0, withdrawn:new Set()};
 
-const PRES=25e6, HIT=CORPUS.cache_hit,
-      IO=(CORPUS.claims[WORK].statement.match(/([\d.]+)\s*:\s*1/)||[0,197.7])[1];
-const price=m=>(PRES*(1-HIT)*m.p[0]+PRES*HIT*m.p[1]+(PRES/IO)*m.p[2])/1e6;
+/* LAST is not UI state — it is the record of the transition that produced the
+   current graph. render() DERIVES the consequence text from it every pass, so
+   the narration can never outlive the state it describes.
+   Previously handlers wrote #conseq directly and it went stale the moment
+   anything else changed. */
+let LAST={kind:"init",before:null};
 
-/* ── layout ────────────────────────────────────────────────────────────── */
-const W=1200,H=534;
-const BUS_Y=p=>44+PUBS.indexOf(p)*28;      /* publisher rails, horizontal, top */
-const SUP_Y=214;                            /* supply bus — feeds every lamp   */
-/* inset so the leftmost column's branch feet stay on canvas */
-const CX=i=>MODELS.length<2?W/2:170+i*((W-250)/(MODELS.length-1));
-const CLAIM_Y=(i)=>268+i*44;
-const LAMP_Y=452;
-
-function draw(){
-  const svg=E("svg",{viewBox:"0 0 "+W+" "+H,role:"img",
-    "aria-label":"Dependency circuit. Publisher rails at top, claims in series, one lamp per priced model."});
-
-  const wire=(x1,y1,x2,y2,on,cls)=>svg.appendChild(
-    E("line",{x1,y1,x2,y2,class:"wire "+(on?"on":"off")+(cls?" "+cls:"")}));
-  const label=(x,y,t,on,anchor)=>{const n=E("text",{x,y,class:"lbl "+(on?"on":"off"),
-    "text-anchor":anchor||"start"});n.textContent=t;svg.appendChild(n);return n};
-
-  /* a switch: two terminals and a lever. Closed = bridged. Open = lifted. */
-  function sw(x,y,sid,on){
-    const g=E("g",{tabindex:"0",role:"switch","aria-checked":String(on),
-      "aria-label":(on?"withdraw ":"restore ")+CORPUS.sources[sid].publisher+" "+
-        (CORPUS.sources[sid].title||sid)});
-    g.appendChild(E("circle",{cx:x-9,cy:y,r:2,class:"node"+(on?"":" off")}));
-    g.appendChild(E("circle",{cx:x+9,cy:y,r:2,class:"node"+(on?"":" off")}));
-    g.appendChild(E("line",{x1:x-9,y1:y,x2:on?x+9:x+5,y2:on?y:y-11,
-      class:"wire "+(on?"on":"off")}));
-    g.appendChild(E("rect",{x:x-16,y:y-16,width:32,height:30,class:"hit"}));
-    g.style.cursor="pointer";
-    g.onclick=()=>toggle(sid);
-    g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle(sid)}};
-    svg.appendChild(g); return g;
-  }
-
-  /* ── publisher rails ─────────────────────────────────────────────────── */
-  PUBS.forEach(p=>{
-    const y=BUS_Y(p), open=busOpen(p);
-    wire(30,y,W-30,y,!open,"bus");
-    const t=E("text",{x:30,y:y-9,class:"pubname"+(open?" off":"")});
-    t.textContent=p.toUpperCase(); svg.appendChild(t);
-    /* master switch: the whole publisher, in one gesture */
-    const all=[...new Set([...SHARED,...MODELS.flatMap(m=>m.claims)].flatMap(srcOf))]
-      .filter(s=>pubOf(s)===p);
-    const g=E("g",{tabindex:"0",role:"switch","aria-checked":String(!open),
-      "aria-label":(open?"restore ":"withdraw ")+p+" entirely"});
-    g.appendChild(E("circle",{cx:64,cy:y,r:2.6,class:"node"+(open?" off":"")}));
-    g.appendChild(E("circle",{cx:90,cy:y,r:2.6,class:"node"+(open?" off":"")}));
-    g.appendChild(E("line",{x1:64,y1:y,x2:open?88:90,y2:open?y-14:y,
-      class:"wire bus "+(open?"off":"on")}));
-    g.appendChild(E("rect",{x:58,y:y-18,width:38,height:34,class:"hit"}));
-    g.style.cursor="pointer";
-    const flip=()=>{const every=all.every(s=>S.withdrawn.has(s));
-      apply(()=>all.forEach(s=>every?S.withdrawn.delete(s):S.withdrawn.add(s)))};
-    g.onclick=flip;
-    g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};
-    svg.appendChild(g);
-  });
-
-  /* ── branches into one claim node ────────────────────────────────────────
-     Sources are grouped BY PUBLISHER and share a single foot on that rail.
-     Two sources from one publisher therefore leave one point, bow apart and
-     rejoin — a closed lens enclosing nothing. Two publishers give two feet on
-     two rails. That difference IS corroboration versus duplication, drawn. */
-  function branches(cid,nodeX,y,footX){
-    const srcs=srcOf(cid), byPub={};
-    srcs.forEach(s=>(byPub[pubOf(s)]=byPub[pubOf(s)]||[]).push(s));
-    Object.keys(byPub).forEach((p,gi)=>{
-      const grp=byPub[p], fx=footX+gi*30, py=BUS_Y(p);
-      const anyOn=grp.some(s=>!S.withdrawn.has(s));
-      wire(fx,py,fx,y,anyOn);                       /* one foot per publisher */
-      grp.forEach((sid,k)=>{
-        const ok=!S.withdrawn.has(sid);
-        const off=(k-(grp.length-1)/2)*17;      /* bow apart, then rejoin */
-        svg.appendChild(E("polyline",{class:"wire "+(ok?"on":"off"),
-          points:`${fx},${y} ${fx+16},${y+off} ${nodeX-26},${y+off} ${nodeX-10},${y}`}));
-        sw((fx+16+nodeX-26)/2, y+off, sid, ok);
-      });
-    });
-    /* an unfilled socket: an independent corroboration that could exist here */
-    if(CORPUS.claims[cid].type==="M"){
-      svg.appendChild(E("circle",{cx:footX-34,cy:y,r:5,class:"sock"}));
-      svg.appendChild(E("line",{x1:footX-29,y1:y,x2:footX-6,y2:y,class:"sock"}));
-    }
-    wire(nodeX-10,y,nodeX,y,live(cid));
-  }
-
-  /* ── the shared chain: claims that feed EVERY lamp, in series ────────── */
-  const SNODE=820;
-  let chainOn=true;
-  SHARED.forEach((cid,i)=>{
-    const on=live(cid), y=126+i*42;
-    branches(cid,SNODE,y,500+i*34);
-    svg.appendChild(E("circle",{cx:SNODE,cy:y,r:3,class:"node"+(on?"":" off")}));
-    const t=label(SNODE+10,y+3.5,cid.replace(/^clm-usage-/,""),on);
-    t.appendChild(E("title")).textContent=cid;
-    if(i<SHARED.length-1) wire(SNODE,y,SNODE,126+(i+1)*42,on&&chainOn);
-    if(!on) chainOn=false;
-  });
-  /* the chain terminates in the supply bus that feeds every column */
-  const supOn=supplyLive();
-  wire(SNODE,126+(SHARED.length-1)*42,SNODE,SUP_Y,supOn);
-  wire(30,SUP_Y,W-30,SUP_Y,supOn,"bus");
-
-  /* ── one column per priced model ─────────────────────────────────────── */
-  MODELS.forEach((m,mi)=>{
-    const cx=CX(mi), lit=lampLive(m);
-    let prevY=SUP_Y, broken=!supOn;
-    m.claims.forEach((cid,ci)=>{
-      const y=CLAIM_Y(ci), on=live(cid);
-      wire(cx,prevY,cx,y,!broken);          /* spine segment above this claim */
-      branches(cid,cx,y,cx-116);
-      svg.appendChild(E("circle",{cx,cy:y,r:3,class:"node"+(on?"":" off")}));
-      const t=label(cx+10,y+3.5,"·"+cid.slice(-3),on);
-      t.appendChild(E("title")).textContent=cid;
-      if(!on) broken=true;                  /* series: a dead claim opens it  */
-      prevY=y;
-    });
-    wire(cx,prevY,cx,LAMP_Y-18,!broken);
-
-    /* the lamp */
-    const g=E("g");
-    g.appendChild(E("circle",{cx,cy:LAMP_Y,r:16,class:"lamp-glass "+(lit?"on":"off")}));
-    g.appendChild(E("line",{x1:cx-11,y1:LAMP_Y-11,x2:cx+11,y2:LAMP_Y+11,
-      class:"lamp-x "+(lit?"on":"off")}));
-    g.appendChild(E("line",{x1:cx+11,y1:LAMP_Y-11,x2:cx-11,y2:LAMP_Y+11,
-      class:"lamp-x "+(lit?"on":"off")}));
-    svg.appendChild(g);
-    const nm=E("text",{x:cx,y:LAMP_Y+40,class:"model"+(lit?"":" off"),"text-anchor":"middle"});
-    nm.textContent=m.name; svg.appendChild(nm);
-    const pr=E("text",{x:cx,y:LAMP_Y+60,class:"price"+(lit?"":" off"),"text-anchor":"middle"});
-    pr.textContent=lit?"$"+price(m).toFixed(2):"—"; svg.appendChild(pr);
-  });
-
-  $("#stage").textContent="";
-  $("#stage").appendChild(svg);
-  $("#restore").disabled=S.withdrawn.size===0;
+/* apply() is the ONLY way state mutates. Capture, mutate, recompute, render.
+   Nothing else may touch S, and nothing outside render() may touch the DOM. */
+function apply(kind,mutate,meta){
+  const before=summarise();
+  mutate();
+  LAST={kind,before,meta:meta||null};
+  render();
 }
 
-/* single mutation path; the drawing is a pure function of S */
-function apply(mutate){ mutate(); draw(); }
-function toggle(sid){ apply(()=>{
-  S.withdrawn.has(sid)?S.withdrawn.delete(sid):S.withdrawn.add(sid)}); }
-$("#restore").onclick=()=>apply(()=>S.withdrawn.clear());
+const srcOf=cid=>{const c=CORPUS.claims[cid];
+  return c?[...new Set((c.evidence||[]).map(e=>e.source).filter(s=>CORPUS.sources[s]))]:[]};
+const live=cid=>srcOf(cid).filter(s=>!S.withdrawn.has(s));
+const held=cid=>live(cid).length>0;
+const pubsOf=cid=>[...new Set(srcOf(cid).map(s=>CORPUS.sources[s].publisher))];
+const pubName=s=>(CORPUS.sources[s]||{}).publisher||s;
+const title=s=>(CORPUS.sources[s]||{}).title||s;
 
+/* a model can be priced only if every claim of its active interval still holds */
+const priceable=m=>m.claims.every(held);
+/* the cache measurement gates every figure: no rate, no arithmetic */
+const hitNow=()=>{const o=HW.options[S.hw];
+  return (o.value===null||!held(CACHE))?null:o.value};
+
+/* every claim in the graph, static — the set the invariant checker walks */
+const CLAIM_IDS=[...new Set([...MODELS.flatMap(m=>m.claims),CACHE,WORK])]
+  .filter(c=>CORPUS.claims[c]);
+const ALL_SRC=[...new Set(CLAIM_IDS.flatMap(srcOf))];
+
+/* a pure, comparable description of the graph. No DOM, no side effects. */
+function summarise(){
+  const s=snapshot();
+  return{refusing:s.refusing, rec:s.rec?s.rec.m.name:null, priced:s.priced,
+         fits:s.fitting.length,
+         priceable:MODELS.filter(priceable).map(m=>m.name),
+         dead:CLAIM_IDS.filter(c=>!held(c)),
+         cacheHeld:held(CACHE), scopeNull:HW.options[S.hw].value===null};
+}
+
+function snapshot(){
+  const hit=hitNow(), refusing=hit===null;
+  /* rows carry their own channel elements — the snapshot IS what render draws */
+  const rows=chans.map(ch=>{
+    const ok=priceable(ch.m);
+    const lo=ok?cost(ch.m.p,S.io,refusing?MEASURED_HIT:hit):null;
+    const hi=ok&&refusing?cost(ch.m.p,S.io,FLOOR_HIT):lo;
+    return Object.assign({},ch,{ok,lo,hi,fits:ok&&hi<=S.budget});
+  }).sort((a,b)=>(a.lo??Infinity)-(b.lo??Infinity));
+  const fitting=rows.filter(r=>r.fits);
+  return{hit,refusing,rows,fitting,
+         rec:refusing?null:(fitting[fitting.length-1]||null),
+         priced:rows.filter(r=>r.ok).length};
+}
+
+/* ── BAND ─────────────────────────────────────────────────────────────── */
+const D_LO=0.30,D_HI=120;
+const x=c=>Math.min(Math.max((Math.log(Math.max(c,D_LO))-Math.log(D_LO))/
+  (Math.log(D_HI)-Math.log(D_LO)),0),1)*100;
+const chart=$("#chart");
+const chans=MODELS.map(m=>{
+  const row=el("div","chan"); row.append(el("div","nm",m.name));
+  const tr=el("div","track"), bar=el("div","bar"), dot=el("div","dot");
+  tr.append(bar,dot);
+  const val=el("div","val n"); row.append(tr,val); chart.append(row);
+  return{m,row,dot,bar,val};
+});
+$("#axlo").textContent="$"+D_LO.toFixed(2); $("#axhi").textContent="$"+D_HI+"+";
+
+/* ── conditions ───────────────────────────────────────────────────────── */
+const work=$("#work");
+const posToIo=p=>IO_LO*Math.pow(IO_MAX/IO_LO,p/1000);
+const ioToPos=io=>1000*Math.log(io/IO_LO)/Math.log(IO_MAX/IO_LO);
+$("#budget").addEventListener("input",e=>{
+  const v=+e.target.value; apply("condition",()=>{S.budget=v});
+});
+work.addEventListener("input",e=>{
+  let io=posToIo(+e.target.value);
+  for(const v of WV) if(Math.abs(Math.log(io/v))<0.03) io=v;
+  apply("condition",()=>{S.io=io});
+});
+
+/* ── number rolling. Never load-bearing: rAF does not fire on a hidden tab,
+      and a stale figure displayed confidently is the one unacceptable bug. ── */
+const rolls=new WeakMap(),timers=new WeakMap(),DUR=190;
+function roll(node,to,fmt){
+  const from=rolls.get(node)??to; rolls.set(node,to);
+  clearTimeout(timers.get(node));
+  if(RM||document.visibilityState!=="visible"||Math.abs(to-from)<0.005){
+    node.textContent=fmt(to);return;
+  }
+  const t0=performance.now();
+  timers.set(node,setTimeout(()=>{node.textContent=fmt(to)},DUR+40));
+  (function step(t){
+    if(rolls.get(node)!==to)return;
+    const k=Math.min((t-t0)/DUR,1);
+    node.textContent=fmt(from+(to-from)*(1-Math.pow(1-k,3)));
+    if(k<1)requestAnimationFrame(step);
+  })(t0);
+}
+const usd=v=>"$"+v.toFixed(2);
+
+/* ── THE CONSEQUENCE — the component that tells the truth about a non-event ──
+   Generated by diffing the graph before and after. Never authored per case. */
+/* Derived on every render from (transition, current graph). Called BY render,
+   never by a handler, so it cannot describe a state that no longer exists. */
+function describeInto(node,after){
+  const kind=LAST.kind, before=LAST.before;
+  const set=(cls,q,html)=>{node.className="consequence "+cls;
+    node.innerHTML='<span class="q">'+q+'</span>'+html};
+
+  if(kind==="init")
+    return set("none","START HERE","This price rests on the sources listed to the right. "+
+      "Switch one off and the engine recomputes without it. Most will change nothing — "+
+      "<b>and why they change nothing is the interesting part.</b>");
+
+  if(kind==="restore")
+    return set("none","RESTORED","Every source is back in the graph. "+
+      after.priced+" of "+MODELS.length+" options priceable.");
+
+  if(kind==="condition"){
+    /* conditions choose WHICH conclusion is under test; they change no evidence */
+    return set("none","CONDITIONS","No evidence changed. At "+usd(S.budget)+" and "+
+      Math.round(S.io)+":1, "+(after.refusing?"the graph still cannot be computed."
+        :"<b>"+(after.rec||"nothing")+"</b> is the priciest of "+after.priced+
+         " priced options that fits.")+
+      " The support beneath it is unchanged.");
+  }
+
+  if(kind==="scope"){
+    const o=HW.options[S.hw];
+    if(o.value===null)
+      return set("gone","OUT OF SCOPE","You told us the measurement does not describe "+
+        "your tool. It is still in the graph — it simply does not apply to you, and "+
+        "substituting it anyway would be inventing a number. "+
+        (after.cacheHeld?"":"<b>Its only source is also withdrawn.</b>"));
+    return set("none","IN SCOPE",o.note+" "+
+      (after.refusing
+        ? "The graph still cannot be computed — <b>"+CACHE+" has no source left</b>."
+        : "The measurement applies again."));
+  }
+
+  /* ── a source was toggled ─────────────────────────────────────────────── */
+  const sid=LAST.meta.sid, off=S.withdrawn.has(sid);
+  const newlyDead=after.dead.filter(c=>!before.dead.includes(c));
+  const revived=before.dead.filter(c=>!after.dead.includes(c));
+  const lost=before.priceable.filter(n=>!after.priceable.includes(n));
+  const regained=after.priceable.filter(n=>!before.priceable.includes(n));
+
+  if(!off){
+    return set("none","RESTORED",title(sid)+" is back in the graph."+
+      (revived.length?" <b>"+revived.length+"</b> claim"+(revived.length===1?"":"s")+
+        " regained support.":"")+
+      (regained.length?" <b>"+regained.join(" and ")+"</b> can be priced again.":"")+
+      (after.refusing?" The graph still cannot be computed.":""));
+  }
+
+  /* 3 — the load-bearing measurement lost its last source. Keyed on the CLAIM
+     dying, not on refusal flipping: the graph may already have been refusing
+     for an unrelated reason, and that must not mask the worst outcome. */
+  if(newlyDead.includes(CACHE))
+    return set("gone","WITHDRAWN","That page was the only thing carrying <b>"+CACHE+
+      "</b> — the one measurement under every figure here. Without a cache rate there "+
+      "is no arithmetic to do, so nothing on this page can be computed. It is not a "+
+      "worse answer. It is <b>no answer</b>.");
+
+  /* 2 — options leave the comparison */
+  if(lost.length)
+    return set("gone","WEAKENED","<b>"+lost.join(" and ")+"</b> can no longer be priced — "+
+      (newlyDead.length?"nothing is left supporting "+newlyDead[0]:"a price lost its last source")+
+      ". "+((before.rec&&after.rec&&before.rec!==after.rec)
+        ?"The conclusion moved to <b>"+after.rec+"</b>. ":"")+
+      after.priced+" of "+MODELS.length+" options remain.");
+
+  /* a claim died but nothing became unpriceable — still a real weakening */
+  if(newlyDead.length)
+    return set("gone","WEAKENED","<b>"+newlyDead[0]+"</b> has no support left. Nothing "+
+      "priced depended on it alone, so every figure survives — but the claim is now "+
+      "unevidenced.");
+
+  /* Nothing moved BECAUSE there was nothing left to move. Distinct from real
+     redundancy, and saying "no change" here would read as reassurance. */
+  if(after.refusing)
+    return set("gone","NO FURTHER CHANGE","The conclusion was already withdrawn, so "+
+      "removing more evidence changes nothing visible. "+
+      (after.cacheHeld
+        ? "The measurement still has a source — it is the scope that does not apply to you."
+        : "<b>"+CACHE+"</b> has no source left.")+
+      " Nothing here can be computed either way.");
+
+  /* 1 — no change. The case nobody explains, and the reason this exists. */
+  const carried=CLAIM_IDS.filter(cid=>srcOf(cid).includes(sid));
+  const survivor=carried[0]||null;
+  const rest=survivor?live(survivor):[];
+  const pubs=[...new Set(rest.map(pubName))];
+  const same=pubs.length===1&&pubs[0]===pubName(sid);
+  return set("none","NO CHANGE","Nothing moved. "+
+    (survivor
+      ? "<b>"+survivor+"</b> is still carried by "+rest.length+" other source"+
+        (rest.length===1?"":"s")+". "+
+        (same
+          ? "But every one of them is "+pubs[0]+"’s — so this was never two sources. "+
+            "It was <b>one publisher, filed twice</b>. Duplication is not corroboration."
+          : "And they are "+pubs.join(" and ")+"’s — genuinely independent.")
+      : "Nothing computed here depended on it."));
+}
+
+/* ── SUPPORT PANEL ────────────────────────────────────────────────────── */
+let CLAIMS=[];
+/* what the CONCLUSION rests on — drives the readout */
+function claimsFor(snap){
+  const base=snap.rec?snap.rec.m.claims:(snap.rows.find(r=>r.ok)||{m:{claims:[]}}).m.claims;
+  return [...new Set([...base,CACHE,WORK])].filter(c=>CORPUS.claims[c]);
+}
+/* the WHOLE graph, grouped by what depends on it. Shared claims first, because
+   load is the thing worth seeing and they carry all of it. Showing only the
+   winner's branch made one of the three outcomes unreachable: every claim under
+   it routes through the same page, so nothing could leave without refusing. */
+function groups(){
+  const g=[{label:"UNDER EVERY FIGURE",claims:[CACHE,WORK].filter(c=>CORPUS.claims[c])}];
+  MODELS.forEach(m=>g.push({label:m.name.toUpperCase(),model:m,
+    claims:m.claims.filter(c=>CORPUS.claims[c])}));
+  return g;
+}
+
+function claimBlock(cid,load){
+    const c=CORPUS.claims[cid], srcs=srcOf(cid), alive=live(cid);
+    const blk=el("div","cl"+(alive.length?"":" dead"));
+    blk.dataset.claim=cid; blk.dataset.held=String(alive.length>0);
+    const h=el("div","clh");
+    h.append(el("span","cid",cid));
+    h.append(el("span","tag",(c.type==="S"?"S · CONSTITUTIVE":c.type==="M"?"M · OBSERVATIONAL":c.type)));
+    if(cid===CACHE)h.append(el("span","tag crit","LOAD "+load));
+    blk.append(h);
+    blk.append(el("div","cst",(c.statement||"").replace(/\s+/g," ").trim()));
+    blk.append(el("div","margin",alive.length
+      ? "holds through "+(alive.length-1)+" more withdrawal"+(alive.length===2?"":"s")
+      : "no support remains"));
+
+    srcs.forEach(sid=>{
+      const off=S.withdrawn.has(sid);
+      const r=el("button","src"+(off?" off":""));
+      /* the DOM carries graph identity. Without it nothing can be verified, and
+         the same source rendered under two claims looked like two switches. */
+      r.dataset.src=sid; r.dataset.claim=cid;
+      r.setAttribute("aria-pressed",String(!off));
+      r.append(el("span","pub",pubName(sid)+" — "+title(sid)));
+      r.append(el("span","sw"));
+      r.onclick=()=>toggle(sid);
+      blk.append(r);
+    });
+
+    /* type S can never be independently corroborated — say so, don't imply fragility */
+    if(c.type==="S"&&srcs.length>1&&pubsOf(cid).length===1)
+      blk.append(el("div","note",srcs.length+" sources, 1 publisher — duplication, not corroboration"));
+    if(c.type==="S"&&srcs.length===1)
+      blk.append(el("div","note","sole authority — a second source could only verify transcription"));
+    if(c.type==="M")
+      blk.append(el("div","note warn","1 observation, unreplicated — the only claim here that could be corroborated and is not"));
+
+    /* the scope control lives ON the claim it qualifies, not in a separate rack */
+    if(cid===CACHE){
+      const w=el("div","scope"), sel=el("select");
+      sel.setAttribute("aria-label",HW.question);
+      HW.options.forEach((o,i)=>{const op=el("option",null,o.label);op.value=i;sel.append(op)});
+      sel.value=String(S.hw);              /* derived, never remembered locally */
+      sel.onchange=e=>{const v=+e.target.value;apply("scope",()=>{S.hw=v})};
+      w.append(sel); blk.append(w);
+    }
+    return blk;
+}
+
+function drawSupport(snap){
+  const gs=groups();
+  CLAIMS=[...new Set(gs.flatMap(g=>g.claims))];
+  const box=$("#support"); box.textContent="";
+  const priced=MODELS.filter(priceable).length;
+  gs.forEach(g=>{
+    if(!g.claims.length)return;
+    const dead=g.model&&!priceable(g.model);
+    const hd=el("div","gh"+(dead?" dead":""));
+    hd.append(el("span","gn",g.label));
+    hd.append(el("span","gl",g.model
+      ? (dead?"unpriceable":(snap.rec&&snap.rec.m.name===g.model.name?"the conclusion":"load 1"))
+      : "load "+priced));
+    box.append(hd);
+    g.claims.forEach(cid=>box.append(claimBlock(cid,g.model?1:priced)));
+  });
+  const pubs=[...new Set(CLAIMS.flatMap(pubsOf))];
+  $("#supn").textContent=CLAIMS.length+" CLAIMS · "+pubs.length+" PUBLISHER"+
+    (pubs.length===1?"":"S");
+  $("#shsub").textContent=snap.refusing
+    ? "Switch a source back on to restore the graph."
+    : "Switch any source off. The engine recomputes without it.";
+}
+
+function toggle(sid){
+  apply("toggle",()=>{
+    S.withdrawn.has(sid)?S.withdrawn.delete(sid):S.withdrawn.add(sid);
+  },{sid});
+}
+$("#restore").onclick=()=>apply("restore",()=>S.withdrawn.clear());
+
+/* ── RENDER ───────────────────────────────────────────────────────────── */
+function render(){
+  const snap=snapshot();
+  $("#face").classList.toggle("refusing",snap.refusing);
+  $("#lampt").textContent=snap.refusing?"REFUSING":"READING";
+  roll($("#brd"),S.budget,v=>"$"+Math.round(v));
+  $("#wrd").textContent=Math.round(S.io)+":1";
+  work.setAttribute("aria-valuetext",Math.round(S.io)+" to 1");
+
+  $("#gate").style.left=x(S.budget)+"%";
+  $("#gate").dataset.l=usd(S.budget);
+  snap.rows.forEach(r=>chart.append(r.row));
+
+  snap.rows.forEach(r=>{
+    r.row.classList.toggle("gone",!r.ok);
+    r.row.classList.toggle("ranged",r.ok&&snap.refusing);
+    r.row.classList.toggle("over",r.ok&&!snap.refusing&&!r.fits);
+    r.row.classList.toggle("rec",!!snap.rec&&r.m.name===snap.rec.m.name);
+    r.row.dataset.model=r.m.name; r.row.dataset.priceable=String(r.ok);
+    if(!r.ok){
+      /* drop the remembered value, or coming back would animate from a number
+         that was true two states ago */
+      rolls.delete(r.val); r.val.textContent="unpriceable"; return;
+    }
+    r.dot.style.left=x(r.lo)+"%";
+    r.bar.style.left=x(r.lo)+"%";
+    r.bar.style.width=Math.max(x(r.hi)-x(r.lo),0)+"%";
+    if(snap.refusing)r.val.textContent=usd(r.lo)+"–"+usd(r.hi);
+    else roll(r.val,r.lo,usd);
+  });
+
+  if(snap.refusing){
+    /* two independent inputs can refuse. Name which, or restoring one source
+       leaves the lamp out with no explanation. */
+    const why=[!held(CACHE)?"NO SOURCE FOR THE MEASUREMENT":null,
+               HW.options[S.hw].value===null?"OUT OF SCOPE FOR YOUR TOOL":null]
+              .filter(Boolean);
+    $("#state").textContent="CANNOT SAY · "+why.join(" · ");
+    $("#subject").textContent="No number belongs here";
+    $("#amount").textContent="—";
+    $("#against").textContent=snap.priced+" of "+MODELS.length+" still have prices";
+    $("#bandtitle").textContent="WHAT MIGHT FIT";
+    $("#bandnote").textContent="RANGES, NOT POSITIONS";
+  }else if(!snap.rec){
+    $("#state").textContent="NOTHING FITS";
+    $("#subject").textContent="Not at "+usd(S.budget);
+    $("#amount").textContent=snap.rows[0]&&snap.rows[0].ok?usd(snap.rows[0].lo):"—";
+    $("#against").textContent=snap.priced+" of "+MODELS.length+" still priceable";
+    $("#bandtitle").textContent="WHAT CAN STILL BE PRICED";
+    $("#bandnote").textContent="NONE FIT";
+  }else{
+    const cs=claimsFor(snap), pubs=[...new Set(cs.flatMap(pubsOf))];
+    /* Was a hardcoded "0". A number that looks derived and is authored is the
+       one thing this project cannot ship. Type S is constitutive — the vendor
+       does not report the price, it constitutes it — so a second publisher
+       there is transcription assurance, never independence. */
+    const corroborated=cs.filter(cid=>
+      CORPUS.claims[cid].type!=="S" &&
+      [...new Set(live(cid).map(pubName))].length>1).length;
+    $("#state").textContent="RESTS ON "+cs.length+" CLAIMS · "+
+      pubs.length+" PUBLISHER"+(pubs.length===1?"":"S")+" · "+corroborated+" CORROBORATED";
+    $("#subject").textContent=snap.rec.m.name;
+    roll($("#amount"),snap.rec.lo,usd);
+    $("#against").textContent="of "+usd(S.budget)+" · "+snap.fitting.length+" of "+
+      snap.priced+" priced options fit";
+    $("#bandtitle").textContent="WHAT CAN STILL BE PRICED";
+    $("#bandnote").textContent=snap.priced+" OF "+MODELS.length;
+  }
+  const focused=document.activeElement&&document.activeElement.dataset
+    ? document.activeElement.dataset.src : null;
+  drawSupport(snap);
+  /* the panel is rebuilt wholesale so it cannot drift; put focus back where the
+     user left it, keyed on graph identity rather than DOM position */
+  if(focused){
+    const back=document.querySelector('.src[data-src="'+CSS.escape(focused)+'"]');
+    if(back)back.focus();
+  }
+  $("#restore").disabled=S.withdrawn.size===0;
+  describeInto($("#conseq"),summarise());
+}
+
+/* ── chrome ───────────────────────────────────────────────────────────── */
 if(matchMedia("(prefers-color-scheme:light)").matches)
   document.documentElement.setAttribute("data-theme","light");
-$("#theme").onclick=()=>{const c=document.documentElement.getAttribute("data-theme")||"dark";
-  document.documentElement.setAttribute("data-theme",c==="dark"?"light":"dark")};
-
+$("#theme").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme")||"dark";
+  document.documentElement.setAttribute("data-theme",cur==="dark"?"light":"dark");
+};
+$("#whatbtn").onclick=()=>{
+  const a=$("#about"),was=!a.hidden;
+  a.hidden=was;$("#whatbtn").setAttribute("aria-expanded",String(!was));
+};
 const cal=CORPUS.calibration;
-$("#fcount").textContent=CORPUS.counts.claims+" claims · "+CORPUS.counts.sources+" sources";
+$("#fcounts").textContent=CORPUS.counts.claims+" claims · "+CORPUS.counts.sources+" sources";
 $("#fcal").textContent=Math.round(cal.dominant_share*100)+"% of citations are "+
   cal.dominant_publisher+"'s";
 $("#fgen").textContent="built "+CORPUS.generated;
-draw();
+
+work.value=ioToPos(IO_MAX);
+render();   /* the ONLY paint. Everything on screen is derived from the graph. */
 </script>
