@@ -369,7 +369,14 @@ function apply(kind,mutate,meta){
 
 const srcOf=cid=>{const c=CORPUS.claims[cid];
   return c?[...new Set((c.evidence||[]).map(e=>e.source).filter(s=>CORPUS.sources[s]))]:[]};
-const live=cid=>srcOf(cid).filter(s=>!S.withdrawn.has(s));
+/* Withdrawal acts on the EDGE you clicked — this source, supporting THIS claim.
+   It used to withdraw the source everywhere, which meant 9 of 13 switches
+   silently yanked the cache measurement out from under every figure and dropped
+   the whole board into refusal. The switch sits in a claim block, so it must
+   mean what it looks like it means. Exactly one switch on the board is fatal
+   now, and finding it is the point. */
+const EK=(cid,sid)=>cid+"|"+sid;
+const live=cid=>srcOf(cid).filter(s=>!S.withdrawn.has(EK(cid,s)));
 const held=cid=>live(cid).length>0;
 const pubsOf=cid=>[...new Set(srcOf(cid).map(s=>CORPUS.sources[s].publisher))];
 const pubName=s=>(CORPUS.sources[s]||{}).publisher||s;
@@ -499,7 +506,7 @@ function describeInto(node,after){
   }
 
   /* ── a source was toggled ─────────────────────────────────────────────── */
-  const sid=LAST.meta.sid, off=S.withdrawn.has(sid);
+  const sid=LAST.meta.sid, cidT=LAST.meta.cid, off=S.withdrawn.has(EK(cidT,sid));
   const newlyDead=after.dead.filter(c=>!before.dead.includes(c));
   const revived=before.dead.filter(c=>!after.dead.includes(c));
   const lost=before.priceable.filter(n=>!after.priceable.includes(n));
@@ -546,15 +553,15 @@ function describeInto(node,after){
         : "<b>"+CACHE+"</b> has no source left.")+
       " Nothing here can be computed either way.");
 
-  /* 1 — no change. The case nobody explains, and the reason this exists. */
-  const carried=CLAIM_IDS.filter(cid=>srcOf(cid).includes(sid));
-  const survivor=carried[0]||null;
-  const rest=survivor?live(survivor):[];
+  /* 1 — no change. The case nobody explains, and the reason this exists.
+     Reads the claim that was ACTUALLY touched, not the first claim that happens
+     to cite this source. */
+  const rest=live(cidT);
   const pubs=[...new Set(rest.map(pubName))];
   const same=pubs.length===1&&pubs[0]===pubName(sid);
   return set("none","NO CHANGE","Nothing moved. "+
-    (survivor
-      ? "<b>"+survivor+"</b> is still carried by "+rest.length+" other source"+
+    (rest.length
+      ? "<b>"+cidT+"</b> is still carried by "+rest.length+" other source"+
         (rest.length===1?"":"s")+". "+
         (same
           ? "But every one of them is "+pubs[0]+"’s — so this was never two sources. "+
@@ -596,7 +603,7 @@ function claimBlock(cid,load){
       : "no support remains"));
 
     srcs.forEach(sid=>{
-      const off=S.withdrawn.has(sid);
+      const off=S.withdrawn.has(EK(cid,sid));
       const r=el("button","src"+(off?" off":""));
       /* the DOM carries graph identity. Without it nothing can be verified, and
          the same source rendered under two claims looked like two switches. */
@@ -604,7 +611,7 @@ function claimBlock(cid,load){
       r.setAttribute("aria-pressed",String(!off));
       r.append(el("span","pub",pubName(sid)+" — "+title(sid)));
       r.append(el("span","sw"));
-      r.onclick=()=>toggle(sid);
+      r.onclick=()=>toggle(cid,sid);
       blk.append(r);
     });
 
@@ -652,10 +659,11 @@ function drawSupport(snap){
     : "Switch any source off. The engine recomputes without it.";
 }
 
-function toggle(sid){
+function toggle(cid,sid){
+  const k=EK(cid,sid);
   apply("toggle",()=>{
-    S.withdrawn.has(sid)?S.withdrawn.delete(sid):S.withdrawn.add(sid);
-  },{sid});
+    S.withdrawn.has(k)?S.withdrawn.delete(k):S.withdrawn.add(k);
+  },{sid,cid});
 }
 $("#restore").onclick=()=>apply("restore",()=>S.withdrawn.clear());
 
